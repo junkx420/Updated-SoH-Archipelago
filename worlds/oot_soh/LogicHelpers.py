@@ -11,6 +11,7 @@ from .Items import SohItem, item_data_table, ItemType, no_rules_bottles, GroupTa
 from rule_builder.rules import *
 from rule_builder.field_resolvers import *
 from .Options import *
+from .RegionScenes import REGION_SCENE
 
 if TYPE_CHECKING:
     from . import SohWorld
@@ -135,6 +136,9 @@ def add_events(parent_region: Regions, world: "SohWorld", events: list[tuple[Str
 
 
 def can_use(item: Items, bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    # 9.3.1 Logic::CanUse: HasItem && ItemUseAllowed (items that can't be used in the region's scene)
+    if not item_use_allowed(item, bundle[0]):
+        return False_()
     rule : Rule = has_item(item, bundle)
     data = item_data_table
 
@@ -150,6 +154,10 @@ def can_use(item: Items, bundle: tuple[Regions, "SohWorld"]) -> Rule:
 
         if data[item].item_type == ItemType.song:
             rule &= can_play_song(item, bundle)
+            # 9.3.1 Logic::CanUse: every song but Song of Storms checks CanUse(RG_FAIRY_OCARINA), so the scene's
+            # ocarina restriction applies (Song of Storms only checks HasItem)
+            if item != Items.SONG_OF_STORMS and not item_use_allowed(Items.FAIRY_OCARINA, bundle[0]):
+                return False_()
 
     if item in (Items.FIRE_ARROW, Items.ICE_ARROW, Items.LIGHT_ARROW):
         rule &= can_use(Items.FAIRY_BOW, bundle)
@@ -164,6 +172,118 @@ def can_use(item: Items, bundle: tuple[Regions, "SohWorld"]) -> Rule:
         rule &= is_adult(bundle) & can_use(Items.EPONAS_SONG, bundle)
     
     return rule
+
+# --- per-scene item restrictions (9.3.1 logic.cpp Logic::ItemUseAllowed / Logic::BAllowed, StaticData sets) -----------
+_SWORDS = {Items.KOKIRI_SWORD, Items.MASTER_SWORD, Items.GIANTS_KNIFE, Items.BIGGORONS_SWORD}
+_ALWAYS_ALLOWED = {Items.DEKU_SHIELD, Items.HYLIAN_SHIELD, Items.MIRROR_SHIELD, Items.GORON_TUNIC, Items.ZORA_TUNIC,
+                   Items.IRON_BOOTS, Items.HOVER_BOOTS, Items.MAGIC_SINGLE, Items.SILVER_GAUNTLETS,
+                   Items.GOLDEN_GAUNTLETS, Items.ZELDAS_LULLABY, Items.EPONAS_SONG, Items.PRELUDE_OF_LIGHT,
+                   Items.SARIAS_SONG, Items.SONG_OF_TIME, Items.BOLERO_OF_FIRE, Items.REQUIEM_OF_SPIRIT,
+                   Items.SONG_OF_STORMS, Items.MINUET_OF_FOREST, Items.SERENADE_OF_WATER, Items.NOCTURNE_OF_SHADOW}
+_RESTRICT_SPELLS = {Items.FARORES_WIND, Items.DINS_FIRE, Items.NAYRUS_LOVE}
+_RESTRICT_TRADE = {Items.POCKET_EGG, Items.COJIRO, Items.ODD_MUSHROOM, Items.ODD_POTION, Items.POACHERS_SAW,
+                   Items.BROKEN_GORONS_SWORD, Items.PRESCRIPTION, Items.EYEBALL_FROG, Items.WORLDS_FINEST_EYEDROPS,
+                   Items.CLAIM_CHECK}
+# allowMasks / allowBottleMaskTrade without the masks (the apworld handles masks in can_use_mask)
+_ALLOW_MASKS = {Items.WEIRD_EGG, Items.ZELDAS_LETTER}
+_ALLOW_BOTTLE_MASK_TRADE = _ALLOW_MASKS | _RESTRICT_TRADE | {
+    Items.EMPTY_BOTTLE, Items.BOTTLE_WITH_MILK, Items.BOTTLE_WITH_RED_POTION, Items.BOTTLE_WITH_GREEN_POTION,
+    Items.BOTTLE_WITH_BLUE_POTION, Items.BOTTLE_WITH_FAIRY, Items.BOTTLE_WITH_FISH, Items.BOTTLE_WITH_BLUE_FIRE,
+    Items.BOTTLE_WITH_BUGS, Items.BOTTLE_WITH_POE, Items.BOTTLE_WITH_RUTOS_LETTER, Items.BOTTLE_WITH_BIG_POE}
+_OCARINAS = {Items.FAIRY_OCARINA, Items.OCARINA_OF_TIME}
+
+_SCENES_ALL_ALLOWED = {"SCENE_DEKU_TREE", "SCENE_DODONGOS_CAVERN", "SCENE_JABU_JABU", "SCENE_FOREST_TEMPLE",
+                       "SCENE_FIRE_TEMPLE", "SCENE_WATER_TEMPLE", "SCENE_SPIRIT_TEMPLE", "SCENE_SHADOW_TEMPLE",
+                       "SCENE_BOTTOM_OF_THE_WELL", "SCENE_ICE_CAVERN", "SCENE_ID_MAX"}
+_SCENES_NO_FARORE = {"SCENE_HYRULE_FIELD", "SCENE_GANONS_TOWER", "SCENE_GERUDO_TRAINING_GROUND",
+                     "SCENE_THIEVES_HIDEOUT", "SCENE_INSIDE_GANONS_CASTLE", "SCENE_GREAT_FAIRYS_FOUNTAIN_MAGIC",
+                     "SCENE_FAIRYS_FOUNTAIN", "SCENE_GREAT_FAIRYS_FOUNTAIN_SPELLS", "SCENE_GROTTOS",
+                     "SCENE_GRAVE_WITH_FAIRYS_FOUNTAIN", "SCENE_REDEAD_GRAVE", "SCENE_ROYAL_FAMILYS_TOMB",
+                     "SCENE_KAKARIKO_VILLAGE", "SCENE_GRAVEYARD", "SCENE_ZORAS_RIVER", "SCENE_KOKIRI_FOREST",
+                     "SCENE_SACRED_FOREST_MEADOW", "SCENE_LAKE_HYLIA", "SCENE_ZORAS_DOMAIN", "SCENE_ZORAS_FOUNTAIN",
+                     "SCENE_GERUDO_VALLEY", "SCENE_LOST_WOODS", "SCENE_DESERT_COLOSSUS", "SCENE_GERUDOS_FORTRESS",
+                     "SCENE_HAUNTED_WASTELAND", "SCENE_HYRULE_CASTLE", "SCENE_DEATH_MOUNTAIN_TRAIL",
+                     "SCENE_DEATH_MOUNTAIN_CRATER", "SCENE_GORON_CITY", "SCENE_LON_LON_RANCH",
+                     "SCENE_OUTSIDE_GANONS_CASTLE"}
+_SCENES_COLLAPSE = {"SCENE_GANONS_TOWER_COLLAPSE_INTERIOR", "SCENE_INSIDE_GANONS_CASTLE_COLLAPSE",
+                    "SCENE_GANONS_TOWER_COLLAPSE_EXTERIOR"}
+_SCENES_BOSS = {"SCENE_DEKU_TREE_BOSS", "SCENE_DODONGOS_CAVERN_BOSS", "SCENE_JABU_JABU_BOSS",
+                "SCENE_FOREST_TEMPLE_BOSS", "SCENE_FIRE_TEMPLE_BOSS", "SCENE_WATER_TEMPLE_BOSS",
+                "SCENE_SPIRIT_TEMPLE_BOSS", "SCENE_SHADOW_TEMPLE_BOSS", "SCENE_GANONDORF_BOSS", "SCENE_GANON_BOSS"}
+_SCENES_TOWN_AND_HOUSES = {"SCENE_MARKET_ENTRANCE_DAY", "SCENE_MARKET_ENTRANCE_NIGHT", "SCENE_MARKET_ENTRANCE_RUINS",
+                           "SCENE_BACK_ALLEY_DAY", "SCENE_BACK_ALLEY_NIGHT", "SCENE_MARKET_DAY", "SCENE_MARKET_NIGHT",
+                           "SCENE_MARKET_RUINS", "SCENE_TEMPLE_OF_TIME_EXTERIOR_DAY",
+                           "SCENE_TEMPLE_OF_TIME_EXTERIOR_NIGHT", "SCENE_TEMPLE_OF_TIME_EXTERIOR_RUINS",
+                           "SCENE_KNOW_IT_ALL_BROS_HOUSE", "SCENE_TWINS_HOUSE", "SCENE_MIDOS_HOUSE",
+                           "SCENE_SARIAS_HOUSE", "SCENE_KAKARIKO_CENTER_GUEST_HOUSE", "SCENE_BACK_ALLEY_HOUSE",
+                           "SCENE_BAZAAR", "SCENE_KOKIRI_SHOP", "SCENE_GORON_SHOP", "SCENE_ZORA_SHOP",
+                           "SCENE_POTION_SHOP_KAKARIKO", "SCENE_BOMBCHU_SHOP", "SCENE_HAPPY_MASK_SHOP",
+                           "SCENE_LINKS_HOUSE", "SCENE_DOG_LADY_HOUSE", "SCENE_STABLE", "SCENE_IMPAS_HOUSE",
+                           "SCENE_LAKESIDE_LABORATORY", "SCENE_CARPENTERS_TENT", "SCENE_GRAVEKEEPERS_HUT",
+                           "SCENE_TEMPLE_OF_TIME", "SCENE_LON_LON_BUILDINGS", "SCENE_HOUSE_OF_SKULLTULA"}
+_SCENES_MASKS_ONLY = {"SCENE_SHOOTING_GALLERY", "SCENE_CASTLE_COURTYARD_GUARDS_DAY",
+                      "SCENE_CASTLE_COURTYARD_GUARDS_NIGHT", "SCENE_BOMBCHU_BOWLING_ALLEY"}
+_SCENES_NO_SWORD = {"SCENE_TREASURE_BOX_SHOP", "SCENE_KNOW_IT_ALL_BROS_HOUSE", "SCENE_TWINS_HOUSE", "SCENE_MIDOS_HOUSE",
+                    "SCENE_SARIAS_HOUSE", "SCENE_KAKARIKO_CENTER_GUEST_HOUSE", "SCENE_BACK_ALLEY_HOUSE",
+                    "SCENE_BAZAAR", "SCENE_KOKIRI_SHOP", "SCENE_GORON_SHOP", "SCENE_ZORA_SHOP",
+                    "SCENE_POTION_SHOP_KAKARIKO", "SCENE_BOMBCHU_SHOP", "SCENE_HAPPY_MASK_SHOP", "SCENE_LINKS_HOUSE",
+                    "SCENE_DOG_LADY_HOUSE", "SCENE_STABLE", "SCENE_IMPAS_HOUSE", "SCENE_LAKESIDE_LABORATORY",
+                    "SCENE_CARPENTERS_TENT", "SCENE_GRAVEKEEPERS_HUT", "SCENE_SHOOTING_GALLERY",
+                    "SCENE_BOMBCHU_BOWLING_ALLEY", "SCENE_POTION_SHOP_GRANNY", "SCENE_CASTLE_COURTYARD_GUARDS_DAY",
+                    "SCENE_CASTLE_COURTYARD_GUARDS_NIGHT", "SCENE_FISHING_POND"}
+
+
+def b_allowed(region: Regions) -> bool:
+    """Logic::BAllowed: can the B button (swords) be used in this region's scene."""
+    if region == Regions.LH_LAB_UNDERWATER:  # upstream: "hacky fix for underwater sections"
+        return False
+    return REGION_SCENE.get(region, "SCENE_ID_MAX") not in _SCENES_NO_SWORD
+
+
+def item_use_allowed(item, region: Regions) -> bool:
+    """Logic::ItemUseAllowed for the region a rule belongs to (upstream CurrentRegionKey: the parent region of an
+    entrance, or the region of an event/location). Fixed per region, so it is decided while building the rules."""
+    if item in _SWORDS:
+        return b_allowed(region)
+    if item in _ALWAYS_ALLOWED:
+        return True
+    if region == Regions.LH_LAB_UNDERWATER:
+        return item in (Items.HOOKSHOT, Items.LONGSHOT)
+    scene = REGION_SCENE.get(region, "SCENE_ID_MAX")
+    if scene in _SCENES_ALL_ALLOWED:
+        return True
+    if scene in _SCENES_NO_FARORE:
+        return item != Items.FARORES_WIND
+    if scene in _SCENES_COLLAPSE:
+        return item != Items.FARORES_WIND and item not in _OCARINAS
+    if scene == "SCENE_CASTLE_COURTYARD_ZELDA":
+        return item not in _RESTRICT_SPELLS and item not in _OCARINAS
+    if scene in _SCENES_BOSS:
+        return item not in _RESTRICT_TRADE and item != Items.FARORES_WIND and item not in _OCARINAS
+    if scene == "SCENE_WINDMILL_AND_DAMPES_GRAVE":
+        return item not in _RESTRICT_SPELLS
+    if scene == "SCENE_MARKET_GUARD_HOUSE":
+        return item not in _RESTRICT_SPELLS and item not in (Items.HOOKSHOT, Items.LONGSHOT)
+    if scene in _SCENES_TOWN_AND_HOUSES:
+        return item in _ALLOW_BOTTLE_MASK_TRADE or item in _OCARINAS
+    if scene == "SCENE_TREASURE_BOX_SHOP":
+        return item in _ALLOW_BOTTLE_MASK_TRADE or item == Items.LENS_OF_TRUTH
+    if scene == "SCENE_POTION_SHOP_GRANNY":
+        return item in _ALLOW_BOTTLE_MASK_TRADE
+    if scene in _SCENES_MASKS_ONLY:
+        return item in _ALLOW_MASKS
+    if scene == "SCENE_FISHING_POND":
+        return item == Items.FISHING_POLE
+    return True  # upstream default: SPDLOG_INFO + true
+
+
+def mask_use_allowed(region: Regions) -> bool:
+    """Logic::ItemUseAllowed for masks: all masks are in allowMasks/allowBottleMaskTrade, so only the fishing pond
+    (fishing pole only) and the Lakeside Lab underwater spot (hookshots only) forbid them."""
+    if region == Regions.LH_LAB_UNDERWATER:
+        return False
+    return REGION_SCENE.get(region, "SCENE_ID_MAX") != "SCENE_FISHING_POND"
+
 
 def can_use_any(names: list[Items], bundle: tuple[Regions, "SohWorld"]) -> Rule:
     rule: Rule
@@ -570,12 +690,13 @@ def can_attack(bundle: tuple[Regions, "SohWorld"]) -> Rule:
 def can_standing_shield(bundle: tuple[Regions, "SohWorld"]) -> Rule:
     """Check if Link can use a shield for standing blocks."""
     return (can_use_any([Items.MIRROR_SHIELD, Items.DEKU_SHIELD], bundle) |
-            (is_adult(bundle) & can_use(Items.HYLIAN_SHIELD, bundle)))
+            (is_adult(bundle) & has_item(Items.HYLIAN_SHIELD, bundle)))  # upstream: HasItem
 
 
 def can_shield(bundle: tuple[Regions, "SohWorld"]) -> Rule:
     """Check if Link can use a shield for blocking or stunning."""
-    return can_use_any([Items.MIRROR_SHIELD, Items.HYLIAN_SHIELD, Items.DEKU_SHIELD], bundle)
+    # upstream 9.3.1 Logic::CanShield: Hylian Shield via HasItem (any age)
+    return can_use_any([Items.MIRROR_SHIELD, Items.DEKU_SHIELD], bundle) | has_item(Items.HYLIAN_SHIELD, bundle)
 
 
 def can_do_trick(trick: Tricks, bundle: tuple[Regions, "SohWorld"]) -> Rule:
@@ -1055,7 +1176,8 @@ def can_cut_shrubs(bundle: tuple[Regions, "SohWorld"]) -> Rule:
     # upstream 9.3.1 Logic::CanCutShrubs also lists Giant's Knife
     return (can_use_sword(bundle) | can_use(Items.GIANTS_KNIFE, bundle) |
             has_explosives(bundle) |
-            can_use_any([Items.BOOMERANG, Items.GORONS_BRACELET, Items.MEGATON_HAMMER], bundle))
+            can_use_any([Items.BOOMERANG, Items.MEGATON_HAMMER], bundle) |
+            has_item(Items.GORONS_BRACELET, bundle))  # upstream: HasItem, not CanUse (no per-scene restriction)
 
 
 def hookshot_or_boomerang(bundle: tuple[Regions, "SohWorld"]) -> Rule:
@@ -1439,6 +1561,8 @@ def has_mask(bundle: tuple[Regions, "SohWorld"], mask: str) -> Rule:
 
 def can_use_mask(bundle: tuple[Regions, "SohWorld"], mask: str) -> Rule:
     # Logic::CanUse: masks need child, unless Masks as Adult (feature 2.4)
+    if not mask_use_allowed(bundle[0]):  # Logic::ItemUseAllowed
+        return False_()
     return has_mask(bundle, mask) & is_child(bundle)
 
 
