@@ -38,7 +38,7 @@ from .Locations import SohLocation, base_location_table, \
     no_logic_trees_location_table, \
     SohLocData, \
     LocTag
-from .location_access import root
+from .location_access import root, archipelago
 from .location_access.overworld import \
     castle_grounds, \
     death_mountain_crater, \
@@ -262,6 +262,8 @@ def create_regions_and_locations(world: "SohWorld") -> None:
                    shadow_temple, spirit_temple, water_temple]
     for region in all_regions:
         region.set_region_rules(world)
+    # Archipelago-specific additions; must run after the ported files (it adjusts the Root connection they create)
+    archipelago.set_region_rules(world)
 
 
 # Create a dictionary mapping blue warp rewards to their vanilla items

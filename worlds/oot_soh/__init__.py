@@ -8,7 +8,6 @@ from rule_builder.cached_world import CachedRuleBuilderWorld
 from rule_builder.rules import Has
 from worlds.AutoWorld import WebWorld, World
 from Fill import fill_restrictive
-from .location_access.overworld.castle_grounds import LocalEvents
 from .Items import SohItem, item_data_table, item_table, SohItemData, progressive_items
 from .Locations import location_table, token_amounts, SohLocData, location_data_table
 from .Options import SohOptions, soh_option_groups, wallet_capacities
@@ -117,6 +116,8 @@ class SohWorld(CachedRuleBuilderWorld):
         self.item_pool = list[SohItem]()
         self.preplaced_items = list[SohItem]()
         self.included_locations = dict[str, SohLocData]()
+        # location name -> [(region, rule)] for every region that lists it (see LogicHelpers.add_location_source)
+        self.soh_location_sources: dict[str, list] = {}
         self.shop_prices = dict[Locations, int]()
         self.shop_vanilla_items = dict[str, str]()
         self.triforce_pieces_required: int = 0
@@ -308,7 +309,27 @@ class SohWorld(CachedRuleBuilderWorld):
 
         self.set_completion_rule()
 
+    def remove_unreachable_events(self) -> None:
+        """Drop event locations that stay unreachable even with every item of this world.
+
+        The 9.3.1 region logic (ported 1:1) has events that only trigger with tricks or settings the seed doesn't use,
+        e.g. the Forest Temple NE courtyard scarecrow without the hover boost trick. Upstream simply never triggers them;
+        in Archipelago an unreachable event fails the accessibility check, so they are removed. This doesn't change what
+        is reachable: the event could never be collected."""
+        state = self.get_pre_fill_state()
+        removed = []
+        for region in self.multiworld.get_regions(self.player):
+            for location in list(region.locations):
+                if location.address is None and location.item is not None and not location.can_reach(state):
+                    region.locations.remove(location)
+                    self.multiworld.regions.location_cache[self.player].pop(location.name, None)
+                    removed.append(location.name)
+        if removed:
+            logger.debug(f"Ship of Harkinian (player {self.player}): removed {len(removed)} unreachable events: {removed}")
+        self.removed_unreachable_events = removed
+
     def pre_fill(self) -> None:
+        self.remove_unreachable_events()
         pre_fill_own_dungeon_items(self)
         pre_fill_dungeon_rewards(self)
         pre_fill_songs(self)

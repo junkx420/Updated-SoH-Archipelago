@@ -65,13 +65,18 @@ def add_locations(parent_region: Regions, world: "SohWorld", locations: list[tup
     mLocations : list[tuple[str, int | None, Rule | Callable[[CollectionState], bool]]] = list()
     for loc in locations:
         locationName = str(loc[0])
+        if locationName not in world.included_locations and locationName not in world.soh_location_sources:
+            continue
+        if len(loc) > 1 and not world.options.true_no_logic:
+            locationRule = loc[1]((parent_region, world)) if callable(loc[1]) else loc[1]
+        else:
+            locationRule = True_()
         if locationName in world.included_locations:
             locationAddress = world.included_locations.pop(loc[0]).loc_id
-            if len(loc) > 1 and not world.options.true_no_logic:
-                locationRule = loc[1]((parent_region, world)) if callable(loc[1]) else loc[1]
-            else:
-                locationRule = True_()
             mLocations.append((locationName, locationAddress, locationRule))
+            world.soh_location_sources[locationName] = [(parent_region, locationRule)]
+        else:
+            add_location_source(locationName, parent_region, locationRule, world)
 
     if len(mLocations) > 0:
         # Create the whole batch of locations at once
@@ -82,6 +87,27 @@ def add_locations(parent_region: Regions, world: "SohWorld", locations: list[tup
             locationRule = mLocation[2]
             location: Location = world.get_location(mLocation[0])
             world.set_rule(location, locationRule)
+
+
+def add_location_source(location_name: str, parent_region: Regions, rule: Rule, world: "SohWorld") -> None:
+    """A location that upstream lists in more than one region (LOCATION() in several areaTable entries) can be
+    collected from any of them. The location moves into its own small region, entered from every listing region with
+    that region's rule; entering keeps the age the region was reached with, so IsChild/IsAdult checks still hold."""
+    from .Regions import SohRegion
+    sources = world.soh_location_sources[location_name]
+    hub_name = f"{location_name} (shared access)"
+    if len(sources) == 1:
+        location: Location = world.get_location(location_name)
+        first_region, first_rule = sources[0]
+        hub = SohRegion(hub_name, world.player, world.multiworld)
+        world.multiworld.regions.append(hub)
+        location.parent_region.locations.remove(location)
+        location.parent_region = hub
+        hub.locations.append(location)
+        world.set_rule(location, True_())
+        world.create_entrance(world.get_region(str(first_region)), hub, first_rule)
+    sources.append((parent_region, rule))
+    world.create_entrance(world.get_region(str(parent_region)), world.get_region(hub_name), rule)
 
 
 def connect_regions(parent_region: Regions, world: "SohWorld", child_regions: list[tuple[Regions, Rule | Callable[[tuple[Regions, "SohWorld"]], Rule]]]) -> None:
@@ -150,6 +176,15 @@ def can_use_any(names: list[Items], bundle: tuple[Regions, "SohWorld"]) -> Rule:
 
 
 def has_item(item: Items | Events | StrEnum, bundle: tuple[Regions, "SohWorld"], count: int = 1) -> Rule:
+    if (item != Items.SKELETON_KEY and item in item_data_table and item_data_table[item].tags
+            and item_data_table[item].tags & GroupTag.Overworld_Key):
+        # 9.3.1 Logic::HasItem: overworld keys count as owned unless Lock Overworld Doors is on
+        return can_open_overworld_door(item, bundle)
+
+    if item in BOSS_SOULS:
+        # 9.3.1 Logic::HasItem: boss souls count as owned while they aren't shuffled
+        return has_boss_soul(item, bundle)
+
     if item == Items.STICKS:
         return has_item(Events.CAN_FARM_STICKS, bundle) & has_item(Items.DEKU_STICK_BAG, bundle)
 
@@ -328,8 +363,8 @@ class HasBottleCount(WrapperRule, game="Ship of Harkinian"):
 
 def has_bottle_count(target_count: int) -> Rule:
     return HasBottleCount( \
-        (HasAll(Events.DELIVER_LETTER, Events.CAN_EMPTY_BIG_POES) & HasFromList(*no_rules_bottles, Items.BOTTLE_WITH_BIG_POE, Items.BOTTLE_WITH_RUTOS_LETTER, count=target_count)) \
-            | (Has(Events.DELIVER_LETTER) & HasFromList(*no_rules_bottles, Items.BOTTLE_WITH_RUTOS_LETTER, count=target_count)) \
+        (HasAll(Events.DELIVER_RUTOS_LETTER, Events.CAN_EMPTY_BIG_POES) & HasFromList(*no_rules_bottles, Items.BOTTLE_WITH_BIG_POE, Items.BOTTLE_WITH_RUTOS_LETTER, count=target_count)) \
+            | (Has(Events.DELIVER_RUTOS_LETTER) & HasFromList(*no_rules_bottles, Items.BOTTLE_WITH_RUTOS_LETTER, count=target_count)) \
             | (Has(Events.CAN_EMPTY_BIG_POES) & HasFromList(*no_rules_bottles, Items.BOTTLE_WITH_BIG_POE, count=target_count)) \
             | HasFromList(*no_rules_bottles, count=target_count) \
         , count = target_count)
@@ -543,11 +578,6 @@ def can_shield(bundle: tuple[Regions, "SohWorld"]) -> Rule:
     return can_use_any([Items.MIRROR_SHIELD, Items.HYLIAN_SHIELD, Items.DEKU_SHIELD], bundle)
 
 
-def take_damage(bundle: tuple[Regions, "SohWorld"]) -> Rule:
-    return (can_use_any([Items.BOTTLE_WITH_FAIRY, Items.NAYRUS_LOVE], bundle)
-            | effective_health_at_least(bundle, 1))
-
-
 def can_do_trick(trick: Tricks, bundle: tuple[Regions, "SohWorld"]) -> Rule:
     # check if we have the trick enabled, the GLITCHED item is for Universal Tracker purposes.
     return OptionFilter(EnableAllTricks, True) | Has(Items.GLITCHED) | OptionFilter(TricksInLogic, trick.value, "contains")
@@ -555,21 +585,6 @@ def can_do_trick(trick: Tricks, bundle: tuple[Regions, "SohWorld"]) -> Rule:
 
 def can_get_nighttime_gs(bundle: tuple[Regions, "SohWorld"]) -> Rule:
     return at_night(bundle) & (OptionFilter(SkullsSunSong, False) | can_use(Items.SUNS_SONG, bundle))
-
-
-def can_break_pots(bundle: tuple[Regions, "SohWorld"]) -> Rule:
-    """Check if Link can break pots for items."""
-    return True_()
-
-
-def can_break_crates(bundle: tuple[Regions, "SohWorld"]) -> Rule:
-    """Check if Link can break crates."""
-    return True_()
-
-
-def can_break_small_crates(bundle: tuple[Regions, "SohWorld"]) -> Rule:
-    """Check if Link can break small crates."""
-    return True_()
 
 
 def can_bonk_trees(bundle: tuple[Regions, "SohWorld"]) -> Rule:
@@ -659,117 +674,153 @@ def can_hit_at_range(bundle: tuple[Regions, "SohWorld"],
 
 def can_kill_enemy(bundle: tuple[Regions, "SohWorld"], enemy: Enemies, distance: EnemyDistance = EnemyDistance.CLOSE,
                    wall_or_floor: bool = True, quantity: int = 1, timer: bool = False, in_water: bool = False) -> Rule:
+    """Port of upstream 9.3.1 Logic::CanKillEnemy (soh/soh/Enhancements/randomizer/logic.cpp).
+
+    The C++ switch(distance) falls through from the given distance to ED_FAR, so a weapon listed under
+    `case ED_X` counts whenever distance <= ED_X.
     """
-    Check if Link can kill a specific enemy at a given combat range.
-    Based on the C++ Logic::CanKillEnemy implementation.
+    def at(case: EnemyDistance) -> bool:
+        return distance <= case
 
-    Args:
-        bundle: The standard bundle of state, regions, and the world class
-        enemy: Enemy type (e.g., "gold_skulltula", "keese", etc.)
-        distance: Combat range - "close", "short_jumpslash", "master_sword_jumpslash",
-                     "long_jumpslash", "bomb_throw", "boomerang", "hookshot", "longshot", "far"
-        wall_or_floor: Whether enemy is on wall or floor
-        quantity: Number of enemies (for ammo considerations)
-        timer: Whether there's a timer constraint
-        in_water: Whether the fight is underwater
-    """
-
-    # Enemy-specific logic based on C++ implementation
-
-    if enemy in [Enemies.GERUDO_GUARD, Enemies.BREAK_ROOM_GUARD]:
+    if enemy in (Enemies.GERUDO_GUARD, Enemies.BREAK_ROOM_GUARD):
         return False_()
-    #For some of the cases to use
-    rule = False_()
+
     if enemy == Enemies.GOLD_SKULLTULA:
-        rule = can_hit_at_range(bundle, distance, wall_or_floor, in_water)
-        if distance <= EnemyDistance.LONGSHOT and wall_or_floor: 
-            rule |= can_use(Items.BOMBCHUS_5, bundle)
-        if distance <= EnemyDistance.BOOMERANG:
-            rule |= can_use_any([Items.DINS_FIRE, Items.BOOMERANG], bundle)
+        rule: Rule = False_()
+        if at(EnemyDistance.CLOSE):
+            rule |= can_use(Items.MEGATON_HAMMER, bundle)
+        if at(EnemyDistance.SHORT_JUMPSLASH):
+            rule |= can_use(Items.KOKIRI_SWORD, bundle)
+        if at(EnemyDistance.MASTER_SWORD_JUMPSLASH):
+            rule |= can_use(Items.MASTER_SWORD, bundle)
+        if at(EnemyDistance.LONG_JUMPSLASH):
+            rule |= can_use_any([Items.BIGGORONS_SWORD, Items.STICKS], bundle)
+        if at(EnemyDistance.BOMB_THROW):
+            rule |= can_use(Items.BOMB_BAG, bundle)
+        if at(EnemyDistance.BOOMERANG):
+            rule |= can_use_any([Items.BOOMERANG, Items.DINS_FIRE], bundle)
+        if at(EnemyDistance.HOOKSHOT):
+            rule |= can_use(Items.HOOKSHOT, bundle)
+        if at(EnemyDistance.LONGSHOT):
+            rule |= can_use(Items.LONGSHOT, bundle)
+            if wall_or_floor:
+                rule |= can_use(Items.BOMBCHUS_5, bundle)
+        rule |= can_use_any([Items.FAIRY_SLINGSHOT, Items.FAIRY_BOW], bundle)
         return rule
-    if enemy == Enemies.BIG_SKULLTULA:
-        rule = can_hit_at_range(bundle, distance, wall_or_floor, in_water)
-        if distance <= EnemyDistance.BOOMERANG:
-            rule |= can_use(Items.DINS_FIRE, bundle)
-        return rule
-    if enemy in [Enemies.GOHMA_LARVA, Enemies.MAD_SCRUB, Enemies.DEKU_BABA]:
+
+    if enemy in (Enemies.GOHMA_LARVA, Enemies.MAD_SCRUB, Enemies.DEKU_BABA, Enemies.POE):
         return can_attack(bundle)
+
+    if enemy == Enemies.BIG_SKULLTULA:
+        rule = False_()
+        if at(EnemyDistance.CLOSE):
+            rule |= can_use(Items.MEGATON_HAMMER, bundle)
+        if at(EnemyDistance.SHORT_JUMPSLASH):
+            rule |= can_use(Items.KOKIRI_SWORD, bundle)
+        if at(EnemyDistance.MASTER_SWORD_JUMPSLASH):
+            rule |= can_use(Items.MASTER_SWORD, bundle)
+        if at(EnemyDistance.LONG_JUMPSLASH):
+            rule |= can_use_any([Items.BIGGORONS_SWORD, Items.STICKS], bundle)
+        if at(EnemyDistance.BOMB_THROW):
+            rule |= can_use_any([Items.BOMB_BAG, Items.DINS_FIRE], bundle)
+        if at(EnemyDistance.HOOKSHOT):  # ED_BOOMERANG falls into ED_HOOKSHOT
+            rule |= can_use(Items.HOOKSHOT, bundle)
+            if wall_or_floor:
+                rule |= can_use(Items.BOMBCHUS_5, bundle)
+        if at(EnemyDistance.LONGSHOT):
+            rule |= can_use(Items.LONGSHOT, bundle)
+        rule |= can_use_any([Items.FAIRY_SLINGSHOT, Items.FAIRY_BOW], bundle)
+        return rule
+
     if enemy == Enemies.DODONGO:
-        rule = can_use_sword(bundle) \
-                | can_use_any([Items.MEGATON_HAMMER, Items.FAIRY_SLINGSHOT, Items.FAIRY_BOW], bundle) \
-                | has_explosives(bundle)
+        rule = (can_use_sword(bundle) | can_use(Items.MEGATON_HAMMER, bundle) | has_explosives(bundle)
+                | can_use_any([Items.FAIRY_SLINGSHOT, Items.FAIRY_BOW], bundle))
         if quantity <= 5:
             rule |= can_use(Items.STICKS, bundle)
         return rule
-    if enemy == Enemies.LIZALFOS:
-        return (can_jump_slash(bundle)
-                | can_use_any([Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT], bundle)
-                | has_explosives(bundle))
 
-    if enemy in [Enemies.KEESE, Enemies.FIRE_KEESE]:
-        rule = can_hit_at_range(bundle, distance, wall_or_floor, in_water)
-        if distance == EnemyDistance.CLOSE:
-            rule |= can_use(Items.KOKIRI_SWORD, bundle)
-        if distance <= EnemyDistance.BOOMERANG:
+    if enemy == Enemies.LIZALFOS:
+        return (can_jump_slash(bundle) | has_explosives(bundle)
+                | can_use_any([Items.FAIRY_SLINGSHOT, Items.FAIRY_BOW], bundle))
+
+    if enemy in (Enemies.KEESE, Enemies.FIRE_KEESE, Enemies.GUAY):
+        rule = False_()
+        if at(EnemyDistance.SHORT_JUMPSLASH):
+            rule |= can_use_any([Items.MEGATON_HAMMER, Items.KOKIRI_SWORD], bundle)
+        if at(EnemyDistance.MASTER_SWORD_JUMPSLASH):
+            rule |= can_use(Items.MASTER_SWORD, bundle)
+        if at(EnemyDistance.LONG_JUMPSLASH):
+            rule |= can_use_any([Items.BIGGORONS_SWORD, Items.STICKS], bundle)
+        if at(EnemyDistance.BOMB_THROW):
+            if not in_water:
+                rule |= can_use(Items.BOMB_BAG, bundle)
+            if enemy == Enemies.GUAY:
+                rule |= can_use(Items.DINS_FIRE, bundle)
+        if at(EnemyDistance.BOOMERANG):
             rule |= can_use(Items.BOOMERANG, bundle)
-        if distance == EnemyDistance.SHORT_JUMPSLASH:
-            rule |= can_use(Items.MEGATON_HAMMER, bundle)
+        if at(EnemyDistance.HOOKSHOT):
+            rule |= can_use(Items.HOOKSHOT, bundle)
+            if wall_or_floor:
+                rule |= can_use(Items.BOMBCHUS_5, bundle)
+        if at(EnemyDistance.LONGSHOT):
+            rule |= can_use(Items.LONGSHOT, bundle)
+        rule |= can_use_any([Items.FAIRY_SLINGSHOT, Items.FAIRY_BOW], bundle)
         return rule
+
     if enemy == Enemies.BLUE_BUBBLE:
-        return blast_or_smash(bundle) | can_use(Items.FAIRY_BOW, bundle) | \
-            ((can_jump_slash_except_hammer(bundle) | can_use(Items.FAIRY_SLINGSHOT, bundle)) &
-             (can_use(Items.NUTS, bundle) | hookshot_or_boomerang(bundle) | can_standing_shield(bundle)))
+        return (blast_or_smash(bundle) | can_use(Items.FAIRY_BOW, bundle)
+                | ((can_jump_slash_except_hammer(bundle) | can_use(Items.FAIRY_SLINGSHOT, bundle))
+                   & (can_use(Items.NUTS, bundle) | hookshot_or_boomerang(bundle) | can_standing_shield(bundle))))
 
     if enemy == Enemies.DEAD_HAND:
-        return can_use_sword(bundle) | (can_use(Items.STICKS, bundle) & can_do_trick(Tricks.BOTW_CHILD_DEADHAND, bundle))
+        return (can_use_sword(bundle)
+                | (can_use(Items.STICKS, bundle) & can_do_trick(Tricks.BOTW_CHILD_DEADHAND, bundle)))
 
     if enemy == Enemies.WITHERED_DEKU_BABA:
-        return can_attack(bundle) | can_use(Items.BOOMERANG, bundle)
+        return can_use_sword(bundle) | can_use(Items.BOOMERANG, bundle)
 
-    if enemy in [Enemies.LIKE_LIKE, Enemies.FLOORMASTER]:
+    if enemy in (Enemies.LIKE_LIKE, Enemies.FLOORMASTER):
         return can_damage(bundle)
 
     if enemy == Enemies.STALFOS:
         rule = False_()
-        if distance <= EnemyDistance.SHORT_JUMPSLASH:
+        if at(EnemyDistance.SHORT_JUMPSLASH):
             rule |= can_use_any([Items.MEGATON_HAMMER, Items.KOKIRI_SWORD], bundle)
-        if distance <= EnemyDistance.MASTER_SWORD_JUMPSLASH:
+        if at(EnemyDistance.MASTER_SWORD_JUMPSLASH):
             rule |= can_use(Items.MASTER_SWORD, bundle)
-        if distance <= EnemyDistance.LONG_JUMPSLASH:
+        if at(EnemyDistance.LONG_JUMPSLASH):
             rule |= can_use(Items.BIGGORONS_SWORD, bundle)
             if quantity <= 1:
                 rule |= can_use(Items.STICKS, bundle)
-        if distance <= EnemyDistance.BOMB_THROW and quantity <= 2 and not timer and not in_water:
-            rule |= (can_use(Items.NUTS, bundle) | hookshot_or_boomerang(bundle)) & can_use(Items.BOMB_BAG, bundle)
-        if distance <= EnemyDistance.HOOKSHOT and wall_or_floor:
+        if at(EnemyDistance.BOMB_THROW) and quantity <= 2 and not timer and not in_water:
+            rule |= ((can_use(Items.NUTS, bundle) | hookshot_or_boomerang(bundle))
+                     & can_use(Items.BOMB_BAG, bundle))
+        if at(EnemyDistance.HOOKSHOT) and wall_or_floor:
             rule |= can_use(Items.BOMBCHUS_5, bundle)
-        if distance <= EnemyDistance.FAR:
-            rule |= can_use(Items.FAIRY_BOW, bundle)
+        rule |= can_use(Items.FAIRY_BOW, bundle)
         return rule
 
     if enemy == Enemies.IRON_KNUCKLE:
-        return (can_use_sword(bundle) |
-                can_use(Items.MEGATON_HAMMER, bundle) |
-                has_explosives(bundle))
+        return can_use_sword(bundle) | can_use(Items.MEGATON_HAMMER, bundle) | has_explosives(bundle)
 
     if enemy == Enemies.FLARE_DANCER:
         return (can_use_any([Items.MEGATON_HAMMER, Items.HOOKSHOT], bundle)
                 | (has_explosives(bundle)
-                    & (can_jump_slash_except_hammer(bundle)
-                         | can_use_any([Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT, Items.BOOMERANG], bundle))))
+                   & (can_jump_slash_except_hammer(bundle)
+                      | can_use_any([Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT, Items.BOOMERANG], bundle))))
 
-    if enemy in [Enemies.WOLFOS, Enemies.WHITE_WOLFOS, Enemies.WALLMASTER]:
+    if enemy in (Enemies.WOLFOS, Enemies.WHITE_WOLFOS, Enemies.WALLMASTER):
         return (can_jump_slash(bundle)
                 | can_use_any([Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT, Items.BOMBCHUS_5, Items.DINS_FIRE], bundle)
                 | (can_use(Items.BOMB_BAG, bundle)
-                    & can_use_any([Items.NUTS, Items.HOOKSHOT, Items.BOOMERANG], bundle)))
+                   & can_use_any([Items.NUTS, Items.HOOKSHOT, Items.BOOMERANG], bundle)))
 
     if enemy == Enemies.GERUDO_WARRIOR:
-        return can_jump_slash(bundle) | can_use(Items.FAIRY_BOW, bundle) | \
-            (can_do_trick(Tricks.GF_WARRIOR_WITH_DIFFICULT_WEAPON, bundle) &
-             can_use_any([Items.FAIRY_SLINGSHOT, Items.BOMBCHUS_5], bundle))
+        return (can_jump_slash(bundle) | can_use(Items.FAIRY_BOW, bundle)
+                | (can_do_trick(Tricks.GF_WARRIOR_WITH_DIFFICULT_WEAPON, bundle)
+                   & can_use_any([Items.FAIRY_SLINGSHOT, Items.BOMBCHUS_5], bundle)))
 
-    if enemy in [Enemies.GIBDO, Enemies.REDEAD]:
+    if enemy in (Enemies.GIBDO, Enemies.REDEAD):
         return can_jump_slash(bundle) | can_use(Items.DINS_FIRE, bundle)
 
     if enemy == Enemies.MEG:
@@ -779,11 +830,10 @@ def can_kill_enemy(bundle: tuple[Regions, "SohWorld"], enemy: Enemies, distance:
         return (blast_or_smash(bundle)
                 | can_use_any([Items.MASTER_SWORD, Items.BIGGORONS_SWORD, Items.STICKS, Items.FAIRY_BOW], bundle)
                 | (can_use_any([Items.NUTS, Items.HOOKSHOT, Items.BOOMERANG], bundle)
-                    & can_use_any([Items.KOKIRI_SWORD, Items.FAIRY_SLINGSHOT], bundle)))
+                   & can_use_any([Items.KOKIRI_SWORD, Items.FAIRY_SLINGSHOT], bundle)))
 
     if enemy == Enemies.GREEN_BUBBLE:
-        return (can_jump_slash(bundle)
-                | can_use_any([Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT], bundle)
+        return (can_jump_slash(bundle) | can_use_any([Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT], bundle)
                 | has_explosives(bundle))
 
     if enemy == Enemies.DINOLFOS:
@@ -791,6 +841,7 @@ def can_kill_enemy(bundle: tuple[Regions, "SohWorld"], enemy: Enemies, distance:
         if not timer:
             rule |= can_use(Items.BOMBCHUS_5, bundle)
         return rule
+
     if enemy == Enemies.TORCH_SLUG:
         return can_jump_slash(bundle) | has_explosives(bundle) | can_use(Items.FAIRY_BOW, bundle)
 
@@ -805,34 +856,46 @@ def can_kill_enemy(bundle: tuple[Regions, "SohWorld"], enemy: Enemies, distance:
 
     if enemy == Enemies.SPIKE:
         return (can_use_any([Items.MASTER_SWORD, Items.BIGGORONS_SWORD, Items.MEGATON_HAMMER, Items.STICKS,
-                            Items.HOOKSHOT, Items.FAIRY_BOW, Items.DINS_FIRE], bundle)
+                             Items.HOOKSHOT, Items.FAIRY_BOW, Items.DINS_FIRE], bundle)
                 | has_explosives(bundle))
 
     if enemy == Enemies.STINGER:
-        rule = can_hit_at_range(bundle, distance, wall_or_floor, in_water)
-        if distance == EnemyDistance.SHORT_JUMPSLASH:
-            rule |= can_use(Items.MEGATON_HAMMER, bundle)
+        rule = False_()
+        if at(EnemyDistance.SHORT_JUMPSLASH):
+            rule |= can_use_any([Items.MEGATON_HAMMER, Items.KOKIRI_SWORD], bundle)
+        if at(EnemyDistance.MASTER_SWORD_JUMPSLASH):
+            rule |= can_use(Items.MASTER_SWORD, bundle)
+        if at(EnemyDistance.LONG_JUMPSLASH):
+            rule |= can_use_any([Items.BIGGORONS_SWORD, Items.STICKS], bundle)
+        if at(EnemyDistance.BOMB_THROW) and not in_water:
+            rule |= can_use(Items.BOMB_BAG, bundle)
+        if at(EnemyDistance.HOOKSHOT):  # ED_BOOMERANG falls into ED_HOOKSHOT
+            rule |= can_use(Items.HOOKSHOT, bundle)
+            if wall_or_floor:
+                rule |= can_use(Items.BOMBCHUS_5, bundle)
+        if at(EnemyDistance.LONGSHOT):
+            rule |= can_use(Items.LONGSHOT, bundle)
+        rule |= can_use_any([Items.FAIRY_SLINGSHOT, Items.FAIRY_BOW], bundle)
         return rule
-    
+
     if enemy == Enemies.BIG_OCTO:
-        # If chasing octo is annoying but with rolls you can catch him, and you need rang to get into this room
-        # without shenanigans anyway. Bunny makes it free
-        # todo: should this have biggoron sword too?
         return can_use_any([Items.KOKIRI_SWORD, Items.STICKS, Items.MASTER_SWORD], bundle)
 
     if enemy == Enemies.GOHMA:
-        return has_boss_soul(Items.GOHMAS_SOUL, bundle) & can_jump_slash(bundle) & \
-            (can_use_any([Items.NUTS, Items.FAIRY_SLINGSHOT, Items.FAIRY_BOW], bundle)
-             | hookshot_or_boomerang(bundle))
+        return (has_boss_soul(Items.GOHMAS_SOUL, bundle) & can_jump_slash(bundle)
+                & (can_use_any([Items.NUTS, Items.FAIRY_SLINGSHOT, Items.FAIRY_BOW], bundle)
+                   | hookshot_or_boomerang(bundle)))
 
     if enemy == Enemies.KING_DODONGO:
-        return (has_boss_soul(Items.KING_DODONGOS_SOUL, bundle) & can_jump_slash(bundle) &
-                (can_use_any([Items.BOMB_BAG, Items.GORONS_BRACELET], bundle) |
-                 (can_do_trick(Tricks.DC_DODONGO_CHU, bundle) & is_adult(bundle) & can_use(Items.BOMBCHUS_5, bundle))))
+        return (has_boss_soul(Items.KING_DODONGOS_SOUL, bundle) & can_jump_slash(bundle)
+                & (can_use(Items.BOMB_BAG, bundle) | has_item(Items.GORONS_BRACELET, bundle)
+                   | (can_do_trick(Tricks.DC_DODONGO_CHU, bundle) & is_adult(bundle)
+                      & can_use(Items.BOMBCHUS_5, bundle))))
 
     if enemy == Enemies.BARINADE:
-        return (has_boss_soul(Items.BARINADES_SOUL, bundle)
-                & can_use(Items.BOOMERANG, bundle) & can_jump_slash_except_hammer(bundle))
+        return (has_boss_soul(Items.BARINADES_SOUL, bundle) & can_use(Items.BOOMERANG, bundle)
+                & (can_jump_slash_except_hammer(bundle)
+                   | (can_do_trick(Tricks.JABU_BARINADE_POTS, bundle) & has_grab(bundle))))
 
     if enemy == Enemies.PHANTOM_GANON:
         return (has_boss_soul(Items.PHANTOM_GANONS_SOUL, bundle) & can_use_sword(bundle)
@@ -842,37 +905,35 @@ def can_kill_enemy(bundle: tuple[Regions, "SohWorld"], enemy: Enemies, distance:
         return has_boss_soul(Items.VOLVAGIAS_SOUL, bundle) & can_use(Items.MEGATON_HAMMER, bundle)
 
     if enemy == Enemies.MORPHA:
-        return (has_boss_soul(Items.MORPHAS_SOUL, bundle) &
-                (can_use(Items.HOOKSHOT, bundle) |
-                (can_do_trick(Tricks.WATER_MORPHA_WITHOUT_HOOKSHOT, bundle) & has_item(Items.BRONZE_SCALE, bundle))) &
-                (can_use_sword(bundle) | can_use(Items.MEGATON_HAMMER, bundle)))
+        return (has_boss_soul(Items.MORPHAS_SOUL, bundle)
+                & (can_use(Items.HOOKSHOT, bundle)
+                   | (can_do_trick(Tricks.WATER_MORPHA_WITHOUT_HOOKSHOT, bundle)
+                      & has_item(Items.BRONZE_SCALE, bundle)))
+                & (can_use_sword(bundle) | can_use(Items.MEGATON_HAMMER, bundle)))
 
     if enemy == Enemies.BONGO_BONGO:
-        return has_boss_soul(Items.BONGO_BONGOS_SOUL, bundle) & \
-            (can_use(Items.LENS_OF_TRUTH, bundle) | can_do_trick(Tricks.LENS_BONGO, bundle)) & can_use_sword(bundle) & \
-            (can_use_any([Items.HOOKSHOT, Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT], bundle) |
-                can_do_trick(Tricks.SHADOW_BONGO, bundle))
+        return (has_boss_soul(Items.BONGO_BONGOS_SOUL, bundle)
+                & (can_use(Items.LENS_OF_TRUTH, bundle) | can_do_trick(Tricks.LENS_BONGO, bundle))
+                & can_use_sword(bundle)
+                & (can_use_any([Items.HOOKSHOT, Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT], bundle)
+                   | can_do_trick(Tricks.SHADOW_BONGO, bundle)))
 
     if enemy == Enemies.TWINROVA:
-        return has_boss_soul(Items.TWINROVAS_SOUL, bundle) & can_use(Items.MIRROR_SHIELD, bundle) & \
-            (can_use_sword(bundle) | can_use(Items.MEGATON_HAMMER, bundle))
+        return (has_boss_soul(Items.TWINROVAS_SOUL, bundle) & can_use(Items.MIRROR_SHIELD, bundle)
+                & (can_use_sword(bundle) | can_use(Items.MEGATON_HAMMER, bundle)))
 
     if enemy == Enemies.GANONDORF:
-        # RANDOTODO: Trick to use hammer (no jumpslash) or stick (only jumpslash) instead of a sword to reflect the
-        # energy ball and either of them regardless of jumpslashing to damage and kill ganondorf
-
-        # Bottle is not taken into account since a sword, hammer or stick are required
-        # for killing ganondorf and all of those can reflect the energy ball
-        # This will not be the case once ammo logic in taken into account as
-        # sticks are limited and using a bottle might become a requirement in that case
         return has_boss_soul(Items.GANONS_SOUL, bundle) & can_use(Items.LIGHT_ARROW, bundle) & can_use_sword(bundle)
 
     if enemy == Enemies.GANON:
         return has_boss_soul(Items.GANONS_SOUL, bundle) & can_use(Items.MASTER_SWORD, bundle)
 
     if enemy == Enemies.DARK_LINK:
-        # RANDOTODO Dark link is buggy right now, retest when he is not
-        return can_jump_slash(bundle) | can_use(Items.FAIRY_BOW, bundle)
+        return (can_use_sword(bundle)
+                | (can_use(Items.BOOMERANG, bundle)
+                   & (can_use_any([Items.FAIRY_BOW, Items.STICKS, Items.MEGATON_HAMMER], bundle)
+                      | has_explosives(bundle)))
+                | (can_use(Items.NUTS, bundle) & can_use_any([Items.STICKS, Items.MEGATON_HAMMER], bundle)))
 
     if enemy == Enemies.ANUBIS:
         # there's a restoration that allows beating them with mirror shield + some way to trigger their attack
@@ -883,8 +944,6 @@ def can_kill_enemy(bundle: tuple[Regions, "SohWorld"], enemy: Enemies, distance:
 
     if enemy == Enemies.PURPLE_LEEVER:
         # dies on its own, so this is the conditions to spawn it (killing 10 normal leevers)
-        # Sticks and Ice arrows work but will need ammo capacity logic
-        # other methods can damage them but not kill them, and they run when hit, making them impractical
         return can_use_any([Items.MASTER_SWORD, Items.BIGGORONS_SWORD], bundle)
 
     if enemy == Enemies.TENTACLE:
@@ -892,33 +951,62 @@ def can_kill_enemy(bundle: tuple[Regions, "SohWorld"], enemy: Enemies, distance:
 
     if enemy == Enemies.BARI:
         return (hookshot_or_boomerang(bundle)
-                | can_use_any([Items.FAIRY_BOW, Items.STICKS, Items.MEGATON_HAMMER, Items.DINS_FIRE], bundle)
+                | can_use_any([Items.FAIRY_BOW, Items.MEGATON_HAMMER, Items.STICKS, Items.DINS_FIRE], bundle)
                 | has_explosives(bundle)
                 | (take_damage(bundle) & can_use_sword(bundle)))
 
     if enemy == Enemies.SHABOM:
-        # RANDOTODO when you add better damage logic, you can kill this by taking hits
+        # EffectiveHealth() > quantity * 4 (1/16 hearts): tank the hits
         return (can_use_any([Items.BOOMERANG, Items.NUTS, Items.DINS_FIRE, Items.ICE_ARROW], bundle)
-                | can_jump_slash(bundle))
+                | can_jump_slash(bundle)
+                | effective_health_at_least(bundle, quantity * 4 + 1))
 
     if enemy == Enemies.OCTOROK:
-        rule = can_reflect_nuts(bundle) | hookshot_or_boomerang(bundle) | can_use_any([Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT, Items.BOMB_BAG], bundle)
+        rule = (can_reflect_nuts(bundle) | hookshot_or_boomerang(bundle)
+                | can_use_any([Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT, Items.BOMB_BAG], bundle))
         if wall_or_floor:
             rule |= can_use(Items.BOMBCHUS_5, bundle)
         return rule
-    return False_()
+
+    if enemy == Enemies.WALLTULA:
+        rule = False_()
+        if at(EnemyDistance.SHORT_JUMPSLASH):
+            rule |= can_use(Items.KOKIRI_SWORD, bundle)
+        if at(EnemyDistance.MASTER_SWORD_JUMPSLASH):
+            rule |= can_use(Items.MASTER_SWORD, bundle)
+        if at(EnemyDistance.LONG_JUMPSLASH):
+            rule |= can_use_any([Items.BIGGORONS_SWORD, Items.STICKS], bundle)
+        if at(EnemyDistance.BOMB_THROW):
+            if not in_water:
+                rule |= can_use(Items.BOMB_BAG, bundle)
+            rule |= can_use(Items.DINS_FIRE, bundle)
+        if at(EnemyDistance.BOOMERANG):
+            rule |= can_use(Items.BOOMERANG, bundle)
+        if at(EnemyDistance.HOOKSHOT):
+            rule |= can_use_any([Items.HOOKSHOT, Items.BOMBCHUS_5, Items.MEGATON_HAMMER], bundle)
+        if at(EnemyDistance.LONGSHOT):
+            rule |= can_use(Items.LONGSHOT, bundle)
+        rule |= can_use_any([Items.FAIRY_SLINGSHOT, Items.FAIRY_BOW], bundle)
+        return rule
+
+    raise ValueError(f"can_kill_enemy: no rule for {enemy}")  # upstream: SPDLOG_ERROR + assert(false)
+
+
+BOSS_SOULS = {Items.GOHMAS_SOUL, Items.KING_DODONGOS_SOUL, Items.BARINADES_SOUL, Items.PHANTOM_GANONS_SOUL,
+              Items.VOLVAGIAS_SOUL, Items.MORPHAS_SOUL, Items.BONGO_BONGOS_SOUL, Items.TWINROVAS_SOUL, Items.GANONS_SOUL}
 
 
 def has_boss_soul(soul: Items, bundle: tuple[Regions, "SohWorld"]):
     # only check for possesion of gannons soul if the option 'on_plus_ganons' is selected
     if soul == Items.GANONS_SOUL:
-        return OptionFilter(ShuffleBossSouls, [ShuffleBossSouls.option_off,ShuffleBossSouls.option_on], operator="in") | has_item(soul, bundle)
+        return OptionFilter(ShuffleBossSouls, [ShuffleBossSouls.option_off,ShuffleBossSouls.option_on], operator="in") | Has(soul)
         
-    return OptionFilter(ShuffleBossSouls, ShuffleBossSouls.option_off) | has_item(soul, bundle)
+    return OptionFilter(ShuffleBossSouls, ShuffleBossSouls.option_off) | Has(soul)
 
 
 def can_pass_enemy(bundle: tuple[Regions, "SohWorld"], enemy: Enemies,
                    distance: EnemyDistance = EnemyDistance.CLOSE, wall_or_floor: bool = True) -> Rule:
+    # upstream 9.3.1 Logic::CanPassEnemy
     if enemy in {Enemies.GOLD_SKULLTULA, Enemies.GOHMA_LARVA, Enemies.LIZALFOS, Enemies.DODONGO, Enemies.MAD_SCRUB,
                  Enemies.KEESE, Enemies.FIRE_KEESE, Enemies.BLUE_BUBBLE, Enemies.DEAD_HAND, Enemies.DEKU_BABA,
                  Enemies.WITHERED_DEKU_BABA, Enemies.STALFOS, Enemies.FLARE_DANCER, Enemies.WOLFOS,
@@ -936,18 +1024,22 @@ def can_pass_enemy(bundle: tuple[Regions, "SohWorld"], enemy: Enemies,
                 | can_use_any([Items.FAIRY_BOW, Items.HOOKSHOT], bundle))
 
     if enemy == Enemies.BIG_SKULLTULA:
-        return (can_kill_enemy(bundle, enemy, distance, wall_or_floor)
+        # hammer jumpslash can pass, but only on flat land where you can kill with hammer swing
+        rule = (can_kill_enemy(bundle, enemy, distance, wall_or_floor)
                 | can_use_any([Items.NUTS, Items.BOOMERANG], bundle))
+        if wall_or_floor and distance == EnemyDistance.CLOSE:
+            rule |= can_do_trick(Tricks.BIG_SKULLTULA_PAUSE_LIFT, bundle)
+        return rule
 
     if enemy == Enemies.LIKE_LIKE:
         return (can_kill_enemy(bundle, enemy, distance, wall_or_floor)
                 | can_use_any([Items.HOOKSHOT, Items.BOOMERANG], bundle))
 
     if enemy in [Enemies.GIBDO, Enemies.REDEAD]:
-        return (can_kill_enemy(bundle, enemy, distance, wall_or_floor)
-                | can_use_any([Items.HOOKSHOT, Items.SUNS_SONG], bundle))
+        # 9.3.1: you can move slowly to avoid getting screamed at
+        return True_()
 
-    if enemy in [Enemies.IRON_KNUCKLE, Enemies.BIG_OCTO]:
+    if enemy in [Enemies.IRON_KNUCKLE, Enemies.BIG_OCTO, Enemies.WALLTULA]:  # Walltula: consistent with RT_SPIRIT_WALL
         return can_kill_enemy(bundle, enemy, distance, wall_or_floor)
 
     if enemy == Enemies.GREEN_BUBBLE:
@@ -960,7 +1052,8 @@ def can_pass_enemy(bundle: tuple[Regions, "SohWorld"], enemy: Enemies,
 
 def can_cut_shrubs(bundle: tuple[Regions, "SohWorld"]) -> Rule:
     """Check if Link can cut shrubs (grass, bushes)."""
-    return (can_use_sword(bundle) |
+    # upstream 9.3.1 Logic::CanCutShrubs also lists Giant's Knife
+    return (can_use_sword(bundle) | can_use(Items.GIANTS_KNIFE, bundle) |
             has_explosives(bundle) |
             can_use_any([Items.BOOMERANG, Items.GORONS_BRACELET, Items.MEGATON_HAMMER], bundle))
 
@@ -973,11 +1066,12 @@ def hookshot_or_boomerang(bundle: tuple[Regions, "SohWorld"]) -> Rule:
 def can_open_underwater_chest(bundle: tuple[Regions, "SohWorld"]) -> Rule:
     return (can_do_trick(Tricks.OPEN_UNDERWATER_CHEST, bundle) &
             can_use(Items.IRON_BOOTS, bundle) &
-            can_use(Items.HOOKSHOT, bundle))
+            can_use(Items.HOOKSHOT, bundle) &
+            has_open_chest(bundle))  # 9.3.1 Logic::CanOpenUnderwaterChest: && HasItem(RG_OPEN_CHEST)
 
 
 def can_open_overworld_door(key: Items, bundle: tuple[Regions, "SohWorld"]) -> Rule:
-    return OptionFilter(LockOverworldDoors, False) | has_item(Items.SKELETON_KEY, bundle) | has_item(key, bundle)
+    return OptionFilter(LockOverworldDoors, False) | HasAny(Items.SKELETON_KEY, key)
 
 
 key_to_ring: dict[Items, Items] = {
@@ -1012,21 +1106,15 @@ def can_get_enemy_drop(bundle: tuple[Regions, "SohWorld"], enemy: Enemies,
             if distance <= EnemyDistance.LONGSHOT:
                 gs_rule |= can_use(Items.LONGSHOT, bundle)
             return rule & gs_rule
-        case Enemies.KEESE:
-            return rule
-        case Enemies.FIRE_KEESE:
+        case Enemies.KEESE | Enemies.FIRE_KEESE | Enemies.GUAY:
             return rule
         case _:
+            # upstream 9.3.1 Logic::CanGetEnemyDrop: aboveLink || (distance <= ED_BOOMERANG && CanUse(RG_BOOMERANG))
             if aboveLink:
                 return rule
-            default_rule: Rule = False_()
             if distance <= EnemyDistance.BOOMERANG:
-                default_rule |= can_use(Items.BOOMERANG, bundle)
-            if distance <= EnemyDistance.HOOKSHOT:
-                default_rule |= can_use(Items.HOOKSHOT, bundle)
-            if distance <= EnemyDistance.LONGSHOT:
-                default_rule |= can_use(Items.LONGSHOT, bundle)
-            return rule & default_rule
+                return rule & can_use(Items.BOOMERANG, bundle)
+            return False_()
     return False_()
 
 def can_detonate_bomb_flowers(bundle: tuple[Regions, "SohWorld"]) -> Rule:
@@ -1038,7 +1126,8 @@ def can_detonate_upright_bomb_flower(bundle: tuple[Regions, "SohWorld"]) -> Rule
             | has_item(Items.GORONS_BRACELET, bundle)
             | (can_do_trick(Tricks.BLUE_FIRE_MUD_WALLS, bundle)
                 & blue_fire(bundle)
-                & (effective_health_at_least(bundle, 1)
+                # 9.3.1 Logic::CanDetonateUprightBombFlower: EffectiveHealth() > 8 (1/16 hearts)
+                & (effective_health_at_least(bundle, 9)
                      | can_use(Items.NAYRUS_LOVE, bundle))))
 
   
@@ -1191,13 +1280,6 @@ def can_trigger_lacs(bundle: tuple[Regions, "SohWorld"]) -> Rule:
 
 
 # TODO implement EffectiveHealth(); Returns 2 for now. Requires implementing a damage multiplier option
-def effective_health_at_least(bundle: tuple[Regions, "SohWorld"], count: int) -> Rule:
-    if count <= 2:
-        return True_()
-    else:
-        return False_()
-
-
 def is_fire_loop_unlocked(bundle: tuple[Regions, "SohWorld"]) -> Rule:
     return False_(options=[OptionFilter(SmallKeyShuffle, [SmallKeyShuffle.option_anywhere, SmallKeyShuffle.option_overworld, SmallKeyShuffle.option_any_dungeon], operator="in")], filtered_resolution=True)
 
@@ -1213,7 +1295,9 @@ def can_ground_jump(bundle: tuple[Regions, "SohWorld"], hasBombFlower: bool = Fa
                 & can_use(Items.BOMB_BAG, bundle))
 
 def can_clear_stalagmite(bundle: tuple[Regions, "SohWorld"]):
-    return can_jump_slash(bundle) | has_explosives(bundle)
+    # upstream 9.3.1 Logic::CanClearStalagmite
+    return (can_jump_slash(bundle) | has_explosives(bundle) | can_use(Items.GIANTS_KNIFE, bundle)
+            | (can_do_trick(Tricks.ICE_STALAGMITE_HOOKSHOT, bundle) & can_use(Items.HOOKSHOT, bundle)))
 
 
 @dataclasses.dataclass
@@ -1274,3 +1358,576 @@ class SohHeartState(LogicMixin):
         ret.soh_piece_of_heart_count = Counter(self.soh_piece_of_heart_count)  # type: ignore # noqa
         ret.soh_heart_count = Counter(self.soh_heart_count)  # type: ignore # noqa
         return ret
+
+
+# ======================================================================================================================
+# Helpers ported from upstream Ship of Harkinian 9.3.1 (soh/soh/Enhancements/randomizer/logic.cpp unless noted).
+# Upstream settings the apworld doesn't offer yet are treated as off; the TODO notes name the feature that adds them
+# (see docs/ap-update/feature-plan.md).
+# ======================================================================================================================
+
+class WaterLevel(IntEnum):
+    """upstream RandoWaterLevel"""
+    LOW = 0
+    LOW_OR_MID = 1
+    MID = 2
+    HIGH = 3
+    HIGH_OR_MID = 4
+
+
+class Recoil(IntEnum):
+    """upstream RecoilRequirements"""
+    SWORD = 0
+    SWORD_AND_SHIELD = 1
+    HAMMER = 2
+    HAMMER_AND_SHIELD = 3
+
+
+class TorchRecoil(IntEnum):
+    """upstream TorchRecoilRequirements"""
+    LONG_AND_SHIELD = 0
+    SHORT = 1
+    MASTER = 2
+    LONG = 3
+
+
+# --- abilities (upstream RG_CLIMB, RG_CRAWL, RG_OPEN_CHEST, RG_POWER_BRACELET, RG_SPEAK_*) ---------------------------
+# Without the ability shuffles (feature 3.11) the game gives all of them at the start.
+def has_climb(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    return True_()  # TODO feature 3.11 (Shuffle Climb)
+
+
+def has_crawl(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    return True_()  # TODO feature 3.11 (Shuffle Crawl)
+
+
+def has_open_chest(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    return True_()  # TODO feature 3.11 (Shuffle Open Chest)
+
+
+def has_grab(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    return True_()  # TODO feature 3.11 (Shuffle Grab / RG_POWER_BRACELET)
+
+
+def has_speak(bundle: tuple[Regions, "SohWorld"], language: str) -> Rule:
+    return True_()  # TODO feature 3.11 (Shuffle Speak)
+
+
+def can_open_large_chest(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    # Logic::CanOpenLargeChest: RAND_INF_CAN_OPEN_LARGE_CHEST, only withheld by Shuffle Open Chest "Progressive"
+    return True_()  # TODO feature 3.11
+
+
+# --- masks (Logic::HasItem RG_*_MASK / RG_BUNNY_HOOD, Logic::CanUse) -------------------------------------------------
+def has_mask(bundle: tuple[Regions, "SohWorld"], mask: str) -> Rule:
+    # Complete Mask Quest = start with every mask (client maps it to the RSK_STARTING_* masks).
+    # Otherwise masks are borrowed in order: Keaton -> Skull -> Spooky -> Bunny Hood, Mask of Truth after all four.
+    borrow = has_item(Events.CAN_BORROW_MASKS, bundle)
+    sold = {
+        "KEATON_MASK": [],
+        "SKULL_MASK": [Events.SOLD_KEATON_MASK],
+        "SPOOKY_MASK": [Events.SOLD_SKULL_MASK],
+        "BUNNY_HOOD": [Events.SOLD_SPOOKY_MASK],
+        "MASK_OF_TRUTH": [Events.SOLD_KEATON_MASK, Events.SOLD_SKULL_MASK, Events.SOLD_SPOOKY_MASK,
+                          Events.SOLD_BUNNY_HOOD],
+    }[mask]
+    rule: Rule = borrow
+    for event in sold:
+        rule &= has_item(event, bundle)
+    return OptionFilter(CompleteMaskQuest, True) | rule
+
+
+def can_use_mask(bundle: tuple[Regions, "SohWorld"], mask: str) -> Rule:
+    # Logic::CanUse: masks need child, unless Masks as Adult (feature 2.4)
+    return has_mask(bundle, mask) & is_child(bundle)
+
+
+def bunny_hood(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    # Logic::BunnyHood: RSK_BUNNY_HOOD ("logical bunny hood") && CanUse(RG_BUNNY_HOOD)
+    return False_()  # TODO feature 2.4 (Bunny Hood option), then: option & can_use_mask(bundle, "BUNNY_HOOD")
+
+
+def bunny_hovers(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    return can_use(Items.HOVER_BOOTS, bundle) & bunny_hood(bundle)
+
+
+# --- health / damage ---------------------------------------------------------------------------------------------
+def effective_health_at_least(bundle: tuple[Regions, "SohWorld"], amount: int) -> Rule:
+    """Logic::EffectiveHealth() >= amount, in 1/16 hearts (9.3.1 units).
+    The apworld has no damage multiplier setting, so damage is normal: effective health = health, doubled by
+    Double Defense."""
+    return (HeartsAtLeast(amount=int(math.ceil(amount / 16)))
+            | (has_item(Items.DOUBLE_DEFENSE, bundle) & HeartsAtLeast(amount=int(math.ceil(amount / 32)))))
+
+
+def take_damage(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    # Logic::TakeDamage: fairy || EffectiveHealth() > 8 || Nayru's Love
+    return (can_use_any([Items.BOTTLE_WITH_FAIRY, Items.NAYRUS_LOVE], bundle)
+            | effective_health_at_least(bundle, 9))
+
+
+def can_void(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    # Logic::CanVoid: fairy, or more than a full heart (half a heart with Double Defense); no OHKO in the apworld
+    return (has_item(Items.BOTTLE_WITH_FAIRY, bundle) | HeartsAtLeast(amount=2)
+            | (has_item(Items.DOUBLE_DEFENSE, bundle) & HeartsAtLeast(amount=1)))
+
+
+# --- movement ------------------------------------------------------------------------------------------------------
+def can_climb_ladder(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    return has_climb(bundle) | (can_do_trick(Tricks.HOOKSHOT_LADDERS, bundle) & can_use(Items.HOOKSHOT, bundle))
+
+
+def can_climb_high_ladder(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    return has_climb(bundle) | (can_do_trick(Tricks.HOOKSHOT_LADDERS, bundle) & can_use(Items.LONGSHOT, bundle))
+
+
+def can_middair_ground_jump(bundle: tuple[Regions, "SohWorld"], has_bombflower: bool = False) -> Rule:
+    explosive = can_use(Items.BOMB_BAG, bundle)
+    if has_bombflower:
+        explosive |= has_item(Items.GORONS_BRACELET, bundle)
+    return (can_do_trick(Tricks.GROUND_JUMP_HARD, bundle) & can_standing_shield(bundle)
+            & can_use(Items.HOVER_BOOTS, bundle) & explosive)
+
+
+def can_ground_jumpslash(bundle: tuple[Regions, "SohWorld"], has_bombflower: bool = False) -> Rule:
+    explosive = can_use(Items.BOMB_BAG, bundle)
+    if has_bombflower:
+        explosive |= has_item(Items.GORONS_BRACELET, bundle)
+    return can_do_trick(Tricks.GROUND_JUMP_HARD, bundle) & can_standing_shield(bundle) & can_jump_slash(bundle) & explosive
+
+
+def can_recoil_hover(bundle: tuple[Regions, "SohWorld"], req: Recoil) -> Rule:
+    base = can_use(Items.HOVER_BOOTS, bundle) & can_do_trick(Tricks.HOVER_BOOST_SIMPLE, bundle)
+    if req == Recoil.SWORD:
+        can = can_jump_slash(bundle)
+    elif req == Recoil.SWORD_AND_SHIELD:
+        # hammer without shield gives better recoils than sword and shield
+        can = (can_jump_slash(bundle) & can_standing_shield(bundle)) | can_use(Items.MEGATON_HAMMER, bundle)
+    elif req == Recoil.HAMMER:
+        can = can_use(Items.MEGATON_HAMMER, bundle)
+    else:
+        can = can_use(Items.MEGATON_HAMMER, bundle) & can_standing_shield(bundle)
+    return base & can
+
+
+def can_recoil_hover_from_object(bundle: tuple[Regions, "SohWorld"], req: TorchRecoil) -> Rule:
+    base = can_use(Items.HOVER_BOOTS, bundle) & can_do_trick(Tricks.HOVER_BOOST_SIMPLE, bundle)
+    long_ = can_use(Items.STICKS, bundle) | can_use(Items.BIGGORONS_SWORD, bundle)
+    if req == TorchRecoil.LONG_AND_SHIELD:
+        can = long_ & can_standing_shield(bundle)
+    elif req == TorchRecoil.SHORT:
+        can = can_use_any([Items.MEGATON_HAMMER, Items.KOKIRI_SWORD, Items.MASTER_SWORD], bundle) | long_
+    elif req == TorchRecoil.MASTER:
+        can = can_use(Items.MASTER_SWORD, bundle) | long_
+    else:
+        can = long_
+    return base & can
+
+
+def summon_epona(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    return is_adult(bundle) & has_item(Events.FREED_EPONA, bundle) & can_use(Items.EPONAS_SONG, bundle)
+
+
+def reach_scarecrow(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    return scarecrows_song(bundle) & can_use(Items.HOOKSHOT, bundle)
+
+
+def reach_distant_scarecrow(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    return scarecrows_song(bundle) & can_use(Items.LONGSHOT, bundle)
+
+
+def sunlight_arrows(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    return OptionFilter(SunlightArrows, True) & can_use(Items.LIGHT_ARROW, bundle)
+
+
+# --- switches / enemies --------------------------------------------------------------------------------------------
+def can_hit_switch(bundle: tuple[Regions, "SohWorld"], distance: EnemyDistance = EnemyDistance.CLOSE,
+                   in_water: bool = False) -> Rule:
+    # upstream switch with fallthrough: every option of a farther distance also works up close
+    hit: Rule = can_use_any([Items.FAIRY_SLINGSHOT, Items.FAIRY_BOW], bundle)
+    if distance <= EnemyDistance.LONGSHOT:
+        hit |= can_use(Items.LONGSHOT, bundle)
+    if distance <= EnemyDistance.HOOKSHOT:
+        hit |= can_use_any([Items.HOOKSHOT, Items.BOMBCHUS_5], bundle)
+    if distance <= EnemyDistance.BOOMERANG:
+        hit |= can_use(Items.BOOMERANG, bundle)
+    if distance <= EnemyDistance.BOMB_THROW and not in_water:
+        hit |= can_use(Items.BOMB_BAG, bundle)
+    if distance <= EnemyDistance.LONG_JUMPSLASH:
+        hit |= can_use_any([Items.BIGGORONS_SWORD, Items.STICKS], bundle)
+    if distance <= EnemyDistance.MASTER_SWORD_JUMPSLASH:
+        hit |= can_use(Items.MASTER_SWORD, bundle)
+    if distance <= EnemyDistance.SHORT_JUMPSLASH:
+        hit |= can_use_any([Items.KOKIRI_SWORD, Items.MEGATON_HAMMER, Items.GIANTS_KNIFE], bundle)
+    return hit
+
+
+def can_break_pots(bundle: tuple[Regions, "SohWorld"], distance: EnemyDistance = EnemyDistance.CLOSE,
+                   wall_or_floor: bool = True, in_water: bool = False) -> Rule:
+    hit: Rule = can_use_any([Items.FAIRY_SLINGSHOT, Items.FAIRY_BOW], bundle)
+    if distance <= EnemyDistance.LONGSHOT:
+        hit |= can_use(Items.LONGSHOT, bundle)
+    if distance <= EnemyDistance.HOOKSHOT:
+        hit |= can_use(Items.HOOKSHOT, bundle)
+    if distance <= EnemyDistance.BOOMERANG:
+        hit |= can_use(Items.BOOMERANG, bundle)
+    if distance <= EnemyDistance.BOMB_THROW and not in_water:
+        hit |= can_use(Items.BOMB_BAG, bundle)
+    if distance <= EnemyDistance.LONG_JUMPSLASH:
+        hit |= can_use_any([Items.BIGGORONS_SWORD, Items.STICKS], bundle)
+    if distance <= EnemyDistance.MASTER_SWORD_JUMPSLASH:
+        hit |= can_use(Items.MASTER_SWORD, bundle)
+    if distance <= EnemyDistance.SHORT_JUMPSLASH:
+        hit |= can_use_any([Items.KOKIRI_SWORD, Items.MEGATON_HAMMER, Items.GIANTS_KNIFE], bundle)
+    if distance <= EnemyDistance.CLOSE:
+        hit |= has_grab(bundle)
+    if wall_or_floor:
+        hit |= can_use(Items.BOMBCHUS_5, bundle)
+    return hit
+
+
+def can_break_crates(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    return True_()
+
+
+def can_break_small_crates(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    return can_jump_slash(bundle) | has_explosives(bundle) | has_grab(bundle)
+
+
+def can_avoid_enemy(bundle: tuple[Regions, "SohWorld"], enemy: Enemies, distance: EnemyDistance = EnemyDistance.CLOSE,
+                    grounded: bool = False, quantity: int = 1) -> Rule:
+    kill = can_kill_enemy(bundle, enemy, distance, True, quantity)
+    if enemy == Enemies.BEAMOS:
+        if not grounded:
+            return True_()
+        avoided: Rule = can_use_any([Items.FAIRY_SLINGSHOT, Items.FAIRY_BOW], bundle)
+        if distance <= EnemyDistance.LONGSHOT:
+            avoided |= can_use(Items.LONGSHOT, bundle)
+        if distance <= EnemyDistance.HOOKSHOT:
+            avoided |= can_use(Items.HOOKSHOT, bundle)
+        if distance <= EnemyDistance.BOOMERANG:
+            avoided |= can_use(Items.BOOMERANG, bundle)
+        if distance <= EnemyDistance.BOMB_THROW:
+            avoided |= can_use_any([Items.DINS_FIRE, Items.NUTS], bundle)
+        return kill | avoided
+    if enemy == Enemies.MAD_SCRUB:
+        return True_() if not grounded else kill | can_use(Items.NUTS, bundle)
+    if enemy in (Enemies.KEESE, Enemies.FIRE_KEESE, Enemies.GUAY):
+        return kill | can_use(Items.NUTS, bundle) | can_use_mask(bundle, "SKULL_MASK")
+    if enemy == Enemies.BLUE_BUBBLE:
+        return True_() if not grounded else kill | can_use(Items.NUTS, bundle) | hookshot_or_boomerang(bundle) | can_standing_shield(bundle)
+    if enemy == Enemies.TORCH_SLUG:
+        return True_() if not grounded else kill | can_use_any([Items.NUTS, Items.HOOKSHOT, Items.DINS_FIRE], bundle)
+    # every other enemy upstream lists can simply be walked past
+    return True_()
+
+
+# --- beans ---------------------------------------------------------------------------------------------------------
+def can_plant_bean(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    # location_access.cpp CanPlantBean: bean soul (always held, no bean soul shuffle) && beans && (child || Skip
+    # Planting Beans, which the client always sets to off)
+    return has_item(Items.MAGIC_BEAN, bundle) & is_child(bundle)
+
+
+def bean_planted(bundle: tuple[Regions, "SohWorld"], plant_event: Events) -> Rule:
+    # Logic::BeanPlanted: the LOGIC_PLANT_*_BEAN event (planting outside of logic is ignored here)
+    return has_item(plant_event, bundle)
+
+
+# --- Death Mountain Crater ---------------------------------------------------------------------------------------
+def dmc_upper_to_pots(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    return (can_use(Items.HOVER_BOOTS, bundle) | bunny_hood(bundle)
+            | (is_adult(bundle) & (has_item(Events.DMC_BOULDER, bundle) | can_do_trick(Tricks.DMC_BOULDER_SKIP, bundle))))
+
+
+def dmc_pots_to_pad(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    return (can_use(Items.HOVER_BOOTS, bundle) | (bunny_hood(bundle) & (is_adult(bundle) | has_climb(bundle)))
+            | can_use(Items.HOOKSHOT, bundle)
+            | (is_adult(bundle) & can_shield(bundle) & can_do_trick(Tricks.DMC_BOLERO_JUMP, bundle) & has_grab(bundle)))
+
+
+def dmc_pad_to_pots(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    return ((can_use(Items.HOVER_BOOTS, bundle) & (is_adult(bundle) | has_climb(bundle)))
+            | can_use(Items.HOOKSHOT, bundle) | (is_adult(bundle) & bunny_hood(bundle) & has_climb(bundle)))
+
+
+def dmc_upper_to_pad(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    return (is_adult(bundle) & take_damage(bundle) & can_do_trick(Tricks.UNINTUITIVE_JUMPS, bundle)
+            & reach_distant_scarecrow(bundle))
+
+
+# --- Water Temple --------------------------------------------------------------------------------------------------
+def water_level(bundle: tuple[Regions, "SohWorld"], level: WaterLevel) -> Rule:
+    low, mid, high = (has_item(Events.WATER_LOW, bundle), has_item(Events.WATER_MIDDLE, bundle),
+                      has_item(Events.WATER_HIGH, bundle))
+    could_low = has_item(Events.WATER_COULD_LOW, bundle)
+    could_low_from_high = has_item(Events.WATER_COULD_LOW_FROM_HIGH, bundle)
+    could_mid = has_item(Events.WATER_COULD_MIDDLE, bundle)
+    could_high_from_mid = has_item(Events.WATER_COULD_HIGH_FROM_MID, bundle)
+    zl = can_use(Items.ZELDAS_LULLABY, bundle)
+    if level == WaterLevel.LOW:
+        return low | (could_low_from_high & (could_high_from_mid | high) & zl)
+    if level == WaterLevel.LOW_OR_MID:
+        return low | mid | ((could_low_from_high | low) & zl)
+    if level == WaterLevel.MID:
+        return mid | (low & could_mid) | ((could_low_from_high | could_low) & could_mid & zl)
+    if level == WaterLevel.HIGH:
+        return high | (could_high_from_mid & could_mid)
+    return mid | high | could_mid  # HIGH_OR_MID
+
+
+def water_rising_target_to_3f_central(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    return can_use(Items.LONGSHOT, bundle) | (can_do_trick(Tricks.HOVER_BOOST_SIMPLE, bundle)
+                                              & can_do_trick(Tricks.DAMAGE_BOOST_SIMPLE, bundle)
+                                              & has_explosives(bundle) & can_use(Items.HOVER_BOOTS, bundle))
+
+
+def water_3f_central_to_high_emblem(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    return ((is_adult(bundle) & can_use(Items.HOVER_BOOTS, bundle)) | can_middair_ground_jump(bundle)
+            | (has_item(Events.WATER_SCARECROW, bundle) & can_use(Items.HOOKSHOT, bundle))
+            | ((is_adult(bundle) | bunny_hood(bundle)) & can_do_trick(Tricks.WATER_HIGH_EMBLEM_JUMP, bundle)))
+
+
+# --- Spirit Temple -------------------------------------------------------------------------------------------------
+def spirit_sun_block_south_ledge(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    return (has_grab(bundle) | is_adult(bundle) | can_kill_enemy(bundle, Enemies.BEAMOS) | bunny_hovers(bundle)
+            | (can_use(Items.HOOKSHOT, bundle)
+               & (has_fire_source(bundle)
+                  | (has_item(Events.SPIRIT_SUN_BLOCK_TORCH, bundle)
+                     & (can_use(Items.STICKS, bundle)
+                        | (can_do_trick(Tricks.SPIRIT_SUN_CHEST, bundle) & can_use(Items.FAIRY_BOW, bundle)))))))
+
+
+def spirit_east_to_switch(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    return ((is_adult(bundle) & (can_do_trick(Tricks.SPIRIT_STATUE_JUMP, bundle) | bunny_hood(bundle)))
+            | can_use(Items.HOVER_BOOTS, bundle)
+            | (can_use(Items.ZELDAS_LULLABY, bundle) & can_use(Items.HOOKSHOT, bundle)))
+
+
+# --- counters / misc ------------------------------------------------------------------------------------------------
+def gs_count_at_least(bundle: tuple[Regions, "SohWorld"], amount: int) -> Rule:
+    return Has(Items.GOLD_SKULLTULA_TOKEN, count=amount)
+
+
+def stone_count_at_least(bundle: tuple[Regions, "SohWorld"], amount: int) -> Rule:
+    return has_enough_stones(bundle, amount)
+
+
+def big_poes_at_least_target(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    # logic->BigPoes >= RSK_BIG_POE_COUNT (big poes in bottles)
+    return has_item(Items.BOTTLE_WITH_BIG_POE, bundle, bundle[1].options.big_poe_target_count.value)
+
+
+def is_fire_loop_locked(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    return OptionFilter(SmallKeyShuffle, [SmallKeyShuffle.option_anywhere, SmallKeyShuffle.option_overworld,
+                                          SmallKeyShuffle.option_any_dungeon], operator="in")
+
+
+def trial_skipped(bundle: tuple[Regions, "SohWorld"], trial: str) -> Rule:
+    # ctx->GetTrial(TK_X)->IsSkipped(); the required trials are rolled in generate_early (world.ganons_trials)
+    name = trial.replace("_", " ").title()  # "FOREST_TRIAL" -> "Forest Trial"
+    return False_() if name in bundle[1].ganons_trials else True_()
+
+
+SCENE_SMALL_KEYS = {
+    "SCENE_FOREST_TEMPLE": Items.FOREST_TEMPLE_SMALL_KEY, "SCENE_FIRE_TEMPLE": Items.FIRE_TEMPLE_SMALL_KEY,
+    "SCENE_WATER_TEMPLE": Items.WATER_TEMPLE_SMALL_KEY, "SCENE_SPIRIT_TEMPLE": Items.SPIRIT_TEMPLE_SMALL_KEY,
+    "SCENE_SHADOW_TEMPLE": Items.SHADOW_TEMPLE_SMALL_KEY,
+    "SCENE_BOTTOM_OF_THE_WELL": Items.BOTTOM_OF_THE_WELL_SMALL_KEY,
+    "SCENE_GERUDO_TRAINING_GROUND": Items.TRAINING_GROUND_SMALL_KEY,
+    "SCENE_THIEVES_HIDEOUT": Items.GERUDO_FORTRESS_SMALL_KEY, "SCENE_INSIDE_GANONS_CASTLE": Items.GANONS_CASTLE_SMALL_KEY,
+    "SCENE_TREASURE_BOX_SHOP": Items.TREASURE_GAME_SMALL_KEY,
+}
+
+
+def small_keys_scene(scene: str, amount: int, bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    # Logic::SmallKeys(SceneID, amount)
+    if scene == "SCENE_TREASURE_BOX_SHOP":
+        # Treasure Chest Game keys only matter with the Treasure Chest Game shuffle (feature 3.10), which the
+        # apworld doesn't offer yet, so the key branch never applies.
+        return False_()  # TODO feature 3.10
+    return small_keys(SCENE_SMALL_KEYS[scene], amount, bundle)
+
+
+# --- AnyAgeTime (location_access.h Region::AnyAgeTime) -------------------------------------------------------------
+@dataclasses.dataclass()
+class AnyAgeTime(WrapperRule, game="Ship of Harkinian"):
+    """The condition holds if it holds for any age that can reach the region (e.g. adult breaks the rocks with the
+    hammer, so child can pass afterwards too)."""
+    parent_region: Regions = Regions.ROOT
+
+    def _instantiate(self, world: "SohWorld") -> Rule.Resolved:  # type: ignore
+        return self.Resolved(self.child.resolve(world), parent_region=self.parent_region, player=world.player,
+                             caching_enabled=getattr(world, "rule_caching_enabled", False))
+
+    class Resolved(WrapperRule.Resolved):
+        parent_region: Regions = Regions.ROOT
+        force_recalculate = True
+
+        def _evaluate(self, state: CollectionState) -> bool:
+            player = self.player
+            region = state.multiworld.get_region(self.parent_region.value, player)
+            stored = state._soh_age[player]  # type: ignore
+            result = False
+            try:
+                for age, reachable in ((Ages.CHILD, state._soh_child_reachable_regions[player]),  # type: ignore
+                                       (Ages.ADULT, state._soh_adult_reachable_regions[player])):  # type: ignore
+                    if region in reachable:
+                        state._soh_age[player] = age  # type: ignore
+                        if self.child(state):
+                            result = True
+                            break
+            finally:
+                state._soh_age[player] = stored  # type: ignore
+            return result
+
+        def region_dependencies(self) -> dict[str, set[int]]:
+            deps = super().region_dependencies()
+            deps.setdefault(self.parent_region.value, set()).add(id(self))
+            return deps
+
+
+def any_age_time(bundle: tuple[Regions, "SohWorld"], rule_fn: Callable[[tuple[Regions, "SohWorld"]], Rule]) -> Rule:
+    return AnyAgeTime(rule_fn(bundle), parent_region=bundle[0])
+
+
+# --- Spirit Temple shared access (location_access.cpp SpiritCertainAccess / SpiritShared) ---------------------------
+# Logic::IsReverseAccessPossible() is only true with boss entrance shuffle, which the apworld doesn't have, so every
+# "!IsReverseAccessPossible() || reverseAccess" term is true and "knownFrontAccess" always holds.
+def spirit_certain_access_rule(bundle: tuple[Regions, "SohWorld"], data: tuple, child: bool) -> Rule:
+    child_keys, child_rev_keys, adult_keys, adult_rev_keys, child_access, adult_access, reverse_access = data
+    keys, rev_keys = (child_keys, child_rev_keys) if child else (adult_keys, adult_rev_keys)
+    access = child_access(bundle) if child else adult_access(bundle)
+    rev = reverse_access(bundle)
+    reverse_event = Events.REVERSE_SPIRIT_CHILD if child else Events.REVERSE_SPIRIT_ADULT
+    spirit_key = Items.SPIRIT_TEMPLE_SMALL_KEY
+    return ((access & small_keys(spirit_key, keys, bundle))
+            | (has_item(reverse_event, bundle) & rev & small_keys(spirit_key, rev_keys, bundle))
+            | (access & rev & small_keys(spirit_key, max(keys, rev_keys), bundle)))
+
+
+@dataclasses.dataclass(init=False)
+class SpiritShared(NestedRule, game="Ship of Harkinian"):
+    """Upstream SpiritShared: a check reachable by one age only counts if the other age could reach it too, unless
+    the current age has enough keys to be certain to get there ("certain access").
+    children: [certain_child, certain_adult, cond_0, child_access_0, adult_access_0, cond_1, ...]
+    Difference to upstream: with any_age and certain access for both ages, upstream evaluates the condition with
+    IsChild and IsAdult both set at once; here it is evaluated per age and OR'ed."""
+    region: Regions = Regions.ROOT
+    any_age: bool = False
+
+    def __init__(self, *children: Rule, region: Regions, any_age: bool, options=(), filtered_resolution=False):
+        super().__init__(*children, options=options, filtered_resolution=filtered_resolution)
+        self.region = region
+        self.any_age = any_age
+
+    def _instantiate(self, world: "SohWorld") -> Rule.Resolved:  # type: ignore
+        return self.Resolved(tuple(c.resolve(world) for c in self.children), region=self.region,
+                             any_age=self.any_age, player=world.player,
+                             caching_enabled=getattr(world, "rule_caching_enabled", False))
+
+    class Resolved(NestedRule.Resolved):
+        region: Regions = Regions.ROOT
+        any_age: bool = False
+        force_recalculate = True
+
+        def _evaluate(self, state: CollectionState) -> bool:
+            player = self.player
+            stored = state._soh_age[player]  # type: ignore
+
+            def at(rule: Rule.Resolved, age: Ages) -> bool:
+                state._soh_age[player] = age  # type: ignore
+                try:
+                    return rule(state)
+                finally:
+                    state._soh_age[player] = stored  # type: ignore
+
+            certain_child, certain_adult = self.children[0], self.children[1]
+            parts = [self.children[i:i + 3] for i in range(2, len(self.children), 3)]
+            cc, ac = at(certain_child, Ages.CHILD), at(certain_adult, Ages.ADULT)
+            if self.any_age and (cc or ac):
+                return (cc and at(parts[0][0], Ages.CHILD)) or (ac and at(parts[0][0], Ages.ADULT))
+            region = state.multiworld.get_region(self.region.value, player)
+            if stored == Ages.CHILD and region in state._soh_child_reachable_regions[player]:  # type: ignore
+                if not at(parts[0][0], Ages.CHILD):
+                    return False
+                return cc or any(at(adult_acc, Ages.ADULT) and at(cond, Ages.ADULT) for cond, _, adult_acc in parts)
+            if stored == Ages.ADULT and region in state._soh_adult_reachable_regions[player]:  # type: ignore
+                if not at(parts[0][0], Ages.ADULT):
+                    return False
+                return ac or any(at(child_acc, Ages.CHILD) and at(cond, Ages.CHILD) for cond, child_acc, _ in parts)
+            return False
+
+        def region_dependencies(self) -> dict[str, set[int]]:
+            deps = super().region_dependencies()
+            deps.setdefault(self.region.value, set()).add(id(self))
+            return deps
+
+
+def make_spirit_shared(world: "SohWorld", data_table: dict, region: Regions, cond_fn, any_age: bool = False,
+                       others: list | None = None) -> Rule:
+    regions = [(region, cond_fn)] + list(others or [])
+    first = (region, world)
+    children: list[Rule] = [spirit_certain_access_rule(first, data_table[region], True),
+                            spirit_certain_access_rule(first, data_table[region], False)]
+    for reg, fn in regions:
+        b = (reg, world)
+        data = data_table[reg]
+        children += [fn(b), data[4](b), data[5](b)]
+    return SpiritShared(*children, region=region, any_age=any_age)
+
+
+def spirit_explosive_key_logic(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    # Logic::SpiritExplosiveKeyLogic: SmallKeys(SCENE_SPIRIT_TEMPLE, HasExplosives() ? 1 : 2)
+    key = Items.SPIRIT_TEMPLE_SMALL_KEY
+    return (has_explosives(bundle) & small_keys(key, 1, bundle)) | small_keys(key, 2, bundle)
+
+
+def spirit_west_to_skull(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    return ((is_adult(bundle) & (can_do_trick(Tricks.SPIRIT_STATUE_JUMP, bundle) | bunny_hood(bundle)))
+            | can_use(Items.HOVER_BOOTS, bundle) | reach_scarecrow(bundle))
+
+
+def outer_west_hand_logic(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    # Logic::OuterWestHandLogic: explosives, (climb or longshot), grab, SmallKeys(SPIRIT, HasItem(LONGSHOT) ? 3 : 5)
+    key = Items.SPIRIT_TEMPLE_SMALL_KEY
+    return (has_explosives(bundle) & (has_climb(bundle) | can_use(Items.LONGSHOT, bundle)) & has_grab(bundle)
+            & ((has_item(Items.LONGSHOT, bundle) & small_keys(key, 3, bundle)) | small_keys(key, 5, bundle)))
+
+
+# --- static negation -----------------------------------------------------------------------------------------------
+# rule_builder has no negation on purpose: logic must stay monotonic in items. Upstream negates settings and tricks,
+# which are fixed at generation time, so these two rules only accept those and fail loudly otherwise.
+@dataclasses.dataclass()
+class Not(WrapperRule, game="Ship of Harkinian"):
+    """!child for a child that resolves to a constant (settings, dungeon type, ...)."""
+
+    def _instantiate(self, world: "SohWorld") -> Rule.Resolved:  # type: ignore
+        if isinstance(self.child, OptionFilter):  # helpers like is_fire_loop_locked return a bare option filter
+            return (False_() if self.child.check(world.options) else True_()).resolve(world)
+        resolved = self.child.resolve(world)
+        if isinstance(resolved, True_.Resolved):
+            return False_().resolve(world)
+        if isinstance(resolved, False_.Resolved):
+            return True_().resolve(world)
+        raise ValueError(f"Not() needs a rule that is constant at generation time, got {resolved}")
+
+
+@dataclasses.dataclass()
+class TrickDisabled(Rule, game="Ship of Harkinian"):
+    """!ctx->GetTrickOption(trick): true when the trick is not enabled in the options."""
+    trick: str = ""
+
+    def _instantiate(self, world: "SohWorld") -> Rule.Resolved:  # type: ignore
+        enabled = bool(world.options.enable_all_tricks.value) or self.trick in world.options.tricks_in_logic.value
+        return (False_() if enabled else True_()).resolve(world)
+
+
+def trick_disabled(trick: Tricks, bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    return TrickDisabled(trick=trick.value)
+
+
+def starting_zeldas_letter(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    # RSK_STARTING_ZELDAS_LETTER as the client sets it (SeedContext.cpp ParseArchipelagoOptions):
+    # Skip Child Zelda, or Kakariko Gate "Open"
+    return True_(options=[OptionFilter(SkipChildZelda, True)]) | True_(options=[OptionFilter(KakarikoGate, KakarikoGate.option_open)])
