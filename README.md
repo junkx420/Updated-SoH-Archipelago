@@ -39,12 +39,3 @@ as sources, not as affiliations:
 
 License files and credits of the original projects are kept unchanged in the `client` and `apworld` branches
 and apply there.
-
----
-
-### Kurzfassung (Deutsch)
-
-Inoffizielles Fan-Update der Archipelago-Einbindung von Ship of Harkinian auf den Randomizer-Stand von SoH 9.3.1.
-Work in Progress, nicht vollständig, nicht vom Archipelago-SoH-Team oder den Harbour Masters, nicht offiziell
-unterstützt. Bitte keine Support-Anfragen an die Original-Projekte. Keine ROMs oder Spieldateien enthalten,
-eine eigene legale Kopie des Spiels ist nötig.
