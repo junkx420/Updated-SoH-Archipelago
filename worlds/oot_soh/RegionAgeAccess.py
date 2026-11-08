@@ -43,6 +43,18 @@ class SohAgeLogic(LogicMixin):
 
     def _soh_update_age_reachable_regions(self, player):
         self._soh_stale[player] = False
+        # Repeat both searches until neither age reaches a new region. Rules such as AnyAgeTime (upstream
+        # Region::AnyAgeTime) let one age use what the other age can reach, so a region the adult search finds can open
+        # further connections for child (and the other way round). The blocked sets keep the searches incremental.
+        while True:
+            before = (len(self._soh_child_reachable_regions[player]),
+                      len(self._soh_adult_reachable_regions[player]))
+            self._soh_search_ages(player)
+            if before == (len(self._soh_child_reachable_regions[player]),
+                          len(self._soh_adult_reachable_regions[player])):
+                break
+
+    def _soh_search_ages(self, player):
         for age in [Ages.CHILD, Ages.ADULT]:
             self._soh_age[player] = age
             start = self.multiworld.get_region(
