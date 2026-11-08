@@ -23,6 +23,10 @@
 #include "soh/Enhancements/game-interactor/GameInteractor.h"
 #include "soh/Enhancements/game-interactor/GameInteractor_Hooks.h"
 #include "soh/Enhancements/randomizer/randomizer_check_tracker.h"
+#include "soh/Enhancements/randomizer/randomizer.h"
+#include "soh/Enhancements/randomizer/rng.h"
+#include "soh/Enhancements/custom-message/CustomMessageTypes.h"
+#include <fast/Fast3dGui.h>
 #include "soh/Notification/Notification.h"
 #include "soh/ShipInit.hpp"
 #include "soh/SaveManager.h"
@@ -361,7 +365,7 @@ bool ArchipelagoClient::StartClient() {
                         if (receivedDamage >= 20) {
                             Player* player = GET_PLAYER(gPlayState);
                             // 80 received points is one full heart aka 16 health.
-                            gSaveContext.health -= floor(receivedDamage / 5);
+                            gSaveContext.health -= static_cast<int16_t>(floor(receivedDamage / 5));
 
                             // Only use hit animations when the player is able to process it.
                             if (!(GameInteractor::IsGameplayPaused() || player->stateFlags2 & PLAYER_STATE2_CRAWLING ||
@@ -495,11 +499,14 @@ void ArchipelagoClient::GameLoaded() {
     // Load textures for the archipelago items that're shown in the notifications
     static bool sArchipelagoTexturesLoaded = false;
     if (!sArchipelagoTexturesLoaded) {
-        Ship::Context::GetInstance()->GetWindow()->GetGui()->LoadTextureFromRawImage(
+        std::dynamic_pointer_cast<Fast::Fast3dGui>(Ship::Context::GetRawInstance()->GetWindow()->GetGui())
+            ->LoadTextureFromRawImage(
             "Archipelago Progressive Icon", "textures/parameter_static/gArchipelagoProgressive.png");
-        Ship::Context::GetInstance()->GetWindow()->GetGui()->LoadTextureFromRawImage(
+        std::dynamic_pointer_cast<Fast::Fast3dGui>(Ship::Context::GetRawInstance()->GetWindow()->GetGui())
+            ->LoadTextureFromRawImage(
             "Archipelago Useful Icon", "textures/parameter_static/gArchipelagoUseful.png");
-        Ship::Context::GetInstance()->GetWindow()->GetGui()->LoadTextureFromRawImage(
+        std::dynamic_pointer_cast<Fast::Fast3dGui>(Ship::Context::GetRawInstance()->GetWindow()->GetGui())
+            ->LoadTextureFromRawImage(
             "Archipelago Junk Icon", "textures/parameter_static/gArchipelagoJunk.png");
 
         sArchipelagoTexturesLoaded = true;
@@ -601,8 +608,8 @@ void ArchipelagoClient::InitForeignHints() {
             ApForeignHint foreignHint;
             foreignHint.playerId = hintLocation[0];
             foreignHint.locationId = hintLocation[1];
-            foreignHint.playerName = apClient->get_player_alias(foreignHint.playerId);
-            const std::string& game = apClient->get_player_game(foreignHint.playerId);
+            foreignHint.playerName = apClient->get_player_alias(static_cast<int>(foreignHint.playerId));
+            const std::string& game = apClient->get_player_game(static_cast<int>(foreignHint.playerId));
             foreignHint.locationName = apClient->get_location_name(foreignHint.locationId, game);
             foreignHint.groupName = get_random_group_from_location(foreignHint.locationName, game);
             foreignLocations.push_back(foreignHint);
@@ -976,7 +983,7 @@ void ArchipelagoClient::OpenForeignHint(RandomizerHint randomizerHintId) {
             foreignHint.locationName == Rando::StaticData::GetLocation(RC_LINKS_POCKET)->GetName()) {
             continue;
         }
-        apClient->CreateHints({ foreignHint.locationId }, foreignHint.playerId);
+        apClient->CreateHints({ foreignHint.locationId }, static_cast<int>(foreignHint.playerId));
     }
 }
 
@@ -1628,27 +1635,27 @@ void LoadArchipelagoData() {
     });
 }
 
-void SaveArchipelagoData(SaveContext* saveContext, int sectionID, bool fullSave) {
-    SaveManager::Instance->SaveData("isArchipelago", saveContext->ship.quest.data.archipelago.isArchipelago);
+void SaveArchipelagoData(const SaveContext& saveContext, int sectionID, bool fullSave) {
+    SaveManager::Instance->SaveData("isArchipelago", saveContext.ship.quest.data.archipelago.isArchipelago);
     SaveManager::Instance->SaveData("lastReceivedItemIndex",
-                                    saveContext->ship.quest.data.archipelago.lastReceivedItemIndex);
+                                    saveContext.ship.quest.data.archipelago.lastReceivedItemIndex);
 
-    SaveManager::Instance->SaveData("roomHash", saveContext->ship.quest.data.archipelago.roomHash);
-    SaveManager::Instance->SaveData("slotName", saveContext->ship.quest.data.archipelago.slotName);
-    SaveManager::Instance->SaveData("archiUri", saveContext->ship.quest.data.archipelago.archiUri);
+    SaveManager::Instance->SaveData("roomHash", saveContext.ship.quest.data.archipelago.roomHash);
+    SaveManager::Instance->SaveData("slotName", saveContext.ship.quest.data.archipelago.slotName);
+    SaveManager::Instance->SaveData("archiUri", saveContext.ship.quest.data.archipelago.archiUri);
     SaveManager::Instance->SaveData("roomPass", gSaveContext.ship.quest.data.archipelago.roomPass);
 
     SaveManager::Instance->SaveArray(
-        "locations", ARRAY_COUNT(saveContext->ship.quest.data.archipelago.locations), [&](size_t i) {
+        "locations", ARRAY_COUNT(saveContext.ship.quest.data.archipelago.locations), [&](size_t i) {
             SaveManager::Instance->SaveStruct("", [&]() {
                 SaveManager::Instance->SaveData("itemFlags",
-                                                saveContext->ship.quest.data.archipelago.locations[i].itemFlags);
+                                                saveContext.ship.quest.data.archipelago.locations[i].itemFlags);
                 SaveManager::Instance->SaveData("itemName",
-                                                saveContext->ship.quest.data.archipelago.locations[i].itemName);
+                                                saveContext.ship.quest.data.archipelago.locations[i].itemName);
                 SaveManager::Instance->SaveData("hintName",
-                                                saveContext->ship.quest.data.archipelago.locations[i].hintName);
+                                                saveContext.ship.quest.data.archipelago.locations[i].hintName);
                 SaveManager::Instance->SaveData("playerName",
-                                                saveContext->ship.quest.data.archipelago.locations[i].playerName);
+                                                saveContext.ship.quest.data.archipelago.locations[i].playerName);
             });
         });
 

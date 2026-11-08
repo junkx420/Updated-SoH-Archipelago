@@ -4,6 +4,7 @@
 #include "soh/ShipInit.hpp"
 #include "soh/Enhancements/enhancementTypes.h"
 #include "soh/Enhancements/randomizer/SeedContext.h"
+#include "soh/Enhancements/randomizer/rng.h"
 #include "soh/Notification/Notification.h"
 
 extern "C" {

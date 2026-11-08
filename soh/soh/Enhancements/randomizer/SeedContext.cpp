@@ -471,8 +471,9 @@ void Context::ParseArchipelago() {
     // Seed the RNG from the Archipelago seed up front so everything downstream is deterministic.
     SetSeed(apClient.GetSlotData()["archipelago_seed"]);
     Random_Init(GetSeed());
-    ParseArchipelagoItemsLocations(apClient.GetScoutedItems());
+    // Options first: item parsing needs some of them (e.g. ice trap names) and options parsing uses no RNG.
     ParseArchipelagoOptions();
+    ParseArchipelagoItemsLocations(apClient.GetScoutedItems());
     PlaceArchipelagoTriggerItems();
     ParseArchipelagoTricks();
     ParseArchipelagoExcludedLocations();
@@ -1074,7 +1075,12 @@ void Context::ParseArchipelagoItemsLocations(const std::vector<ArchipelagoClient
             if (item == RG_ICE_TRAP) {
                 RandomizerGet iceTrapItem = ArchipelagoClient::GetInstance().GetIceTrapItem();
                 overrides[rc] = ItemOverride(rc, iceTrapItem);
-                overrides[rc].SetTrickName(Text(Traps::GetTrapName(iceTrapItem)));
+                // 9.3.1: trap names depend on the Ice Trap Names setting and carry their own article
+                // (same as upstream Context::CreateItemOverrides)
+                Traps::TrickName trickName = Traps::GetTrapName(
+                    iceTrapItem, static_cast<RandoIceTrapNames>(mOptions[RSK_ICE_TRAP_NAMES].Get()), &rando_state);
+                overrides[rc].SetTrickName(trickName.name);
+                overrides[rc].SetTrickArticle(trickName.article);
             }
         } else {
             // Other player item

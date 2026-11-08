@@ -91,7 +91,7 @@ void Window::Draw() {
         if (position == 2 || position == 3) {
             ImGui::SetCursorPosY(ImGui::GetWindowSize().y - (60 * (inverseIndex + 1)));
         } else {
-            ImGui::SetCursorPosY(60 * inverseIndex);
+            ImGui::SetCursorPosY(static_cast<float>(60 * inverseIndex));
         }
 
         ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0, 0, 0, 0.5));
