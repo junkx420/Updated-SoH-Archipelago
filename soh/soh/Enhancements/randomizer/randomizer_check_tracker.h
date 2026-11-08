@@ -2,10 +2,7 @@
 
 #include <nlohmann/json.hpp>
 #include "randomizerTypes.h"
-#include "randomizer_check_objects.h"
 #include "soh/SohGui/UIWidgets.hpp"
-
-#include <libultraship/libultraship.h>
 
 namespace CheckTracker {
 
@@ -62,7 +59,9 @@ void UpdateAllOrdering();
 void UpdateAllAreas();
 void RecalculateAllAreaTotals();
 void SpoilAreaFromCheck(RandomizerCheck rc);
+void SpoilAreaFromCantObtain(RandomizerGet rg);
 void RecalculateAvailableChecks(RandomizerRegion startingRegion = RR_ROOT, RandoAgeTime startingAgeTime = RAT_NONE);
-void LoadFromPreset(nlohmann::json info);
+void LoadFromPreset(const nlohmann::json& info);
+bool AreAllSilversSpoiled();
 int GetStartingShopItem(uint32_t sceneId);
 } // namespace CheckTracker

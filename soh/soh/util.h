@@ -1,12 +1,17 @@
 #pragma once
 #include <string>
+#include <vector>
 #include <stdint.h>
+#include <algorithm>
+#include <iterator>
 
 typedef enum FileType {
     FILE_TYPE_SAVE_VANILLA,
     FILE_TYPE_SAVE_RANDO,
     FILE_TYPE_PRESET,
     FILE_TYPE_SPOILER,
+    FILE_TYPE_SAVE_SPEEDRUN,
+    // Archipelago comes after the upstream file types so that saves made with upstream SoH keep their meaning.
     FILE_TYPE_SAVE_ARCHI
 } FileType;
 
@@ -31,4 +36,15 @@ size_t CopyStringToCharBuffer(char* buffer, const std::string& source, size_t ma
 
 bool IsStringEmpty(std::string str);
 uint32_t Hash(std::string str);
+
+std::vector<std::string> StringSplit(const std::string& str, const std::string& delimiter);
+
+template <typename T, typename Container> bool Contains(const T& element, const Container& container) {
+    return std::find(container.begin(), container.end(), element) != container.end();
+}
+
+template <typename T, typename FromContainer>
+void AppendVector(std::vector<T>& toVector, const FromContainer& fromContainer) {
+    toVector.insert(toVector.end(), std::cbegin(fromContainer), std::cend(fromContainer));
+}
 } // namespace SohUtils
