@@ -99,10 +99,10 @@ class TestCanKillEnemy(KillBase):
         enemy = Enemies.BIG_SKULLTULA
         items = [Items.BOOMERANG]
 
-        # Dins Fire
+        # Dins Fire (9.3.1 Logic::CanKillEnemy: listed under ED_BOMB_THROW; ED_BOOMERANG falls into ED_HOOKSHOT)
         items = [Items.PROGRESSIVE_MAGIC_METER, Items.DINS_FIRE]
         for distance in (EnemyDistance.CLOSE, EnemyDistance.SHORT_JUMPSLASH, EnemyDistance.MASTER_SWORD_JUMPSLASH, 
-                         EnemyDistance.LONG_JUMPSLASH, EnemyDistance.BOMB_THROW, EnemyDistance.BOOMERANG):
+                         EnemyDistance.LONG_JUMPSLASH, EnemyDistance.BOMB_THROW):
             self.require_all_to_beat(items, enemy, distance)
 
     def test_dodongo(self):
@@ -336,8 +336,10 @@ class TestCanKillEnemy(KillBase):
         """
         Checking if player can kill Dark Link
         """
-        items = [Items.KOKIRI_SWORD, Items.MASTER_SWORD, Items.BIGGORONS_SWORD, Items.PROGRESSIVE_BOW]
+        # 9.3.1 Logic::CanKillEnemy: any sword, or boomerang plus bow/sticks/hammer/explosives, or nuts plus sticks/hammer
+        items = [Items.KOKIRI_SWORD, Items.MASTER_SWORD, Items.BIGGORONS_SWORD]
         self.require_any_to_beat(items, Enemies.DARK_LINK)
+        self.require_all_to_beat([Items.BOOMERANG, Items.PROGRESSIVE_BOW], Enemies.DARK_LINK)
 
     def test_anubis(self):
         """
@@ -380,9 +382,11 @@ class TestCanKillEnemy(KillBase):
         Checking if player can kill Shabom
         """
         items = [Items.BOOMERANG, Items.PROGRESSIVE_NUT_CAPACITY, Items.KOKIRI_SWORD, Items.MASTER_SWORD, Items.BIGGORONS_SWORD, Items.PROGRESSIVE_STICK_CAPACITY, Items.MEGATON_HAMMER]
-        self.require_any_to_beat(items, Enemies.SHABOM)
-        self.require_all_to_beat([Items.PROGRESSIVE_MAGIC_METER, Items.DINS_FIRE], Enemies.SHABOM)
-        self.require_all_to_beat([Items.PROGRESSIVE_BOW, Items.PROGRESSIVE_MAGIC_METER, Items.ICE_ARROW], Enemies.SHABOM)
+        # 9.3.1 Logic::CanKillEnemy: EffectiveHealth() > quantity * 4 (1/16 hearts), so tanking the hits works for up to
+        # 11 shaboms with the starting 3 hearts; the weapons only matter for bigger groups
+        self.require_any_to_beat(items, Enemies.SHABOM, quantity=12)
+        self.require_all_to_beat([Items.PROGRESSIVE_MAGIC_METER, Items.DINS_FIRE], Enemies.SHABOM, quantity=12)
+        self.require_all_to_beat([Items.PROGRESSIVE_BOW, Items.PROGRESSIVE_MAGIC_METER, Items.ICE_ARROW], Enemies.SHABOM, quantity=12)
 
     def test_octorok(self):
         """

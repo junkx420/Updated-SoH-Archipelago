@@ -130,7 +130,8 @@ class TestCanUseItems(SohTestBase):
         self.require_all(Items.FISHING_POLE, [Items.FISHING_POLE, Items.PROGRESSIVE_WALLET])
 
     def test_epona(self):
-        self.require_all(Items.EPONA, [Items.PROGRESSIVE_OCARINA, Items.EPONAS_SONG, Events.FREED_EPONA])
+        # skip_epona_race is on in this test: 9.3.1 root.cpp then sets LOGIC_FREED_EPONA from the start
+        self.require_all(Items.EPONA, [Items.PROGRESSIVE_OCARINA, Items.EPONAS_SONG])
     
     def test_trade_items(self):
         # when creating this test the shuffle_adult_trade_items option is turned on so trade items aren't pre-collected
