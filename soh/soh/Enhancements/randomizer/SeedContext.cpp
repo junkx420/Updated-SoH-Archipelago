@@ -473,6 +473,7 @@ void Context::ParseArchipelago() {
     Random_Init(GetSeed());
     ParseArchipelagoItemsLocations(apClient.GetScoutedItems());
     ParseArchipelagoOptions();
+    PlaceArchipelagoTriggerItems();
     ParseArchipelagoTricks();
     ParseArchipelagoExcludedLocations();
     ParseArchipelagoHints();
@@ -536,9 +537,9 @@ void Context::ParseArchipelagoOptions() {
     // Set options to what Archipelago expects. Need to slowly convert these to options in apworld and
     // load those in instead.
     nlohmann::json slotData = ArchipelagoClient::GetInstance().GetSlotData();
-    mOptions[RSK_LOGIC_RULES].Set(slotData["no_logic"]);
+    // 9.3.1 replaced the Logic combobox (Glitchless/No Logic) with the No Logic checkbox (upstream #7196)
+    mOptions[RSK_NO_LOGIC].Set(slotData["no_logic"]);
     mOptions[RSK_FOREST].Set(slotData["closed_forest"]);
-    mOptions[RSK_KAK_GATE].Set(slotData["kakariko_gate"]);
     mOptions[RSK_DOOR_OF_TIME].Set(slotData["door_of_time"]);
     mOptions[RSK_ZORAS_FOUNTAIN].Set(slotData["zoras_fountain"]);
     mOptions[RSK_SLEEPING_WATERFALL].Set(slotData["sleeping_waterfall"]);
@@ -546,7 +547,13 @@ void Context::ParseArchipelagoOptions() {
     mOptions[RSK_STARTING_AGE].Set(slotData["starting_age"]);
     mOptions[RSK_SELECTED_STARTING_AGE].Set(slotData["starting_age"]);
     mOptions[RSK_GERUDO_FORTRESS].Set(slotData["fortress_carpenters"]);
-    mOptions[RSK_RAINBOW_BRIDGE].Set(slotData["rainbow_bridge"]);
+    // 9.3.1 inserted "Triforce Pieces" at index 7, which moved Greg from 7 to 8. The apworld still sends Greg as 7.
+    // (same migration as upstream ConfigVersion7Updater)
+    if (slotData["rainbow_bridge"] == 7) {
+        mOptions[RSK_RAINBOW_BRIDGE].Set(RO_BRIDGE_GREG);
+    } else {
+        mOptions[RSK_RAINBOW_BRIDGE].Set(slotData["rainbow_bridge"]);
+    }
     mOptions[RSK_RAINBOW_BRIDGE_STONE_COUNT].Set(slotData["rainbow_bridge_stones_required"]);
     mOptions[RSK_RAINBOW_BRIDGE_MEDALLION_COUNT].Set(slotData["rainbow_bridge_medallions_required"]);
     mOptions[RSK_RAINBOW_BRIDGE_REWARD_COUNT].Set(slotData["rainbow_bridge_dungeon_rewards_required"]);
@@ -675,12 +682,19 @@ void Context::ParseArchipelagoOptions() {
     mOptions[RSK_SCRUBS_PRICES_AFFORDABLE].Set(0);
     mOptions[RSK_SHUFFLE_BEEHIVES].Set(slotData["shuffle_beehives"]);
     mOptions[RSK_SHUFFLE_COWS].Set(slotData["shuffle_cows"]);
-    // Ship shows Malon Egg location if weird egg is shuffled even with "Skip Child Zelda" on
-    // So manually set this to off.
-    if (slotData["skip_child_zelda"] == 0) {
-        mOptions[RSK_SHUFFLE_WEIRD_EGG].Set(slotData["shuffle_weird_egg"]);
+    // 9.3.1 removed "Skip Child Zelda" and "Kakariko Gate" (upstream #6938). Their replacements are
+    // "Start with Zelda's Letter" (with the letter not shuffled), and for Skip Child Zelda additionally
+    // Weird Egg = "Skip Waking Talon". Same mapping as upstream ConfigVersion7Updater.
+    // Kakariko Gate "Open" is mapped to starting with Zelda's Letter (decided for the AP update): upstream opens
+    // the gate only through the letter. Note that an unshuffled starting letter also counts as having met Zelda.
+    mOptions[RSK_SHUFFLE_ZELDAS_LETTER].Set(RO_GENERIC_OFF);
+    if (slotData["skip_child_zelda"] != 0) {
+        mOptions[RSK_STARTING_ZELDAS_LETTER].Set(RO_GENERIC_ON);
+        mOptions[RSK_SHUFFLE_WEIRD_EGG].Set(RO_WEIRD_EGG_SKIP_TALON);
     } else {
-        mOptions[RSK_SHUFFLE_WEIRD_EGG].Set(RO_GENERIC_NO);
+        mOptions[RSK_STARTING_ZELDAS_LETTER].Set(slotData["kakariko_gate"] != 0 ? RO_GENERIC_ON : RO_GENERIC_OFF);
+        mOptions[RSK_SHUFFLE_WEIRD_EGG].Set(slotData["shuffle_weird_egg"] != 0 ? RO_WEIRD_EGG_SHUFFLED
+                                                                               : RO_WEIRD_EGG_VANILLA);
     }
     mOptions[RSK_SHUFFLE_GERUDO_MEMBERSHIP_CARD].Set(slotData["shuffle_gerudo_membership_card"]);
     mOptions[RSK_SHUFFLE_POTS].Set(slotData["shuffle_pots"]);
@@ -782,20 +796,21 @@ void Context::ParseArchipelagoOptions() {
     } else if (slotData["ganons_castle_boss_key"] == 1) {
         mOptions[RSK_GANONS_BOSS_KEY].Set(RO_GANON_BOSS_KEY_ANYWHERE);
     } else if (slotData["ganons_castle_boss_key"] == 2) {
-        mOptions[RSK_GANONS_BOSS_KEY].Set(RO_GANON_BOSS_KEY_LACS_VANILLA);
+        // LACS-Vanilla (Shadow + Spirit Medallion) no longer exists; upstream migrates it to
+        // Trigger-Medallions with 2 medallions (ConfigVersion7Updater), so any 2 medallions are enough now.
+        mOptions[RSK_GANONS_BOSS_KEY].Set(RO_GANON_BOSS_KEY_MEDALLIONS);
     } else if (slotData["ganons_castle_boss_key"] == 3) {
-        mOptions[RSK_GANONS_BOSS_KEY].Set(RO_GANON_BOSS_KEY_LACS_STONES);
+        mOptions[RSK_GANONS_BOSS_KEY].Set(RO_GANON_BOSS_KEY_STONES);
     } else if (slotData["ganons_castle_boss_key"] == 4) {
-        mOptions[RSK_GANONS_BOSS_KEY].Set(RO_GANON_BOSS_KEY_LACS_MEDALLIONS);
+        mOptions[RSK_GANONS_BOSS_KEY].Set(RO_GANON_BOSS_KEY_MEDALLIONS);
     } else if (slotData["ganons_castle_boss_key"] == 5) {
-        mOptions[RSK_GANONS_BOSS_KEY].Set(RO_GANON_BOSS_KEY_LACS_REWARDS);
+        mOptions[RSK_GANONS_BOSS_KEY].Set(RO_GANON_BOSS_KEY_REWARDS);
     } else if (slotData["ganons_castle_boss_key"] == 6) {
-        mOptions[RSK_GANONS_BOSS_KEY].Set(RO_GANON_BOSS_KEY_LACS_DUNGEONS);
+        mOptions[RSK_GANONS_BOSS_KEY].Set(RO_GANON_BOSS_KEY_DUNGEONS);
     } else if (slotData["ganons_castle_boss_key"] == 7) {
-        mOptions[RSK_GANONS_BOSS_KEY].Set(RO_GANON_BOSS_KEY_LACS_TOKENS);
+        mOptions[RSK_GANONS_BOSS_KEY].Set(RO_GANON_BOSS_KEY_TOKENS);
     }
     mOptions[RSK_SKIP_CHILD_STEALTH].Set(RO_GENERIC_NO);
-    mOptions[RSK_SKIP_CHILD_ZELDA].Set(slotData["skip_child_zelda"]);
     mOptions[RSK_STARTING_STICKS].Set(slotData["start_with_stick_ammo"]);
     mOptions[RSK_STARTING_NUTS].Set(slotData["start_with_nut_ammo"]);
     mOptions[RSK_STARTING_BEANS].Set(slotData["start_with_magic_beans"]);
@@ -803,8 +818,20 @@ void Context::ParseArchipelagoOptions() {
     mOptions[RSK_SHUFFLE_CHEST_MINIGAME].Set(RO_GENERIC_NO);
     mOptions[RSK_BIG_POE_COUNT].Set(slotData["big_poe_target_count"]);
     mOptions[RSK_SKIP_EPONA_RACE].Set(slotData["skip_epona_race"]);
-    mOptions[RSK_MASK_QUEST].Set(slotData["complete_mask_quest"]);
-    mOptions[RSK_SKIP_SCARECROWS_SONG].Set(slotData["skip_scarecrows_song"]);
+    // 9.3.1 removed "Complete Mask Quest" (upstream #7104): "Completed" is now starting with every mask.
+    // Upstream's migration additionally turns on Shuffle Masks; that is NOT done here, because Shuffle Masks
+    // adds checks the apworld doesn't know yet.
+    mOptions[RSK_SHUFFLE_MASKS].Set(RO_GENERIC_OFF);
+    if (slotData["complete_mask_quest"] != 0) {
+        for (RandomizerSettingKey mask : { RSK_STARTING_KEATON_MASK, RSK_STARTING_SKULL_MASK, RSK_STARTING_SPOOKY_MASK,
+                                           RSK_STARTING_BUNNY_HOOD, RSK_STARTING_GORON_MASK, RSK_STARTING_ZORA_MASK,
+                                           RSK_STARTING_GERUDO_MASK, RSK_STARTING_MASK_OF_TRUTH }) {
+            mOptions[mask].Set(RO_GENERIC_ON);
+        }
+    }
+    // 9.3.1 replaced "Skip Scarecrow's Song" with "Start with Scarecrow's Song" (upstream #7205)
+    mOptions[RSK_SHUFFLE_SCARECROWS_SONG].Set(RO_GENERIC_OFF);
+    mOptions[RSK_STARTING_SCARECROWS_SONG].Set(slotData["skip_scarecrows_song"]);
     mOptions[RSK_SKIP_PLANTING_BEANS].Set(RO_GENERIC_NO);
     mOptions[RSK_SKULLS_SUNS_SONG].Set(slotData["skulls_sun_song"]);
     mOptions[RSK_SHUFFLE_ADULT_TRADE].Set(slotData["shuffle_adult_trade_items"]);
@@ -848,12 +875,17 @@ void Context::ParseArchipelagoOptions() {
     mOptions[RSK_MQ_ICE_CAVERN].Set(0);
     mOptions[RSK_MQ_GTG].Set(0);
     mOptions[RSK_MQ_GANONS_CASTLE].Set(0);
-    mOptions[RSK_LACS_STONE_COUNT].Set(slotData["ganons_castle_boss_key_stones_required"]);
-    mOptions[RSK_LACS_MEDALLION_COUNT].Set(slotData["ganons_castle_boss_key_medallions_required"]);
-    mOptions[RSK_LACS_REWARD_COUNT].Set(slotData["ganons_castle_boss_key_dungeon_rewards_required"]);
-    mOptions[RSK_LACS_DUNGEON_COUNT].Set(slotData["ganons_castle_boss_key_dungeons_required"]);
-    mOptions[RSK_LACS_TOKEN_COUNT].Set(slotData["ganons_castle_boss_key_skull_tokens_required"]);
-    mOptions[RSK_LACS_OPTIONS].Set(slotData["ganons_castle_boss_key_greg_modifier"]);
+    // 9.3.1 decoupled Ganon's Boss Key from LACS (upstream #5838): the LACS_* counts became GBK_* trigger counts
+    mOptions[RSK_GBK_STONE_COUNT].Set(slotData["ganons_castle_boss_key_stones_required"]);
+    if (slotData["ganons_castle_boss_key"] == 2) {
+        mOptions[RSK_GBK_MEDALLION_COUNT].Set(2); // former LACS-Vanilla, see above
+    } else {
+        mOptions[RSK_GBK_MEDALLION_COUNT].Set(slotData["ganons_castle_boss_key_medallions_required"]);
+    }
+    mOptions[RSK_GBK_REWARD_COUNT].Set(slotData["ganons_castle_boss_key_dungeon_rewards_required"]);
+    mOptions[RSK_GBK_DUNGEON_COUNT].Set(slotData["ganons_castle_boss_key_dungeons_required"]);
+    mOptions[RSK_GBK_TOKEN_COUNT].Set(slotData["ganons_castle_boss_key_skull_tokens_required"]);
+    mOptions[RSK_GBK_OPTIONS].Set(slotData["ganons_castle_boss_key_greg_modifier"]);
     if (slotData["key_rings"] == 0) {
         mOptions[RSK_KEYRINGS].Set(RO_KEYRINGS_OFF);
     } else if (slotData["key_rings"] == 1) {
@@ -892,17 +924,33 @@ void Context::ParseArchipelagoOptions() {
     uint8_t slotDataStartingHearts = slotData["starting_hearts"];
     mOptions[RSK_STARTING_HEARTS].Set(slotDataStartingHearts - 1);
     mOptions[RSK_DAMAGE_MULTIPLIER].Set(0);
-    mOptions[RSK_ALL_LOCATIONS_REACHABLE].Set(0);
+    mOptions[RSK_ALL_CHECKS_REACHABLE].Set(0);
     mOptions[RSK_SHUFFLE_BOSS_ENTRANCES].Set(0);
     mOptions[RSK_SHUFFLE_100_GS_REWARD].Set(slotData["shuffle_100_gs_reward"]);
-    mOptions[RSK_TRIFORCE_HUNT].Set(slotData["triforce_hunt"]);
-    // For some reason, ship adds 1 after the option is parsed in normal rando, so we subtract 1 here.
-    uint8_t triforcePieceTotal = slotData["triforce_hunt_pieces_total"];
-    uint8_t triforcePieceRequired = slotData["triforce_hunt_pieces_required"];
-    mOptions[RSK_TRIFORCE_HUNT_PIECES_TOTAL].Set((triforcePieceTotal - 1));
-    mOptions[RSK_TRIFORCE_HUNT_PIECES_REQUIRED].Set((triforcePieceRequired - 1));
+    // 9.3.1 folded Triforce Hunt (Off/Win/GBK) into "Total Pieces" (0 = off) plus the win condition
+    // "Trigger-Triforce Pieces" (upstream #5838, mapping as in ConfigVersion7Updater). The counts are now the
+    // real numbers, so the old "- 1" correction is gone. The apworld only knows "Win".
+    if (slotData["triforce_hunt"] != 0) {
+        uint8_t triforcePieceTotal = slotData["triforce_hunt_pieces_total"];
+        uint8_t triforcePieceRequired = slotData["triforce_hunt_pieces_required"];
+        mOptions[RSK_TRIFORCE_HUNT_PIECES_TOTAL].Set(triforcePieceTotal);
+        mOptions[RSK_WINCON].Set(RO_WINCON_TRIFORCE_PIECES);
+        mOptions[RSK_WINCON_TRIFORCE_COUNT].Set(triforcePieceRequired);
+        mOptions[RSK_GBK_TRIFORCE_COUNT].Set(triforcePieceRequired);
+    } else {
+        mOptions[RSK_TRIFORCE_HUNT_PIECES_TOTAL].Set(0);
+        mOptions[RSK_WINCON].Set(RO_WINCON_DEFEAT_GANON);
+    }
     mOptions[RSK_SHUFFLE_BEAN_SOULS].Set(RO_GENERIC_NO);
-    mOptions[RSK_SHUFFLE_BOSS_SOULS].Set(slotData["shuffle_boss_souls"]);
+    // 9.3.1 split "On + Ganon" (apworld value 2) into "On" plus the standalone Ganon's Soul setting
+    // (upstream #5838, mapping as in ConfigVersion7Updater)
+    if (slotData["shuffle_boss_souls"] == 2) {
+        mOptions[RSK_SHUFFLE_BOSS_SOULS].Set(RO_BOSS_SOULS_ON);
+        mOptions[RSK_GANONS_SOUL].Set(RO_GANONS_SOUL_ANYWHERE);
+    } else {
+        mOptions[RSK_SHUFFLE_BOSS_SOULS].Set(slotData["shuffle_boss_souls"]);
+        mOptions[RSK_GANONS_SOUL].Set(RO_GANONS_SOUL_STARTWITH);
+    }
     if (slotData["shuffle_fish"] == 0) {
         mOptions[RSK_FISHSANITY].Set(RO_FISHSANITY_OFF);
     } else if (slotData["shuffle_fish"] == 1) {
@@ -927,6 +975,40 @@ void Context::ParseArchipelagoOptions() {
     mOptions[RSK_LOCK_OVERWORLD_DOORS].Set(slotData["lock_overworld_doors"]);
     mOptions[RSK_SHUFFLE_GRASS].Set(slotData["shuffle_grass"]);
     mOptions[RSK_ROCS_FEATHER].Set(slotData["rocs_feather"]);
+}
+
+// Since 9.3.1 the Ganon's Boss Key / Ganon's Soul triggers and the win condition are handed out through
+// pseudo-locations that CheckTriggers() (hook_handlers.cpp) queues once their condition is met. In normal rando
+// GenerateItemPool fills them (upstream 3drando/item_pool.cpp). Archipelago never sends these locations, and
+// ParseArchipelagoItemsLocations clears the whole table, so fill them here the same way upstream does.
+// Has to run after ParseArchipelagoOptions, the placement depends on the parsed options.
+void Context::PlaceArchipelagoTriggerItems() {
+    const auto placeIfUnset = [this](RandomizerCheck rc, RandomizerGet rg) {
+        if (itemLocationTable[rc].GetPlacedRandomizerGet() == RG_NONE) {
+            itemLocationTable[rc].SetPlacedItem(rg);
+        }
+    };
+
+    // Win condition (upstream: GenerateItemPool, "Win condition")
+    if (mOptions[RSK_WINCON].Is(RO_WINCON_DEFEAT_GANON)) {
+        placeIfUnset(RC_GANON, RG_TRIFORCE);
+    } else {
+        // Ganon isn't the win condition, so slaying him is optional and just hands out a junk reward.
+        placeIfUnset(RC_GANON, RG_BLUE_RUPEE);
+        if (!mOptions[RSK_WINCON].Is(RO_WINCON_ANYWHERE)) {
+            placeIfUnset(RC_WINCON, RG_TRIFORCE);
+        }
+    }
+
+    // Ganon's Boss Key trigger (upstream: GenerateItemPool, RSK_GANONS_BOSS_KEY >= RO_GANON_BOSS_KEY_STONES)
+    if (mOptions[RSK_GANONS_BOSS_KEY].Get() >= RO_GANON_BOSS_KEY_STONES) {
+        placeIfUnset(RC_GANONS_BOSS_KEY, RG_GANONS_CASTLE_BOSS_KEY);
+    }
+
+    // Ganon's Soul trigger (upstream: GenerateItemPool, RSK_GANONS_SOUL >= RO_GANONS_SOUL_STONES)
+    if (mOptions[RSK_GANONS_SOUL].Get() >= RO_GANONS_SOUL_STONES) {
+        placeIfUnset(RC_GANON_SOUL, RG_GANON_SOUL);
+    }
 }
 
 void Context::ParseArchipelagoTricks() {
