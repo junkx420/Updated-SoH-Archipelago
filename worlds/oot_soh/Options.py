@@ -734,6 +734,14 @@ class GanonsCastleBossKeyTriforcePiecesRequired(Range):
     default = 100
 
 
+class ProgressiveGoronSword(Toggle):
+    """
+    Giant's Knife and Biggoron's Sword become two "Progressive Goron Sword" items: the first is the Giant's Knife, the
+    second the Biggoron's Sword. Medigoron then only replaces broken knives (Ship of Harkinian 9.3.1).
+    """
+    display_name = "Progressive Goron Sword"
+
+
 class BunnyHoodEffect(Toggle):
     """
     Wearing the Bunny Hood makes Link run 1.5x faster and jump 1.5x further, like in Majora's Mask.
@@ -1976,6 +1984,7 @@ class SohOptions(PerGameCommonOptions):
     start_with_links_pocket: StartWithLinksPocket
     links_pocket_reward: LinksPocketReward
     bunny_hood_effect: BunnyHoodEffect
+    progressive_goron_sword: ProgressiveGoronSword
     masks_as_adult: MasksAsAdult
     early_grannys_shop: EarlyGrannysShop
     swordless_epona_items: SwordlessEponaItems
@@ -2442,6 +2451,7 @@ soh_option_groups = [
     ]),
     # todo: decide whether these should be in the yaml or just let you change them locally on the fly
     OptionGroup("Gameplay (SoH 9.3.1)", [
+        ProgressiveGoronSword,
         BunnyHoodEffect,
         MasksAsAdult,
         EarlyGrannysShop,

@@ -563,6 +563,7 @@ class SohWorld(CachedRuleBuilderWorld):
             "start_with_links_pocket": self.options.start_with_links_pocket.value,
             "links_pocket_reward": self.options.links_pocket_reward.value,
             "bunny_hood_effect": self.options.bunny_hood_effect.value,
+            "progressive_goron_sword": self.options.progressive_goron_sword.value,
             "masks_as_adult": self.options.masks_as_adult.value,
             "early_grannys_shop": self.options.early_grannys_shop.value,
             "swordless_epona_items": self.options.swordless_epona_items.value,

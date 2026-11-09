@@ -79,6 +79,13 @@ def create_item_pool(world: "SohWorld") -> None:
     if world.options.shuffle_merchants in ("all", "all_but_beans"):
         items_to_create[Items.GIANTS_KNIFE] = 1
 
+    # Progressive Goron Sword (9.3.1 item_pool.cpp): two progressive swords instead of Biggoron's Sword and the
+    # merchant Giant's Knife
+    if world.options.progressive_goron_sword:
+        items_to_create[Items.PROGRESSIVE_GORON_SWORD] = 2
+        items_to_create[Items.BIGGORONS_SWORD] = 0
+        items_to_create[Items.GIANTS_KNIFE] = 0
+
     # Adult Trade Items
     if world.options.shuffle_adult_trade_items:
         items_to_create[Items.POCKET_EGG] = 1

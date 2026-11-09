@@ -317,6 +317,15 @@ def has_item(item: Items | Events | StrEnum, bundle: tuple[Regions, "SohWorld"],
     if item == Items.MAGIC_BEAN:
         return HasAny(Items.MAGIC_BEAN_PACK, Events.CAN_BUY_BEANS)
 
+    # 9.3.1 Logic::HasItem: the knife is found, the first Progressive Goron Sword, or bought from Medigoron (not with
+    # progressive swords, Medigoron then only replaces broken knives); Biggoron's Sword is found or the second one
+    if item == Items.GIANTS_KNIFE:
+        return (Has(Items.GIANTS_KNIFE) | Has(Items.PROGRESSIVE_GORON_SWORD)
+                | (Has(Events.MEDIGORON) & True_(options=[OptionFilter(ProgressiveGoronSword, False)])))
+
+    if item == Items.BIGGORONS_SWORD:
+        return Has(Items.BIGGORONS_SWORD) | Has(Items.PROGRESSIVE_GORON_SWORD, 2)
+
     # apworld rule: found shields can be lost (fire, Like-Likes), so only buyable ones count. With "Gate Shop Shields &
     # Tunics" the found shield is what unlocks buying it (CanAffordSlot).
     if item == Items.DEKU_SHIELD:

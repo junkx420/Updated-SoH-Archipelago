@@ -141,7 +141,7 @@ item_data_table: dict[Items, SohItemData] = {
     # Items.MAGIC_SINGLE: SohItemData( 50, IC.filler, 0 ),
     # Items.MAGIC_DOUBLE: SohItemData( 51, IC.filler, 0 ),
     Items.PROGRESSIVE_OCARINA: SohItemData(52, IC.progression | IC.useful, 2, tags=GroupTag.Ocarina),
-    # Items.PROGRESSIVE_GORON_SWORD: SohItemData(53, IC.progression, 0),
+    Items.PROGRESSIVE_GORON_SWORD: SohItemData(53, IC.progression | IC.useful, 0, adult_only=True, tags=GroupTag.Sword | GroupTag.Melee_Weapon),  # ID 53 was reserved
     Items.EMPTY_BOTTLE: SohItemData(54, IC.progression | IC.useful, 0, tags=GroupTag.Bottle),
     Items.BOTTLE_WITH_MILK: SohItemData(55, IC.progression | IC.useful, 0, tags=GroupTag.Bottle),
     Items.BOTTLE_WITH_RED_POTION: SohItemData(56, IC.progression | IC.useful, 0, tags=GroupTag.Bottle),
