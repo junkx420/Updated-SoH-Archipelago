@@ -25,7 +25,7 @@ from .Locations import SohLocation, base_location_table, \
     fairies_fountain_location_table, \
     fairies_stone_location_table, \
     fairies_bean_location_table, \
-    fairies_song_location_table,     fairies_butterfly_location_table,     signs_overworld_location_table,     signs_dungeon_location_table,     wonder_items_overworld_location_table,     wonder_items_dungeon_location_table,     icicle_location_table,     red_ice_location_table,     rocks_location_table,     boulders_overworld_location_table,     boulders_dungeon_location_table, \
+    fairies_song_location_table,     fairies_butterfly_location_table,     signs_overworld_location_table,     signs_dungeon_location_table,     wonder_items_overworld_location_table,     wonder_items_dungeon_location_table,     icicle_location_table,     red_ice_location_table,     rocks_location_table,     boulders_overworld_location_table,     boulders_dungeon_location_table,     scarecrows_song_location_table, \
     grass_overworld_location_table, \
     grass_dungeon_location_table, \
     fish_pond_location_table, \
@@ -197,6 +197,10 @@ def create_regions_and_locations(world: "SohWorld") -> None:
         world.included_locations.update(boulders_overworld_location_table)
     if world.options.shuffle_boulders in ("dungeon", "all"):
         world.included_locations.update(boulders_dungeon_location_table)
+
+    # Scarecrow's Song (SoH 9.3.1 RSK_SHUFFLE_SCARECROWS_SONG)
+    if world.options.shuffle_scarecrows_song:
+        world.included_locations.update(scarecrows_song_location_table)
 
     # Pots (Overworld)
     if world.options.shuffle_pots == "overworld" or world.options.shuffle_pots == "all":

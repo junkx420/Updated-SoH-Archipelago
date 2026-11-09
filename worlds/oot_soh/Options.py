@@ -1378,6 +1378,15 @@ class CompleteMaskQuest(DefaultOnToggle):
     display_name = "Complete Mask Quest"
 
 
+class ShuffleScarecrowsSong(Toggle):
+    """
+    Scarecrow's Song becomes an item in the pool, and teaching Pierre the song in Lake Hylia (as child, then as adult)
+    gives a randomized item (Ship of Harkinian 9.3.1: "Shuffle Scarecrow's Song").
+    Turns "Skip Scarecrow's Song" off, since that would mean starting with the song.
+    """
+    display_name = "Shuffle Scarecrow's Song"
+
+
 class SkipScarecrowsSong(DefaultOnToggle):
     """
     Start with the ability to summon Pierre the Scarecrow. Pulling out an Ocarina in Pierre's locations will automatically summon him.
@@ -2512,6 +2521,7 @@ class SohOptions(PerGameCommonOptions):
     complete_mask_quest: CompleteMaskQuest
     shuffle_masks: ShuffleMasks
     skip_scarecrows_song: SkipScarecrowsSong
+    shuffle_scarecrows_song: ShuffleScarecrowsSong
     start_with_links_pocket: StartWithLinksPocket
     links_pocket_reward: LinksPocketReward
     bunny_hood_effect: BunnyHoodEffect
@@ -2674,6 +2684,10 @@ class SohOptions(PerGameCommonOptions):
     def adjust_starting_items(self):
         # Shuffle Masks wins over Complete Mask Quest (which the client turns into starting with every mask);
         # decision 2026-11-09
+        # same for Shuffle Scarecrow's Song over Skip Scarecrow's Song (= starting with the song); decision 2026-11-09
+        if self.shuffle_scarecrows_song and self.skip_scarecrows_song:
+            logging.warning("Shuffle Scarecrow's Song is on: Skip Scarecrow's Song is turned off, so the song gets shuffled.")
+            self.skip_scarecrows_song.value = SkipScarecrowsSong.option_false
         if self.shuffle_masks and self.complete_mask_quest:
             logging.warning("Shuffle Masks is on: Complete Mask Quest is turned off, so the masks get shuffled.")
             self.complete_mask_quest.value = CompleteMaskQuest.option_false
@@ -3058,6 +3072,7 @@ soh_option_groups = [
         CompleteMaskQuest,
         ShuffleMasks,
         SkipScarecrowsSong,
+        ShuffleScarecrowsSong,
     ]),
     OptionGroup("Item Pool & Traps", [
         ItemPool,

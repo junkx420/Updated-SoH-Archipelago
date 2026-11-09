@@ -3189,6 +3189,11 @@ boulders_dungeon_location_table: dict[str, SohLocData] = {
     Locations.BOTW_BOULDER_6:                                         SohLocData(3027, LocTag.Bottom_of_the_Well | LocTag.Boulder, DungeonLocations.BOTTOM_OF_THE_WELL),
 }
 
+# SoH 9.3.1 Shuffle Scarecrow's Song (location_list.cpp RC_LH_SCARECROWS_SONG); new ID after the boulders (3027)
+scarecrows_song_location_table: dict[str, SohLocData] = {
+    Locations.LH_SCARECROWS_SONG:                          SohLocData(3028, LocTag.Lake_Hylia),
+}
+
 fish_pond_location_table: dict[str, SohLocData] = {
     Locations.LH_CHILD_POND_FISH1:         SohLocData(2345, LocTag.Lake_Hylia | LocTag.Pond_Fish),
     Locations.LH_CHILD_POND_FISH2:         SohLocData(2346, LocTag.Lake_Hylia | LocTag.Pond_Fish),
@@ -3308,6 +3313,7 @@ location_data_table: dict[str, SohLocData] = {
     **rocks_location_table,
     **boulders_overworld_location_table,
     **boulders_dungeon_location_table,
+    **scarecrows_song_location_table,
     **grass_overworld_location_table,
     **grass_dungeon_location_table,
     **tree_location_table,

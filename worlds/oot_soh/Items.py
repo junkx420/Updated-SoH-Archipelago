@@ -378,6 +378,8 @@ item_data_table: dict[Items, SohItemData] = {
     Items.ZORA_MASK: SohItemData(282, IC.useful, 0, tags=GroupTag.Mask | GroupTag.Trade_Item),
     Items.GERUDO_MASK: SohItemData(283, IC.useful, 0, tags=GroupTag.Mask | GroupTag.Trade_Item),
     Items.MASK_OF_TRUTH: SohItemData(284, IC.progression, 0, tags=GroupTag.Mask | GroupTag.Trade_Item),
+    # SoH 9.3.1 Shuffle Scarecrow's Song: new ID 285
+    Items.SCARECROWS_SONG: SohItemData(285, IC.progression, 0, tags=GroupTag.Song),
     Items.STICKS: SohItemData(None, child_only=True),
     Items.NUTS: SohItemData(None),
     Items.EPONA: SohItemData(None),

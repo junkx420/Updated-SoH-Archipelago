@@ -217,6 +217,10 @@ def create_item_pool(world: "SohWorld") -> None:
     if world.options.rocs_feather:
         items_to_create[Items.ROCS_FEATHER] = 1
 
+    # Shuffle Scarecrow's Song (3drando/item_pool.cpp): unless it's a starting item ("Skip Scarecrow's Song")
+    if world.options.shuffle_scarecrows_song and not world.options.skip_scarecrows_song:
+        items_to_create[Items.SCARECROWS_SONG] = 1
+
     # Shuffle Masks (3drando/item_pool.cpp): every mask that isn't a starting mask goes into the pool
     if world.options.shuffle_masks:
         if not world.options.start_with_keaton_mask:

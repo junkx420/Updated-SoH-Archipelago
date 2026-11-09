@@ -1220,6 +1220,8 @@ class Items(StrEnum):
     ZORA_MASK = "Zora Mask"
     GERUDO_MASK = "Gerudo Mask"
     MASK_OF_TRUTH = "Mask of Truth"
+    # SoH 9.3.1 Shuffle Scarecrow's Song
+    SCARECROWS_SONG = "Scarecrow's Song"
     STICKS = "Sticks"
     NUTS = "Nuts"
     EPONA = "Epona"
@@ -3693,6 +3695,8 @@ class Locations(StrEnum):
     KAK_BEGGAR_BUGS = "Kak Beggar Bugs"
     KAK_BEGGAR_FISH = "Kak Beggar Fish"
     KAK_BEGGAR_BLUE_FIRE = "Kak Beggar Blue Fire"
+    # Shuffle Scarecrow's Song (SoH 9.3.1)
+    LH_SCARECROWS_SONG = "LH Scarecrow's Song"
     # Butterfly Fairies (SoH 9.3.1 ShuffleFairies.cpp)
     HC_NEAR_WALL_BUTTERFLY_FAIRY = "HC Near Wall Butterfly Fairy"
     HC_NEAR_STAIRS_BUTTERFLY_FAIRY = "HC Near Stairs Butterfly Fairy"

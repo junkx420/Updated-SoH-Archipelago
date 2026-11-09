@@ -466,9 +466,12 @@ def can_afford_slot(slot: Locations, bundle: tuple[Regions, "SohWorld"]) -> Rule
 
 
 def scarecrows_song(bundle: tuple[Regions, "SohWorld"]) -> Rule:
-    return ((OptionFilter(SkipScarecrowsSong, True) & has_item(Items.FAIRY_OCARINA, bundle)
-            & has_enough_ocarina_buttons(bundle, 2))
-            | (has_item(Events.CHILD_SCARECROW_UNLOCKED, bundle) & has_item(Events.ADULT_SCARECROW_UNLOCKED, bundle)))
+    # logic.cpp Logic::ScarecrowsSong: (HasItem(RG_SCARECROWS_SONG) && Fairy Ocarina && 2 buttons) ||
+    # (!RSK_SHUFFLE_SCARECROWS_SONG && child scarecrow && adult scarecrow); HasItem = starting song or the item
+    return (((True_(options=[OptionFilter(SkipScarecrowsSong, True)]) | Has(Items.SCARECROWS_SONG))
+             & has_item(Items.FAIRY_OCARINA, bundle) & has_enough_ocarina_buttons(bundle, 2))
+            | (True_(options=[OptionFilter(ShuffleScarecrowsSong, False)])
+               & has_item(Events.CHILD_SCARECROW_UNLOCKED, bundle) & has_item(Events.ADULT_SCARECROW_UNLOCKED, bundle)))
 
 
 def has_bottle(bundle: tuple[Regions, "SohWorld"]) -> Rule:  # soup

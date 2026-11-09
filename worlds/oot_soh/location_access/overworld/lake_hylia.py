@@ -45,7 +45,8 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.LAKE_HYLIA, world, [
         (Locations.LH_UNDERWATER_ITEM,
          lambda bundle: is_child(bundle) & has_item(Items.SILVER_SCALE, bundle)),
-        # DEFERRED RC_LH_SCARECROWS_SONG: logic->Get(LOGIC_CHILD_SCARECROW) && logic->Get(LOGIC_ADULT_SCARECROW)
+        (Locations.LH_SCARECROWS_SONG,
+         lambda bundle: has_item(Events.CHILD_SCARECROW_UNLOCKED, bundle) & has_item(Events.ADULT_SCARECROW_UNLOCKED, bundle)),
         (Locations.LH_SUN,
          lambda bundle: is_adult(bundle) & ((has_item(Events.WATER_TEMPLE_COMPLETED, bundle) & has_item(Items.BRONZE_SCALE, bundle)) | reach_distant_scarecrow(bundle)) & can_use(Items.FAIRY_BOW, bundle)),
         (Locations.LH_FREESTANDING_POH,
@@ -414,4 +415,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (4): ['RC_LH_SCARECROWS_SONG', 'RC_LH_LAB_GOSSIP_STONE', 'RC_LH_SOUTHEAST_GOSSIP_STONE', 'RC_LH_SOUTHWEST_GOSSIP_STONE']
+# deferred locations (3): ['RC_LH_LAB_GOSSIP_STONE', 'RC_LH_SOUTHEAST_GOSSIP_STONE', 'RC_LH_SOUTHWEST_GOSSIP_STONE']

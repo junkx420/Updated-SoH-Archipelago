@@ -573,6 +573,7 @@ class SohWorld(CachedRuleBuilderWorld):
             "complete_mask_quest": self.options.complete_mask_quest.value,
             "shuffle_masks": self.options.shuffle_masks.value,
             "skip_scarecrows_song": self.options.skip_scarecrows_song.value,
+            "shuffle_scarecrows_song": self.options.shuffle_scarecrows_song.value,
             "start_with_links_pocket": self.options.start_with_links_pocket.value,
             "links_pocket_reward": self.options.links_pocket_reward.value,
             "bunny_hood_effect": self.options.bunny_hood_effect.value,
