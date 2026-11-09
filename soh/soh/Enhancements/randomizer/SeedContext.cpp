@@ -715,6 +715,7 @@ void Context::ParseArchipelagoOptions() {
     }
     mOptions[RSK_SHUFFLE_GERUDO_MEMBERSHIP_CARD].Set(slotData["shuffle_gerudo_membership_card"]);
     mOptions[RSK_SHUFFLE_POTS].Set(slotData["shuffle_pots"]);
+    mOptions[RSK_SHUFFLE_SIGNS].Set(slotData.value("shuffle_signs", static_cast<int>(RO_SHUFFLE_SIGNS_OFF)));
     mOptions[RSK_SHUFFLE_CRATES].Set(slotData["shuffle_crates"]);
     mOptions[RSK_SHUFFLE_TREES].Set(slotData["shuffle_trees"]);
     mOptions[RSK_SHUFFLE_BUSHES].Set(RO_GENERIC_NO);
