@@ -26,7 +26,9 @@ class ClosedForest(Choice):
 class KakarikoGate(Choice):
     """
     Closed - The gate will remain closed until Zelda's Letter is shown to the guard.
-    Open - The gate is always open. The Happy Mask Shop will open immediately after obtaining Zelda's Letter.
+    Open - You start with Zelda's Letter, which opens the gate. Ship of Harkinian 9.3.1 no longer has a separate gate
+    setting; starting with the letter also counts as having met Zelda, so the Song from Impa and Zelda's Letter checks
+    are given at the start (as with Skip Child Zelda, but Talon still has to be woken with the Weird Egg).
     """
     display_name = "Kakariko Gate"
     option_closed = 0
@@ -956,6 +958,7 @@ class BigPoeTargetCount(Range):
 class SkipChildZelda(DefaultOnToggle):
     """
     Start with Zelda's Letter and the item Impa would normally give you and skip the sequence up until after meeting Zelda. Disables the ability to shuffle Weird Egg.
+    Talon is already awake and back at Lon Lon Ranch (Ship of Harkinian 9.3.1: "Skip Waking Talon").
     """
     display_name = "Skip Child Zelda"
 
