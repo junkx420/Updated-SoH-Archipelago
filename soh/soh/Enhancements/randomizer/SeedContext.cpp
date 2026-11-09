@@ -641,6 +641,9 @@ void Context::ParseArchipelagoOptions() {
         mOptions[RSK_SHUFFLE_DUNGEON_REWARDS].Set(RO_DUNGEON_REWARDS_OVERWORLD);
     } else if (slotData["shuffle_dungeon_rewards"] == 4) {
         mOptions[RSK_SHUFFLE_DUNGEON_REWARDS].Set(RO_DUNGEON_REWARDS_ANYWHERE);
+    } else if (slotData["shuffle_dungeon_rewards"] == 5) {
+        // apworld 1.5 appended "Own Dungeon" as 5 (9.3.1 has it between End of Dungeons and Any Dungeon)
+        mOptions[RSK_SHUFFLE_DUNGEON_REWARDS].Set(RO_DUNGEON_REWARDS_OWN_DUNGEON);
     }
     if (slotData["shuffle_songs"] == 0) {
         mOptions[RSK_SHUFFLE_SONGS].Set(RO_SONG_SHUFFLE_OFF);
@@ -870,6 +873,10 @@ void Context::ParseArchipelagoOptions() {
         mOptions[RSK_LINKS_POCKET].Set(RO_LINKS_POCKET_ANYTHING);
     } else if (slotData["start_with_links_pocket"] == 3) {
         mOptions[RSK_LINKS_POCKET].Set(RO_LINKS_POCKET_NOTHING);
+    }
+    // apworld 1.5+: which kind of dungeon reward Link's Pocket may get (same order as RandoOptionLinksPocketReward)
+    if (slotData.contains("links_pocket_reward")) {
+        mOptions[RSK_LINKS_POCKET_REWARD].Set(slotData["links_pocket_reward"].get<uint8_t>());
     }
     mOptions[RSK_MQ_DUNGEON_RANDOM].Set(0);
     mOptions[RSK_MQ_DUNGEON_COUNT].Set(0);
