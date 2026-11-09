@@ -635,3 +635,97 @@ def give_starting_items(world: "SohWorld") -> None:
     if world.options.boss_key_shuffle == "start_with":
         for boss_key in dungeon_boss_key_vanilla_mapping.values():
             world.precollect_from_pool(boss_key)
+
+    # Starting items from SoH 9.3.1 (RSK_STARTING_*): taken out of the pool like upstream item_pool.cpp
+    if world.options.start_with_megaton_hammer:
+        world.precollect_from_pool(Items.MEGATON_HAMMER)
+    if world.options.start_with_boomerang:
+        world.precollect_from_pool(Items.BOOMERANG)
+    if world.options.start_with_lens_of_truth:
+        world.precollect_from_pool(Items.LENS_OF_TRUTH)
+    if world.options.start_with_dins_fire:
+        world.precollect_from_pool(Items.DINS_FIRE)
+    if world.options.start_with_farores_wind:
+        world.precollect_from_pool(Items.FARORES_WIND)
+    if world.options.start_with_nayrus_love:
+        world.precollect_from_pool(Items.NAYRUS_LOVE)
+    if world.options.start_with_fire_arrows:
+        world.precollect_from_pool(Items.FIRE_ARROW)
+    if world.options.start_with_ice_arrows:
+        world.precollect_from_pool(Items.ICE_ARROW)
+    if world.options.start_with_light_arrows:
+        world.precollect_from_pool(Items.LIGHT_ARROW)
+    if world.options.start_with_iron_boots:
+        world.precollect_from_pool(Items.IRON_BOOTS)
+    if world.options.start_with_hover_boots:
+        world.precollect_from_pool(Items.HOVER_BOOTS)
+    if world.options.start_with_hylian_shield:
+        world.precollect_from_pool(Items.HYLIAN_SHIELD)
+    if world.options.start_with_mirror_shield:
+        world.precollect_from_pool(Items.MIRROR_SHIELD)
+    if world.options.start_with_goron_tunic:
+        world.precollect_from_pool(Items.GORON_TUNIC)
+    if world.options.start_with_zora_tunic:
+        world.precollect_from_pool(Items.ZORA_TUNIC)
+    if world.options.start_with_stone_of_agony:
+        world.precollect_from_pool(Items.STONE_OF_AGONY)
+    if world.options.start_with_weird_egg:
+        world.precollect_from_pool(Items.WEIRD_EGG)
+    if world.options.start_with_claim_check:
+        world.precollect_from_pool(Items.CLAIM_CHECK)
+    if world.options.start_with_gerudo_card:
+        world.precollect_from_pool(Items.GERUDO_MEMBERSHIP_CARD)
+    if world.options.start_with_hookshot:
+        for _ in range(world.options.start_with_hookshot.value):
+            world.precollect_from_pool(Items.PROGRESSIVE_HOOKSHOT)
+    if world.options.start_with_bow:
+        for _ in range(world.options.start_with_bow.value):
+            world.precollect_from_pool(Items.PROGRESSIVE_BOW)
+    if world.options.start_with_slingshot:
+        for _ in range(world.options.start_with_slingshot.value):
+            world.precollect_from_pool(Items.PROGRESSIVE_SLINGSHOT)
+    if world.options.start_with_bomb_bag:
+        for _ in range(world.options.start_with_bomb_bag.value):
+            world.precollect_from_pool(Items.PROGRESSIVE_BOMB_BAG)
+    if world.options.start_with_strength:
+        for _ in range(world.options.start_with_strength.value):
+            world.precollect_from_pool(Items.STRENGTH_UPGRADE)
+    if world.options.start_with_scale:
+        for _ in range(world.options.start_with_scale.value + (1 if world.options.shuffle_swim else 0)):
+            world.precollect_from_pool(Items.PROGRESSIVE_SCALE)
+    if world.options.start_with_wallet:
+        for _ in range(world.options.start_with_wallet.value + (1 if world.options.shuffle_childs_wallet else 0)):
+            world.precollect_from_pool(Items.PROGRESSIVE_WALLET)
+    if world.options.start_with_magic_meter:
+        for _ in range(world.options.start_with_magic_meter.value):
+            world.precollect_from_pool(Items.PROGRESSIVE_MAGIC_METER)
+    if world.options.start_with_bombchu_bag and world.options.bombchu_bag == BombchuBag.option_single_bag:
+        world.precollect_from_pool(Items.BOMBCHU_BAG)
+    if world.options.start_with_biggorons_sword:
+        if world.options.progressive_goron_sword:
+            for _ in range(world.options.start_with_biggorons_sword.value):
+                world.precollect_from_pool(Items.PROGRESSIVE_GORON_SWORD)
+        elif world.options.start_with_biggorons_sword.value == 2:
+            world.precollect_from_pool(Items.BIGGORONS_SWORD)
+        elif not in_pool(world, Items.GIANTS_KNIFE):
+            # without merchant shuffle the knife isn't in the pool (Medigoron sells it)
+            world.push_precollected(world.create_item(Items.GIANTS_KNIFE, True))
+        else:
+            world.precollect_from_pool(Items.GIANTS_KNIFE)
+    for bottle in (world.options.start_with_bottle_1, world.options.start_with_bottle_2,
+                   world.options.start_with_bottle_3, world.options.start_with_bottle_4):
+        if bottle.value == 0:
+            continue
+        wanted = {1: list(no_rules_bottles), 2: [Items.BOTTLE_WITH_BIG_POE], 3: [Items.BOTTLE_WITH_RUTOS_LETTER]}[bottle.value]
+        # a bottle from the pool makes room for it (upstream: starting bottles are removed from the pool)
+        pool_bottle = next((b for b in list(wanted) + list(no_rules_bottles)
+                            if in_pool(world, b)), None)
+        if pool_bottle is not None:
+            world.get_item_from_pool(pool_bottle, world.item_pool)
+        # as an event item (no ID), like precollect_from_pool: the client gives it at the start, not the server
+        world.push_precollected(world.create_item(wanted[0] if bottle.value != 1 else (pool_bottle or wanted[0]), True))
+
+
+def in_pool(world: "SohWorld", item: Items) -> bool:
+    item_id = item_data_table[item].item_id
+    return any(pool_item.code == item_id for pool_item in world.item_pool)

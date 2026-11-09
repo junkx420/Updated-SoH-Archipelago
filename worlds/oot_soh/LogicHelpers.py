@@ -1653,7 +1653,10 @@ def has_mask(bundle: tuple[Regions, "SohWorld"], mask: str) -> Rule:
     rule: Rule = borrow
     for event in sold:
         rule &= has_item(event, bundle)
-    return OptionFilter(CompleteMaskQuest, True) | rule
+    starting = {"KEATON_MASK": StartWithKeatonMask, "SKULL_MASK": StartWithSkullMask, "SPOOKY_MASK": StartWithSpookyMask, "BUNNY_HOOD": StartWithBunnyHood, "MASK_OF_TRUTH": StartWithMaskOfTruth}[mask]
+    # RSK_STARTING_<mask> (9.3.1 HasItem: RAND_INF_CHILD_TRADES_HAS_MASK_*)
+    return (True_(options=[OptionFilter(CompleteMaskQuest, True)]) | True_(options=[OptionFilter(starting, True)])
+            | rule)
 
 
 def can_use_mask(bundle: tuple[Regions, "SohWorld"], mask: str) -> Rule:

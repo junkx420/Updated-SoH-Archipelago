@@ -1831,6 +1831,357 @@ class StartWithPrelude(Toggle):
     """
     display_name = "Start with Prelude of Light"
 
+# --- starting items added for SoH 9.3.1 (RSK_STARTING_*, feature 2.7) ---------------------------------------
+class StartWithMegatonHammer(Toggle):
+    """
+    Start with the Megaton Hammer. It is taken out of the item pool.
+    """
+    display_name = "Start with Megaton Hammer"
+
+
+class StartWithBoomerang(Toggle):
+    """
+    Start with the Boomerang. It is taken out of the item pool.
+    """
+    display_name = "Start with Boomerang"
+
+
+class StartWithLensOfTruth(Toggle):
+    """
+    Start with the Lens of Truth. It is taken out of the item pool.
+    """
+    display_name = "Start with Lens of Truth"
+
+
+class StartWithDinsFire(Toggle):
+    """
+    Start with the Din's Fire. It is taken out of the item pool.
+    """
+    display_name = "Start with Din's Fire"
+
+
+class StartWithFaroresWind(Toggle):
+    """
+    Start with the Farore's Wind. It is taken out of the item pool.
+    """
+    display_name = "Start with Farore's Wind"
+
+
+class StartWithNayrusLove(Toggle):
+    """
+    Start with the Nayru's Love. It is taken out of the item pool.
+    """
+    display_name = "Start with Nayru's Love"
+
+
+class StartWithFireArrows(Toggle):
+    """
+    Start with the Fire Arrows. It is taken out of the item pool.
+    """
+    display_name = "Start with Fire Arrows"
+
+
+class StartWithIceArrows(Toggle):
+    """
+    Start with the Ice Arrows. It is taken out of the item pool.
+    """
+    display_name = "Start with Ice Arrows"
+
+
+class StartWithLightArrows(Toggle):
+    """
+    Start with the Light Arrows. It is taken out of the item pool.
+    """
+    display_name = "Start with Light Arrows"
+
+
+class StartWithIronBoots(Toggle):
+    """
+    Start with the Iron Boots. It is taken out of the item pool.
+    """
+    display_name = "Start with Iron Boots"
+
+
+class StartWithHoverBoots(Toggle):
+    """
+    Start with the Hover Boots. It is taken out of the item pool.
+    """
+    display_name = "Start with Hover Boots"
+
+
+class StartWithHylianShield(Toggle):
+    """
+    Start with the Hylian Shield. It is taken out of the item pool.
+    """
+    display_name = "Start with Hylian Shield"
+
+
+class StartWithMirrorShield(Toggle):
+    """
+    Start with the Mirror Shield. It is taken out of the item pool.
+    """
+    display_name = "Start with Mirror Shield"
+
+
+class StartWithGoronTunic(Toggle):
+    """
+    Start with the Goron Tunic. It is taken out of the item pool.
+    """
+    display_name = "Start with Goron Tunic"
+
+
+class StartWithZoraTunic(Toggle):
+    """
+    Start with the Zora Tunic. It is taken out of the item pool.
+    """
+    display_name = "Start with Zora Tunic"
+
+
+class StartWithStoneOfAgony(Toggle):
+    """
+    Start with the Stone of Agony. It is taken out of the item pool.
+    """
+    display_name = "Start with Stone of Agony"
+
+
+class StartWithWeirdEgg(Toggle):
+    """
+    Start with the Weird Egg. It is taken out of the item pool.
+    """
+    display_name = "Start with Weird Egg"
+
+
+class StartWithClaimCheck(Toggle):
+    """
+    Start with the Claim Check. It is taken out of the item pool.
+    """
+    display_name = "Start with Claim Check"
+
+
+class StartWithGerudoCard(Toggle):
+    """
+    Start with the Gerudo Membership Card. It is taken out of the item pool.
+    """
+    display_name = "Start with Gerudo Membership Card"
+
+
+class StartWithKeatonMask(Toggle):
+    """
+    Start with the Keaton Mask.
+    """
+    display_name = "Start with Keaton Mask"
+
+
+class StartWithSkullMask(Toggle):
+    """
+    Start with the Skull Mask.
+    """
+    display_name = "Start with Skull Mask"
+
+
+class StartWithSpookyMask(Toggle):
+    """
+    Start with the Spooky Mask.
+    """
+    display_name = "Start with Spooky Mask"
+
+
+class StartWithBunnyHood(Toggle):
+    """
+    Start with the Bunny Hood.
+    """
+    display_name = "Start with Bunny Hood"
+
+
+class StartWithGoronMask(Toggle):
+    """
+    Start with the Goron Mask.
+    """
+    display_name = "Start with Goron Mask"
+
+
+class StartWithZoraMask(Toggle):
+    """
+    Start with the Zora Mask.
+    """
+    display_name = "Start with Zora Mask"
+
+
+class StartWithGerudoMask(Toggle):
+    """
+    Start with the Gerudo Mask.
+    """
+    display_name = "Start with Gerudo Mask"
+
+
+class StartWithMaskOfTruth(Toggle):
+    """
+    Start with the Mask of Truth.
+    """
+    display_name = "Start with Mask of Truth"
+
+
+class StartWithHookshot(Choice):
+    """
+    Start with the Hookshot at this level. The matching items are taken out of the item pool.
+    """
+    display_name = "Start with Hookshot"
+    option_off = 0
+    option_hookshot = 1
+    option_longshot = 2
+    default = 0
+
+
+class StartWithBow(Choice):
+    """
+    Start with the Bow at this level. The matching items are taken out of the item pool.
+    """
+    display_name = "Start with Bow"
+    option_off = 0
+    option_quiver_30 = 1
+    option_quiver_40 = 2
+    option_quiver_50 = 3
+    default = 0
+
+
+class StartWithSlingshot(Choice):
+    """
+    Start with the Slingshot at this level. The matching items are taken out of the item pool.
+    """
+    display_name = "Start with Slingshot"
+    option_off = 0
+    option_bullet_bag_30 = 1
+    option_bullet_bag_40 = 2
+    option_bullet_bag_50 = 3
+    default = 0
+
+
+class StartWithBombBag(Choice):
+    """
+    Start with the Bomb Bag at this level. The matching items are taken out of the item pool.
+    """
+    display_name = "Start with Bomb Bag"
+    option_off = 0
+    option_bomb_bag_20 = 1
+    option_bomb_bag_30 = 2
+    option_bomb_bag_40 = 3
+    default = 0
+
+
+class StartWithStrength(Choice):
+    """
+    Start with the Strength at this level. The matching items are taken out of the item pool.
+    """
+    display_name = "Start with Strength"
+    option_off = 0
+    option_gorons_bracelet = 1
+    option_silver_gauntlets = 2
+    option_golden_gauntlets = 3
+    default = 0
+
+
+class StartWithScale(Choice):
+    """
+    Start with the Scale at this level. The matching items are taken out of the item pool.
+    """
+    display_name = "Start with Scale"
+    option_off = 0
+    option_silver_scale = 1
+    option_golden_scale = 2
+    default = 0
+
+
+class StartWithWallet(Choice):
+    """
+    Start with the Wallet at this level. The matching items are taken out of the item pool.
+    """
+    display_name = "Start with Wallet"
+    option_off = 0
+    option_adults_wallet = 1
+    option_giants_wallet = 2
+    default = 0
+
+
+class StartWithMagicMeter(Choice):
+    """
+    Start with the Magic Meter at this level. The matching items are taken out of the item pool.
+    """
+    display_name = "Start with Magic Meter"
+    option_off = 0
+    option_single_magic = 1
+    option_double_magic = 2
+    default = 0
+
+
+class StartWithBombchuBag(Choice):
+    """
+    Start with the Bombchu Bag at this level. The matching items are taken out of the item pool.
+    Only with Bombchu Bag "single_bag" (the level is the capacity in the game).
+    """
+    display_name = "Start with Bombchu Bag"
+    option_off = 0
+    option_bombchu_bag_20 = 1
+    option_bombchu_bag_30 = 2
+    option_bombchu_bag_50 = 3
+    default = 0
+
+
+class StartWithBiggoronsSword(Choice):
+    """
+    Start with the Biggoron's Sword at this level. The matching items are taken out of the item pool.
+    """
+    display_name = "Start with Biggoron's Sword"
+    option_off = 0
+    option_giants_knife = 1
+    option_biggorons_sword = 2
+    default = 0
+
+
+class StartWithBottle1(Choice):
+    """
+    Start with a bottle in slot 1. A bottle from the item pool is taken out for it.
+    """
+    display_name = "Start with Bottle 1"
+    option_off = 0
+    option_empty_bottle = 1
+    option_big_poe = 2
+    option_rutos_letter = 3
+    default = 0
+
+
+class StartWithBottle2(Choice):
+    """
+    Start with a bottle in slot 2. A bottle from the item pool is taken out for it.
+    """
+    display_name = "Start with Bottle 2"
+    option_off = 0
+    option_empty_bottle = 1
+    option_big_poe = 2
+    default = 0
+
+
+class StartWithBottle3(Choice):
+    """
+    Start with a bottle in slot 3. A bottle from the item pool is taken out for it.
+    """
+    display_name = "Start with Bottle 3"
+    option_off = 0
+    option_empty_bottle = 1
+    option_big_poe = 2
+    default = 0
+
+
+class StartWithBottle4(Choice):
+    """
+    Start with a bottle in slot 4. A bottle from the item pool is taken out for it.
+    """
+    display_name = "Start with Bottle 4"
+    option_off = 0
+    option_empty_bottle = 1
+    option_big_poe = 2
+    default = 0
+
+
 class ItemPool(Choice):
     """
     Sets how many major items appear in the item pool.
@@ -2025,6 +2376,47 @@ class SohOptions(PerGameCommonOptions):
     start_with_requiem :StartWithRequiem
     start_with_nocturne :StartWithNocturne
     start_with_prelude :StartWithPrelude
+    start_with_megaton_hammer: StartWithMegatonHammer
+    start_with_boomerang: StartWithBoomerang
+    start_with_lens_of_truth: StartWithLensOfTruth
+    start_with_dins_fire: StartWithDinsFire
+    start_with_farores_wind: StartWithFaroresWind
+    start_with_nayrus_love: StartWithNayrusLove
+    start_with_fire_arrows: StartWithFireArrows
+    start_with_ice_arrows: StartWithIceArrows
+    start_with_light_arrows: StartWithLightArrows
+    start_with_iron_boots: StartWithIronBoots
+    start_with_hover_boots: StartWithHoverBoots
+    start_with_hylian_shield: StartWithHylianShield
+    start_with_mirror_shield: StartWithMirrorShield
+    start_with_goron_tunic: StartWithGoronTunic
+    start_with_zora_tunic: StartWithZoraTunic
+    start_with_stone_of_agony: StartWithStoneOfAgony
+    start_with_weird_egg: StartWithWeirdEgg
+    start_with_claim_check: StartWithClaimCheck
+    start_with_gerudo_card: StartWithGerudoCard
+    start_with_keaton_mask: StartWithKeatonMask
+    start_with_skull_mask: StartWithSkullMask
+    start_with_spooky_mask: StartWithSpookyMask
+    start_with_bunny_hood: StartWithBunnyHood
+    start_with_goron_mask: StartWithGoronMask
+    start_with_zora_mask: StartWithZoraMask
+    start_with_gerudo_mask: StartWithGerudoMask
+    start_with_mask_of_truth: StartWithMaskOfTruth
+    start_with_hookshot: StartWithHookshot
+    start_with_bow: StartWithBow
+    start_with_slingshot: StartWithSlingshot
+    start_with_bomb_bag: StartWithBombBag
+    start_with_strength: StartWithStrength
+    start_with_scale: StartWithScale
+    start_with_wallet: StartWithWallet
+    start_with_magic_meter: StartWithMagicMeter
+    start_with_bombchu_bag: StartWithBombchuBag
+    start_with_biggorons_sword: StartWithBiggoronsSword
+    start_with_bottle_1: StartWithBottle1
+    start_with_bottle_2: StartWithBottle2
+    start_with_bottle_3: StartWithBottle3
+    start_with_bottle_4: StartWithBottle4
     #StartingTokens
     full_wallets: FullWallets
     bombchu_bag: BombchuBag
@@ -2543,6 +2935,47 @@ soh_option_groups = [
         StartWithRequiem,
         StartWithNocturne,
         StartWithPrelude,
+        StartWithMegatonHammer,
+        StartWithBoomerang,
+        StartWithLensOfTruth,
+        StartWithDinsFire,
+        StartWithFaroresWind,
+        StartWithNayrusLove,
+        StartWithFireArrows,
+        StartWithIceArrows,
+        StartWithLightArrows,
+        StartWithIronBoots,
+        StartWithHoverBoots,
+        StartWithHylianShield,
+        StartWithMirrorShield,
+        StartWithGoronTunic,
+        StartWithZoraTunic,
+        StartWithStoneOfAgony,
+        StartWithWeirdEgg,
+        StartWithClaimCheck,
+        StartWithGerudoCard,
+        StartWithKeatonMask,
+        StartWithSkullMask,
+        StartWithSpookyMask,
+        StartWithBunnyHood,
+        StartWithGoronMask,
+        StartWithZoraMask,
+        StartWithGerudoMask,
+        StartWithMaskOfTruth,
+        StartWithHookshot,
+        StartWithBow,
+        StartWithSlingshot,
+        StartWithBombBag,
+        StartWithStrength,
+        StartWithScale,
+        StartWithWallet,
+        StartWithMagicMeter,
+        StartWithBombchuBag,
+        StartWithBiggoronsSword,
+        StartWithBottle1,
+        StartWithBottle2,
+        StartWithBottle3,
+        StartWithBottle4,
         #StartingTokens,
         #StartingHearts,
     ]),
