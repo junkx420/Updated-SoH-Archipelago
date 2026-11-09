@@ -719,6 +719,7 @@ void Context::ParseArchipelagoOptions() {
     mOptions[RSK_SHUFFLE_TREES].Set(slotData["shuffle_trees"]);
     mOptions[RSK_SHUFFLE_BUSHES].Set(RO_GENERIC_NO);
     mOptions[RSK_SHUFFLE_FROG_SONG_RUPEES].Set(slotData["shuffle_frog_song_rupees"]);
+    mOptions[RSK_SHUFFLE_BEGGAR].Set(slotData.value("shuffle_beggar", static_cast<int>(RO_GENERIC_OFF)));
     mOptions[RSK_ITEM_POOL].Set(0);
     mOptions[RSK_BASE_ICE_TRAPS].Set(0);
     mOptions[RSK_ADDITIONAL_ICE_TRAPS].Set(0);
