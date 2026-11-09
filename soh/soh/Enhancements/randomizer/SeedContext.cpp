@@ -851,6 +851,57 @@ void Context::ParseArchipelagoOptions() {
     // 9.3.1 replaced "Skip Scarecrow's Song" with "Start with Scarecrow's Song" (upstream #7205)
     mOptions[RSK_SHUFFLE_SCARECROWS_SONG].Set(RO_GENERIC_OFF);
     mOptions[RSK_STARTING_SCARECROWS_SONG].Set(slotData["skip_scarecrows_song"]);
+    // Starting items added in apworld 1.5 (feature 2.7); values follow the upstream option order. Masks keep the
+    // Complete Mask Quest mapping above and add the single starting masks on top.
+    mOptions[RSK_STARTING_MEGATON_HAMMER].Set(slotData.value("start_with_megaton_hammer", 0));
+    mOptions[RSK_STARTING_BOOMERANG].Set(slotData.value("start_with_boomerang", 0));
+    mOptions[RSK_STARTING_LENS_OF_TRUTH].Set(slotData.value("start_with_lens_of_truth", 0));
+    mOptions[RSK_STARTING_DINS_FIRE].Set(slotData.value("start_with_dins_fire", 0));
+    mOptions[RSK_STARTING_FARORES_WIND].Set(slotData.value("start_with_farores_wind", 0));
+    mOptions[RSK_STARTING_NAYRUS_LOVE].Set(slotData.value("start_with_nayrus_love", 0));
+    mOptions[RSK_STARTING_FIRE_ARROWS].Set(slotData.value("start_with_fire_arrows", 0));
+    mOptions[RSK_STARTING_ICE_ARROWS].Set(slotData.value("start_with_ice_arrows", 0));
+    mOptions[RSK_STARTING_LIGHT_ARROWS].Set(slotData.value("start_with_light_arrows", 0));
+    mOptions[RSK_STARTING_IRON_BOOTS].Set(slotData.value("start_with_iron_boots", 0));
+    mOptions[RSK_STARTING_HOVER_BOOTS].Set(slotData.value("start_with_hover_boots", 0));
+    mOptions[RSK_STARTING_HYLIAN_SHIELD].Set(slotData.value("start_with_hylian_shield", 0));
+    mOptions[RSK_STARTING_MIRROR_SHIELD].Set(slotData.value("start_with_mirror_shield", 0));
+    mOptions[RSK_STARTING_GORON_TUNIC].Set(slotData.value("start_with_goron_tunic", 0));
+    mOptions[RSK_STARTING_ZORA_TUNIC].Set(slotData.value("start_with_zora_tunic", 0));
+    mOptions[RSK_STARTING_STONE_OF_AGONY].Set(slotData.value("start_with_stone_of_agony", 0));
+    mOptions[RSK_STARTING_WEIRD_EGG].Set(slotData.value("start_with_weird_egg", 0));
+    mOptions[RSK_STARTING_CLAIM_CHECK].Set(slotData.value("start_with_claim_check", 0));
+    mOptions[RSK_STARTING_GERUDO_CARD].Set(slotData.value("start_with_gerudo_card", 0));
+    mOptions[RSK_STARTING_HOOKSHOT].Set(slotData.value("start_with_hookshot", 0));
+    mOptions[RSK_STARTING_BOW].Set(slotData.value("start_with_bow", 0));
+    mOptions[RSK_STARTING_SLINGSHOT].Set(slotData.value("start_with_slingshot", 0));
+    mOptions[RSK_STARTING_BOMB_BAG].Set(slotData.value("start_with_bomb_bag", 0));
+    mOptions[RSK_STARTING_STRENGTH].Set(slotData.value("start_with_strength", 0));
+    mOptions[RSK_STARTING_SCALE].Set(slotData.value("start_with_scale", 0));
+    mOptions[RSK_STARTING_WALLET].Set(slotData.value("start_with_wallet", 0));
+    mOptions[RSK_STARTING_MAGIC_METER].Set(slotData.value("start_with_magic_meter", 0));
+    mOptions[RSK_STARTING_BOMBCHU_BAG].Set(slotData.value("start_with_bombchu_bag", 0));
+    mOptions[RSK_STARTING_BIGGORON_SWORD].Set(slotData.value("start_with_biggorons_sword", 0));
+    mOptions[RSK_STARTING_BOTTLE_1].Set(slotData.value("start_with_bottle_1", 0));
+    mOptions[RSK_STARTING_BOTTLE_2].Set(slotData.value("start_with_bottle_2", 0));
+    mOptions[RSK_STARTING_BOTTLE_3].Set(slotData.value("start_with_bottle_3", 0));
+    mOptions[RSK_STARTING_BOTTLE_4].Set(slotData.value("start_with_bottle_4", 0));
+    mOptions[RSK_STARTING_KEATON_MASK].Set((slotData["complete_mask_quest"] != 0 || slotData.value("start_with_keaton_mask", 0) != 0)
+                             ? RO_GENERIC_ON : RO_GENERIC_OFF);
+    mOptions[RSK_STARTING_SKULL_MASK].Set((slotData["complete_mask_quest"] != 0 || slotData.value("start_with_skull_mask", 0) != 0)
+                             ? RO_GENERIC_ON : RO_GENERIC_OFF);
+    mOptions[RSK_STARTING_SPOOKY_MASK].Set((slotData["complete_mask_quest"] != 0 || slotData.value("start_with_spooky_mask", 0) != 0)
+                             ? RO_GENERIC_ON : RO_GENERIC_OFF);
+    mOptions[RSK_STARTING_BUNNY_HOOD].Set((slotData["complete_mask_quest"] != 0 || slotData.value("start_with_bunny_hood", 0) != 0)
+                             ? RO_GENERIC_ON : RO_GENERIC_OFF);
+    mOptions[RSK_STARTING_GORON_MASK].Set((slotData["complete_mask_quest"] != 0 || slotData.value("start_with_goron_mask", 0) != 0)
+                             ? RO_GENERIC_ON : RO_GENERIC_OFF);
+    mOptions[RSK_STARTING_ZORA_MASK].Set((slotData["complete_mask_quest"] != 0 || slotData.value("start_with_zora_mask", 0) != 0)
+                             ? RO_GENERIC_ON : RO_GENERIC_OFF);
+    mOptions[RSK_STARTING_GERUDO_MASK].Set((slotData["complete_mask_quest"] != 0 || slotData.value("start_with_gerudo_mask", 0) != 0)
+                             ? RO_GENERIC_ON : RO_GENERIC_OFF);
+    mOptions[RSK_STARTING_MASK_OF_TRUTH].Set((slotData["complete_mask_quest"] != 0 || slotData.value("start_with_mask_of_truth", 0) != 0)
+                             ? RO_GENERIC_ON : RO_GENERIC_OFF);
     mOptions[RSK_SKIP_PLANTING_BEANS].Set(RO_GENERIC_NO);
     mOptions[RSK_SKULLS_SUNS_SONG].Set(slotData["skulls_sun_song"]);
     mOptions[RSK_SHUFFLE_ADULT_TRADE].Set(slotData["shuffle_adult_trade_items"]);
