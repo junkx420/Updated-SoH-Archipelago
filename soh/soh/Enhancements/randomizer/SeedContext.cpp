@@ -855,7 +855,7 @@ void Context::ParseArchipelagoOptions() {
         }
     }
     // 9.3.1 replaced "Skip Scarecrow's Song" with "Start with Scarecrow's Song" (upstream #7205)
-    mOptions[RSK_SHUFFLE_SCARECROWS_SONG].Set(RO_GENERIC_OFF);
+    mOptions[RSK_SHUFFLE_SCARECROWS_SONG].Set(slotData.value("shuffle_scarecrows_song", static_cast<int>(RO_GENERIC_OFF)));
     mOptions[RSK_STARTING_SCARECROWS_SONG].Set(slotData["skip_scarecrows_song"]);
     // Starting items added in apworld 1.5 (feature 2.7); values follow the upstream option order. Masks keep the
     // Complete Mask Quest mapping above and add the single starting masks on top.
