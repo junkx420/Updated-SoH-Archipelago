@@ -122,10 +122,14 @@ def set_region_rules(world: "SohWorld") -> None:
         # DEFERRED RC_KAK_ROCK_2: logic->CanBreakRocks()
         (Locations.KAK_TREE,
          lambda bundle: can_bonk_trees(bundle)),
-        # DEFERRED RC_KAK_GUARD_GATE_RECTANGLE_SIGN: logic->IsChild && logic->CanRead()
-        # DEFERRED RC_KAK_WELL_RECTANGLE_SIGN: logic->IsChild && logic->CanRead()
-        # DEFERRED RC_KAK_SOUTHEAST_EXIT_ARROW_SIGN: logic->CanRead()
-        # DEFERRED RC_KAK_FRONT_GATE_ARROW_SIGN: logic->CanRead()
+        (Locations.KAK_GUARD_GATE_RECTANGLE_SIGN,
+         lambda bundle: is_child(bundle) & can_read(bundle)),
+        (Locations.KAK_WELL_RECTANGLE_SIGN,
+         lambda bundle: is_child(bundle) & can_read(bundle)),
+        (Locations.KAK_SOUTHEAST_EXIT_ARROW_SIGN,
+         lambda bundle: can_read(bundle)),
+        (Locations.KAK_FRONT_GATE_ARROW_SIGN,
+         lambda bundle: can_read(bundle)),
         # DEFERRED RC_KAK_WONDER_UNDER_CONSTRUCTION: logic->IsChild
         (Locations.KAK_BEGGAR_BUGS,
          lambda bundle: is_adult(bundle) & can_use(Items.BOTTLE_WITH_BUGS, bundle)),
@@ -385,7 +389,8 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.KAK_SHOOTING_GALLERY, world, [
         (Locations.KAK_SHOOTING_GALLERY_REWARD,
          lambda bundle: is_adult(bundle) & has_item(Items.CHILD_WALLET, bundle) & has_speak(bundle, "HYLIAN") & has_item(Items.FAIRY_BOW, bundle)),
-        # DEFERRED RC_KAK_SHOOTING_GALLERY_RECTANGLE_SIGN: logic->IsAdult && logic->CanRead()
+        (Locations.KAK_SHOOTING_GALLERY_RECTANGLE_SIGN,
+         lambda bundle: is_adult(bundle) & can_read(bundle)),
     ])
     # Connections
     connect_regions(Regions.KAK_SHOOTING_GALLERY, world, [
@@ -507,4 +512,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (11): ['RC_KAK_SILVER_BOULDER', 'RC_KAK_ROCK_1', 'RC_KAK_ROCK_2', 'RC_KAK_GUARD_GATE_RECTANGLE_SIGN', 'RC_KAK_WELL_RECTANGLE_SIGN', 'RC_KAK_SOUTHEAST_EXIT_ARROW_SIGN', 'RC_KAK_FRONT_GATE_ARROW_SIGN', 'RC_KAK_WONDER_UNDER_CONSTRUCTION', 'RC_KAK_WONDER_ABOVE_COW', 'RC_KAK_SHOOTING_GALLERY_RECTANGLE_SIGN', 'RC_KAK_OPEN_GROTTO_GOSSIP_STONE']
+# deferred locations (6): ['RC_KAK_SILVER_BOULDER', 'RC_KAK_ROCK_1', 'RC_KAK_ROCK_2', 'RC_KAK_WONDER_UNDER_CONSTRUCTION', 'RC_KAK_WONDER_ABOVE_COW', 'RC_KAK_OPEN_GROTTO_GOSSIP_STONE']

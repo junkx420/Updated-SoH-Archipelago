@@ -173,10 +173,14 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_cut_shrubs(bundle) | summon_epona(bundle)),
         (Locations.LH_SCARECROW_BUTTERFLY_FAIRY,
          lambda bundle: is_child(bundle) & can_use(Items.STICKS, bundle)),
-        # DEFERRED RC_LH_LAB_RECTANGLE_SIGN: logic->CanRead()
-        # DEFERRED RC_LH_NORTH_EXIT_ARROW_SIGN: logic->CanRead()
-        # DEFERRED RC_LH_ISLAND_PEDESTAL: logic->CanRead()
-        # DEFERRED RC_LH_WATER_SWITCH_SIGN: logic->IsAdult && logic->CanRead()
+        (Locations.LH_LAB_RECTANGLE_SIGN,
+         lambda bundle: can_read(bundle)),
+        (Locations.LH_NORTH_EXIT_ARROW_SIGN,
+         lambda bundle: can_read(bundle)),
+        (Locations.LH_ISLAND_PEDESTAL,
+         lambda bundle: can_read(bundle)),
+        (Locations.LH_WATER_SWITCH_SIGN,
+         lambda bundle: is_adult(bundle) & can_read(bundle)),
     ])
     # Connections
     connect_regions(Regions.LAKE_HYLIA, world, [
@@ -225,8 +229,10 @@ def set_region_rules(world: "SohWorld") -> None:
     # Locations
     add_locations(Regions.LH_FISHING_ISLAND, world, [
         # DEFERRED RC_LH_ROCK: logic->CanBreakRocks()
-        # DEFERRED RC_LH_FISHING_SIGN: logic->CanRead()
-        # DEFERRED RC_LH_FISHING_ISLAND_WATER_SWITCH_SIGN: logic->IsAdult && logic->CanRead()
+        (Locations.LH_FISHING_SIGN,
+         lambda bundle: can_read(bundle)),
+        (Locations.LH_FISHING_ISLAND_WATER_SWITCH_SIGN,
+         lambda bundle: is_adult(bundle) & can_read(bundle)),
     ])
     # Connections
     connect_regions(Regions.LH_FISHING_ISLAND, world, [
@@ -371,7 +377,8 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_use(Items.FISHING_POLE, bundle) & has_speak(bundle, "HYLIAN")),
         (Locations.LH_FISHING_POLE_HINT,
          lambda bundle: has_speak(bundle, "HYLIAN")),
-        # DEFERRED RC_LH_FISHING_POND_RECTANGLE_SIGN: logic->CanRead()
+        (Locations.LH_FISHING_POND_RECTANGLE_SIGN,
+         lambda bundle: can_read(bundle)),
     ])
     # Connections
     connect_regions(Regions.LH_FISHING_POND, world, [
@@ -406,4 +413,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (12): ['RC_LH_SCARECROWS_SONG', 'RC_LH_LAB_GOSSIP_STONE', 'RC_LH_SOUTHEAST_GOSSIP_STONE', 'RC_LH_SOUTHWEST_GOSSIP_STONE', 'RC_LH_LAB_RECTANGLE_SIGN', 'RC_LH_NORTH_EXIT_ARROW_SIGN', 'RC_LH_ISLAND_PEDESTAL', 'RC_LH_WATER_SWITCH_SIGN', 'RC_LH_ROCK', 'RC_LH_FISHING_SIGN', 'RC_LH_FISHING_ISLAND_WATER_SWITCH_SIGN', 'RC_LH_FISHING_POND_RECTANGLE_SIGN']
+# deferred locations (5): ['RC_LH_SCARECROWS_SONG', 'RC_LH_LAB_GOSSIP_STONE', 'RC_LH_SOUTHEAST_GOSSIP_STONE', 'RC_LH_SOUTHWEST_GOSSIP_STONE', 'RC_LH_ROCK']

@@ -23,7 +23,8 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: (is_child(bundle) | can_pass_enemy(bundle, Enemies.GERUDO_GUARD)) & can_break_crates(bundle)),
         (Locations.GF_OUTSKIRTS_NORTHWEST_CRATE,
          lambda bundle: (is_child(bundle) | can_pass_enemy(bundle, Enemies.GERUDO_GUARD)) & can_break_crates(bundle)),
-        # DEFERRED RC_GF_EAST_EXIT_ARROW_SIGN: logic->CanRead()
+        (Locations.GF_EAST_EXIT_ARROW_SIGN,
+         lambda bundle: can_read(bundle)),
         # DEFERRED RC_GF_WONDER_ENTRANCE_SIGN: logic->CanUse(RG_HOOKSHOT)
     ])
     # Connections
@@ -84,7 +85,8 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Locations
     add_locations(Regions.GF_OUTSIDE_GTG, world, [
-        # DEFERRED RC_GF_GTG_ENTRANCE_RECTANGLE_SIGN: logic->IsAdult && logic->CanRead() && (ctx->GetTrickOption(RT_PASS_GUARDS_WITH_NOTHING) || logic->HasItem(RG_GERUDO_MEMBERSHIP_CARD))
+        (Locations.GF_GTG_ENTRANCE_RECTANGLE_SIGN,
+         lambda bundle: is_adult(bundle) & can_read(bundle) & (can_do_trick(Tricks.PASS_GUARDS_WITH_NOTHING, bundle) | has_item(Items.GERUDO_MEMBERSHIP_CARD, bundle))),
     ])
     # Connections
     connect_regions(Regions.GF_OUTSIDE_GTG, world, [
@@ -385,7 +387,8 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_break_crates(bundle)),
         (Locations.GF_SOUTH_TARGET_WEST_CRATE,
          lambda bundle: can_break_crates(bundle)),
-        # DEFERRED RC_GF_HBA_RECTANGLE_SIGN: logic->IsAdult && logic->CanRead()
+        (Locations.GF_HBA_RECTANGLE_SIGN,
+         lambda bundle: is_adult(bundle) & can_read(bundle)),
         # DEFERRED RC_GF_WONDER_ARCHERY_SIGN: logic->CanUse(RG_HOOKSHOT)
     ])
     # Connections
@@ -402,7 +405,8 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Locations
     add_locations(Regions.GF_OUTSIDE_GATE, world, [
-        # DEFERRED RC_GF_GATE_EXIT_RECTANGLE_SIGN: logic->IsAdult && logic->CanRead()
+        (Locations.GF_GATE_EXIT_RECTANGLE_SIGN,
+         lambda bundle: is_adult(bundle) & can_read(bundle)),
         # DEFERRED RC_GF_FAR_AWAY_CRATE_CHILD: logic->IsChild && false
         # DEFERRED RC_GF_FAR_AWAY_CRATE_ADULT: logic->IsAdult && false
     ])
@@ -454,4 +458,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (8): ['RC_GF_EAST_EXIT_ARROW_SIGN', 'RC_GF_WONDER_ENTRANCE_SIGN', 'RC_GF_GTG_ENTRANCE_RECTANGLE_SIGN', 'RC_GF_HBA_RECTANGLE_SIGN', 'RC_GF_WONDER_ARCHERY_SIGN', 'RC_GF_GATE_EXIT_RECTANGLE_SIGN', 'RC_GF_FAR_AWAY_CRATE_CHILD', 'RC_GF_FAR_AWAY_CRATE_ADULT']
+# deferred locations (4): ['RC_GF_WONDER_ENTRANCE_SIGN', 'RC_GF_WONDER_ARCHERY_SIGN', 'RC_GF_FAR_AWAY_CRATE_CHILD', 'RC_GF_FAR_AWAY_CRATE_ADULT']

@@ -422,7 +422,8 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.DODONGOS_CAVERN_FAR_BRIDGE, world, [
         (Locations.DODONGOS_CAVERN_END_OF_BRIDGE_CHEST,
          lambda bundle: can_break_mud_walls(bundle) & has_open_chest(bundle)),
-        # DEFERRED RC_DODONGOS_CAVERN_TOP_FLOOR_PEDESTAL: logic->CanRead()
+        (Locations.DODONGOS_CAVERN_TOP_FLOOR_PEDESTAL,
+         lambda bundle: can_read(bundle)),
     ])
     # Connections
     connect_regions(Regions.DODONGOS_CAVERN_FAR_BRIDGE, world, [
@@ -521,4 +522,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (2): ['RC_DODONGOS_CAVERN_GOSSIP_STONE', 'RC_DODONGOS_CAVERN_TOP_FLOOR_PEDESTAL']
+# deferred locations (1): ['RC_DODONGOS_CAVERN_GOSSIP_STONE']

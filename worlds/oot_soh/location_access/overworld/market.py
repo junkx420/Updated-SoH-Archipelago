@@ -281,7 +281,8 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.MARKET_MASK_SHOP, world, [
         (Locations.MARKET_MASK_SHOP_HINT,
          lambda bundle: True_()),
-        # DEFERRED RC_MK_MASK_SHOP_SIGN: logic->CanRead()
+        (Locations.MK_MASK_SHOP_SIGN,
+         lambda bundle: can_read(bundle)),
     ])
     # Connections
     connect_regions(Regions.MARKET_MASK_SHOP, world, [
@@ -294,7 +295,8 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.MARKET_SHOOTING_GALLERY, world, [
         (Locations.MARKET_SHOOTING_GALLERY,
          lambda bundle: is_child(bundle) & has_item(Items.CHILD_WALLET, bundle) & has_speak(bundle, "HYLIAN")),
-        # DEFERRED RC_MK_SHOOTING_GALLERY_RECTANGLE_SIGN: logic->IsChild && logic->CanRead()
+        (Locations.MK_SHOOTING_GALLERY_RECTANGLE_SIGN,
+         lambda bundle: is_child(bundle) & can_read(bundle)),
     ])
     # Connections
     connect_regions(Regions.MARKET_SHOOTING_GALLERY, world, [
@@ -447,4 +449,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (10): ['RC_MKT_WONDER_DAY_1', 'RC_MKT_WONDER_DAY_2', 'RC_MKT_WONDER_DAY_3', 'RC_MKT_WONDER_DAY_4', 'RC_MKT_WONDER_DAY_5', 'RC_MKT_WONDER_NIGHT_1', 'RC_MKT_WONDER_NIGHT_2', 'RC_MK_MASK_SHOP_SIGN', 'RC_MK_SHOOTING_GALLERY_RECTANGLE_SIGN', 'RC_MARKET_TREASURE_CHEST_GAME_SHOPKEEPER']
+# deferred locations (8): ['RC_MKT_WONDER_DAY_1', 'RC_MKT_WONDER_DAY_2', 'RC_MKT_WONDER_DAY_3', 'RC_MKT_WONDER_DAY_4', 'RC_MKT_WONDER_DAY_5', 'RC_MKT_WONDER_NIGHT_1', 'RC_MKT_WONDER_NIGHT_2', 'RC_MARKET_TREASURE_CHEST_GAME_SHOPKEEPER']

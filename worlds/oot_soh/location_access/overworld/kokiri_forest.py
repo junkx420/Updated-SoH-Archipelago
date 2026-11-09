@@ -144,20 +144,34 @@ def set_region_rules(world: "SohWorld") -> None:
         # DEFERRED RC_KF_ROCK_BEHIND_SARIAS_HOUSE: logic->IsChild && logic->CanBreakRocks()
         # DEFERRED RC_KF_ROCK_BY_MIDOS_HOUSE: logic->IsChild && logic->CanBreakRocks()
         # DEFERRED RC_KF_ROCK_BY_KNOW_IT_ALLS_HOUSE: logic->IsChild && logic->CanBreakRocks()
-        # DEFERRED RC_KF_DEKU_TREE_RECTANGLE_SIGN: logic->CanRead()
-        # DEFERRED RC_KF_STEPPING_STONES_RECTANGLE_SIGN: logic->CanRead()
-        # DEFERRED RC_KF_LINKS_HOUSE_RECTANGLE_SIGN: logic->CanRead()
-        # DEFERRED RC_KF_FIRST_TRAINING_CENTER_RECTANGLE_SIGN: logic->IsChild && logic->CanRead()
-        # DEFERRED RC_KF_SECOND_TRAINING_CENTER_RECTANGLE_SIGN: logic->IsChild && logic->CanRead()
-        # DEFERRED RC_KF_CRAWL_RECTANGLE_RECTANGLE_SIGN: logic->IsChild && logic->CanRead()
-        # DEFERRED RC_KF_LOST_WOODS_RECTANGLE_SIGN: logic->CanRead()
-        # DEFERRED RC_KF_HOUSE_OF_TWINS_ARROW_SIGN: logic->CanRead()
-        # DEFERRED RC_KF_SHOP_ARROW_SIGN: logic->CanRead()
-        # DEFERRED RC_KF_SARIAS_HOUSE_ARROW_SIGN: logic->CanRead()
-        # DEFERRED RC_KF_MIDOS_HOUSE_ARROW_SIGN: logic->CanRead()
-        # DEFERRED RC_KF_TRAINING_CENTER_ENTRANCE_ARROW_SIGN: logic->IsChild && logic->CanRead()
-        # DEFERRED RC_KF_INNER_TRAINING_CENTER_ARROW_SIGN: logic->IsChild && logic->CanRead()
-        # DEFERRED RC_KF_KNOW_IT_ALL_BROTHERS_HOUSE_ARROW_SIGN: logic->CanRead()
+        (Locations.KF_DEKU_TREE_RECTANGLE_SIGN,
+         lambda bundle: can_read(bundle)),
+        (Locations.KF_STEPPING_STONES_RECTANGLE_SIGN,
+         lambda bundle: can_read(bundle)),
+        (Locations.KF_LINKS_HOUSE_RECTANGLE_SIGN,
+         lambda bundle: can_read(bundle)),
+        (Locations.KF_FIRST_TRAINING_CENTER_RECTANGLE_SIGN,
+         lambda bundle: is_child(bundle) & can_read(bundle)),
+        (Locations.KF_SECOND_TRAINING_CENTER_RECTANGLE_SIGN,
+         lambda bundle: is_child(bundle) & can_read(bundle)),
+        (Locations.KF_CRAWL_RECTANGLE_RECTANGLE_SIGN,
+         lambda bundle: is_child(bundle) & can_read(bundle)),
+        (Locations.KF_LOST_WOODS_RECTANGLE_SIGN,
+         lambda bundle: can_read(bundle)),
+        (Locations.KF_HOUSE_OF_TWINS_ARROW_SIGN,
+         lambda bundle: can_read(bundle)),
+        (Locations.KF_SHOP_ARROW_SIGN,
+         lambda bundle: can_read(bundle)),
+        (Locations.KF_SARIAS_HOUSE_ARROW_SIGN,
+         lambda bundle: can_read(bundle)),
+        (Locations.KF_MIDOS_HOUSE_ARROW_SIGN,
+         lambda bundle: can_read(bundle)),
+        (Locations.KF_TRAINING_CENTER_ENTRANCE_ARROW_SIGN,
+         lambda bundle: is_child(bundle) & can_read(bundle)),
+        (Locations.KF_INNER_TRAINING_CENTER_ARROW_SIGN,
+         lambda bundle: is_child(bundle) & can_read(bundle)),
+        (Locations.KF_KNOW_IT_ALL_BROTHERS_HOUSE_ARROW_SIGN,
+         lambda bundle: can_read(bundle)),
         # DEFERRED RC_KF_WONDER_TRAINING_1: logic->IsChild
         # DEFERRED RC_KF_WONDER_TRAINING_2: logic->IsChild
         # DEFERRED RC_KF_WONDER_TRAINING_3: logic->IsChild
@@ -214,7 +228,8 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: is_adult(bundle) & can_use(Items.BOOMERANG, bundle)),
         (Locations.KF_BEAN_PLATFORM_RED_RUPEE,
          lambda bundle: is_adult(bundle) & can_use(Items.BOOMERANG, bundle)),
-        # DEFERRED RC_KF_LOST_WOODS_ARROW_SIGN: logic->IsChild && logic->CanRead()
+        (Locations.KF_LOST_WOODS_ARROW_SIGN,
+         lambda bundle: is_child(bundle) & can_read(bundle)),
         (Locations.KF_GOSSIP_STONE_FAIRY,
          lambda bundle: call_gossip_fairy_except_suns(bundle)),
         (Locations.KF_GOSSIP_STONE_BIG_FAIRY,
@@ -272,8 +287,10 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: is_child(bundle) & can_cut_shrubs(bundle)),
         (Locations.KF_CHILD_GRASS_MAZE3,
          lambda bundle: is_child(bundle) & can_cut_shrubs(bundle)),
-        # DEFERRED RC_KF_AFTER_CRAWLSPACE_RECTANGLE_SIGN: logic->IsChild && logic->CanRead()
-        # DEFERRED RC_KF_BOULDER_MAZE_RECTANGLE_SIGN: logic->IsChild && logic->CanRead()
+        (Locations.KF_AFTER_CRAWLSPACE_RECTANGLE_SIGN,
+         lambda bundle: is_child(bundle) & can_read(bundle)),
+        (Locations.KF_BOULDER_MAZE_RECTANGLE_SIGN,
+         lambda bundle: is_child(bundle) & can_read(bundle)),
         # DEFERRED RC_KF_WONDER_CRAWL_GRASS_1: logic->IsChild
         # DEFERRED RC_KF_WONDER_CRAWL_GRASS_2: logic->IsChild
     ])
@@ -332,7 +349,8 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: is_adult(bundle) & can_use(Items.EPONAS_SONG, bundle) & has_item(Events.GOTTEN_LINKS_COW, bundle)),
         (Locations.KF_LINKS_HOUSE_POT,
          lambda bundle: can_break_pots(bundle)),
-        # DEFERRED RC_KF_LINKS_HOUSE_SIGN: logic->CanRead()
+        (Locations.KF_LINKS_HOUSE_SIGN,
+         lambda bundle: can_read(bundle)),
     ])
     # Connections
     connect_regions(Regions.KF_LINKS_HOUSE, world, [
@@ -474,4 +492,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (45): ['RC_KF_CIRCLE_ROCK_1', 'RC_KF_CIRCLE_ROCK_2', 'RC_KF_CIRCLE_ROCK_3', 'RC_KF_CIRCLE_ROCK_4', 'RC_KF_CIRCLE_ROCK_5', 'RC_KF_CIRCLE_ROCK_6', 'RC_KF_CIRCLE_ROCK_7', 'RC_KF_CIRCLE_ROCK_8', 'RC_KF_ROCK_BY_SARIAS_HOUSE', 'RC_KF_ROCK_BEHIND_SARIAS_HOUSE', 'RC_KF_ROCK_BY_MIDOS_HOUSE', 'RC_KF_ROCK_BY_KNOW_IT_ALLS_HOUSE', 'RC_KF_DEKU_TREE_RECTANGLE_SIGN', 'RC_KF_STEPPING_STONES_RECTANGLE_SIGN', 'RC_KF_LINKS_HOUSE_RECTANGLE_SIGN', 'RC_KF_FIRST_TRAINING_CENTER_RECTANGLE_SIGN', 'RC_KF_SECOND_TRAINING_CENTER_RECTANGLE_SIGN', 'RC_KF_CRAWL_RECTANGLE_RECTANGLE_SIGN', 'RC_KF_LOST_WOODS_RECTANGLE_SIGN', 'RC_KF_HOUSE_OF_TWINS_ARROW_SIGN', 'RC_KF_SHOP_ARROW_SIGN', 'RC_KF_SARIAS_HOUSE_ARROW_SIGN', 'RC_KF_MIDOS_HOUSE_ARROW_SIGN', 'RC_KF_TRAINING_CENTER_ENTRANCE_ARROW_SIGN', 'RC_KF_INNER_TRAINING_CENTER_ARROW_SIGN', 'RC_KF_KNOW_IT_ALL_BROTHERS_HOUSE_ARROW_SIGN', 'RC_KF_WONDER_TRAINING_1', 'RC_KF_WONDER_TRAINING_2', 'RC_KF_WONDER_TRAINING_3', 'RC_KF_WONDER_SIGN', 'RC_KF_WONDER_PLATFORMS_1', 'RC_KF_WONDER_PLATFORMS_2', 'RC_MIDO_HINT', 'RC_KF_LOST_WOODS_ARROW_SIGN', 'RC_KF_GOSSIP_STONE', 'RC_KF_AFTER_CRAWLSPACE_RECTANGLE_SIGN', 'RC_KF_BOULDER_MAZE_RECTANGLE_SIGN', 'RC_KF_WONDER_CRAWL_GRASS_1', 'RC_KF_WONDER_CRAWL_GRASS_2', 'RC_KF_DEKU_TREE_LEFT_GOSSIP_STONE']
+# deferred locations (27): ['RC_KF_CIRCLE_ROCK_1', 'RC_KF_CIRCLE_ROCK_2', 'RC_KF_CIRCLE_ROCK_3', 'RC_KF_CIRCLE_ROCK_4', 'RC_KF_CIRCLE_ROCK_5', 'RC_KF_CIRCLE_ROCK_6', 'RC_KF_CIRCLE_ROCK_7', 'RC_KF_CIRCLE_ROCK_8', 'RC_KF_ROCK_BY_SARIAS_HOUSE', 'RC_KF_ROCK_BEHIND_SARIAS_HOUSE', 'RC_KF_ROCK_BY_MIDOS_HOUSE', 'RC_KF_ROCK_BY_KNOW_IT_ALLS_HOUSE', 'RC_KF_WONDER_TRAINING_1', 'RC_KF_WONDER_TRAINING_2', 'RC_KF_WONDER_TRAINING_3', 'RC_KF_WONDER_SIGN', 'RC_KF_WONDER_PLATFORMS_1', 'RC_KF_WONDER_PLATFORMS_2', 'RC_MIDO_HINT', 'RC_KF_GOSSIP_STONE', 'RC_KF_WONDER_CRAWL_GRASS_1', 'RC_KF_WONDER_CRAWL_GRASS_2', 'RC_KF_DEKU_TREE_LEFT_GOSSIP_STONE', 'RC_KF_DEKU_TREE_RIGHT_GOSSIP_STONE', 'RC_MIDO_HINT', 'RC_KF_WONDER_SHOP', 'RC_KF_STORMS_GROTTO_GOSSIP_STONE']

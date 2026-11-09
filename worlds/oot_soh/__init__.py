@@ -523,6 +523,7 @@ class SohWorld(CachedRuleBuilderWorld):
             "shuffle_beehives": self.options.shuffle_beehives.value,
             "shuffle_cows": self.options.shuffle_cows.value,
             "shuffle_pots": self.options.shuffle_pots.value,
+            "shuffle_signs": self.options.shuffle_signs.value,
             "shuffle_crates": self.options.shuffle_crates.value,
             "shuffle_trees": self.options.shuffle_trees.value,
             "shuffle_merchants": self.options.shuffle_merchants.value,

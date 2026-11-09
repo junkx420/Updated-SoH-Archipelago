@@ -25,7 +25,7 @@ from .Locations import SohLocation, base_location_table, \
     fairies_fountain_location_table, \
     fairies_stone_location_table, \
     fairies_bean_location_table, \
-    fairies_song_location_table,     fairies_butterfly_location_table, \
+    fairies_song_location_table,     fairies_butterfly_location_table,     signs_overworld_location_table,     signs_dungeon_location_table, \
     grass_overworld_location_table, \
     grass_dungeon_location_table, \
     fish_pond_location_table, \
@@ -171,6 +171,12 @@ def create_regions_and_locations(world: "SohWorld") -> None:
     # Beehives
     if world.options.shuffle_beehives:
         world.included_locations.update(beehives_location_table)
+
+    # Signs (SoH 9.3.1 RSK_SHUFFLE_SIGNS)
+    if world.options.shuffle_signs in ("overworld", "all"):
+        world.included_locations.update(signs_overworld_location_table)
+    if world.options.shuffle_signs in ("dungeon", "all"):
+        world.included_locations.update(signs_dungeon_location_table)
 
     # Pots (Overworld)
     if world.options.shuffle_pots == "overworld" or world.options.shuffle_pots == "all":

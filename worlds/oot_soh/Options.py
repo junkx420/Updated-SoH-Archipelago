@@ -557,6 +557,23 @@ class ShufflePots(Choice):
     default = 0
 
 
+class ShuffleSigns(Choice):
+    """
+    Reading a sign (or a plaque, grave, pedestal or statue with text) for the first time gives a randomized item
+    (Ship of Harkinian 9.3.1: "Shuffle Signs").
+    Off - Signs are not shuffled.
+    Dungeons - Only signs within dungeons (5).
+    Overworld - Only signs outside of dungeons (74).
+    All Signs - All signs (79).
+    """
+    display_name = "Shuffle Signs"
+    option_off = 0
+    option_dungeon = 1
+    option_overworld = 2
+    option_all = 3
+    default = 0
+
+
 class ShuffleCrates(Choice):
     """
     Large and small crates will drop a randomized item the first time they're broken and collected.
@@ -2367,6 +2384,7 @@ class SohOptions(PerGameCommonOptions):
     shuffle_beehives: ShuffleBeehives
     shuffle_cows: ShuffleCows
     shuffle_pots: ShufflePots
+    shuffle_signs: ShuffleSigns
     shuffle_crates: ShuffleCrates
     shuffle_trees: ShuffleTrees
     shuffle_merchants: ShuffleMerchants
@@ -2884,6 +2902,7 @@ soh_option_groups = [
         ShuffleBeehives,
         ShuffleCows,
         ShufflePots,
+        ShuffleSigns,
         ShuffleCrates,
         ShuffleTrees,
         ShuffleMerchants,

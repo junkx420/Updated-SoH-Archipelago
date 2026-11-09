@@ -740,6 +740,11 @@ def can_get_nighttime_gs(bundle: tuple[Regions, "SohWorld"]) -> Rule:
     return at_night(bundle) & (OptionFilter(SkullsSunSong, False) | can_use(Items.SUNS_SONG, bundle))
 
 
+def can_read(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    """logic.cpp Logic::CanRead: always true in 9.3.1 (signs)."""
+    return True_()
+
+
 def can_bonk_trees(bundle: tuple[Regions, "SohWorld"]) -> Rule:
     """Check if Link can bonk trees."""
     return True_()

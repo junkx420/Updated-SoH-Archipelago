@@ -75,11 +75,16 @@ def set_region_rules(world: "SohWorld") -> None:
         # DEFERRED RC_GY_ROCK: logic->CanBreakRocks()
         (Locations.GRAVEYARD_GRAVE_BUTTERFLY_FAIRY,
          lambda bundle: is_child(bundle) & at_day(bundle) & can_use(Items.STICKS, bundle)),
-        # DEFERRED RC_GY_ENTRANCE_RECTANGLE_SIGN: logic->CanRead()
-        # DEFERRED RC_GY_ENTRANCE_PLINTH: logic->CanRead()
-        # DEFERRED RC_GY_RIGHT_OF_ROYAL_TOMB_GRAVE: logic->CanRead()
-        # DEFERRED RC_GY_LEFT_OF_ROYAL_TOMB_GRAVE: logic->CanRead()
-        # DEFERRED RC_GY_ROYAL_TOMB_GRAVE: logic->CanRead() || logic->CanUse(RG_ZELDAS_LULLABY)
+        (Locations.GY_ENTRANCE_RECTANGLE_SIGN,
+         lambda bundle: can_read(bundle)),
+        (Locations.GY_ENTRANCE_PLINTH,
+         lambda bundle: can_read(bundle)),
+        (Locations.GY_RIGHT_OF_ROYAL_TOMB_GRAVE,
+         lambda bundle: can_read(bundle)),
+        (Locations.GY_LEFT_OF_ROYAL_TOMB_GRAVE,
+         lambda bundle: can_read(bundle)),
+        (Locations.GY_ROYAL_TOMB_GRAVE,
+         lambda bundle: can_read(bundle) | can_use(Items.ZELDAS_LULLABY, bundle)),
     ])
     # Connections
     connect_regions(Regions.THE_GRAVEYARD, world, [
@@ -274,4 +279,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (22): ['RC_GY_ROCK', 'RC_GY_ENTRANCE_RECTANGLE_SIGN', 'RC_GY_ENTRANCE_PLINTH', 'RC_GY_RIGHT_OF_ROYAL_TOMB_GRAVE', 'RC_GY_LEFT_OF_ROYAL_TOMB_GRAVE', 'RC_GY_ROYAL_TOMB_GRAVE', 'RC_GY_WONDER_DAMPE_RACE_1', 'RC_GY_WONDER_DAMPE_RACE_2', 'RC_GY_WONDER_DAMPE_RACE_3', 'RC_GY_WONDER_DAMPE_RACE_4', 'RC_GY_WONDER_DAMPE_RACE_5', 'RC_GY_WONDER_DAMPE_RACE_6', 'RC_GY_WONDER_DAMPE_RACE_7', 'RC_GY_WONDER_DAMPE_RACE_8', 'RC_GY_WONDER_DAMPE_RACE_9', 'RC_GY_WONDER_DAMPE_RACE_10', 'RC_GY_WONDER_DAMPE_RACE_11', 'RC_GY_WONDER_DAMPE_RACE_12', 'RC_GY_WONDER_DAMPE_RACE_13', 'RC_GY_WONDER_DAMPE_RACE_14', 'RC_GY_WONDER_DAMPE_RACE_15', 'RC_GRAVEYARD_GOSSIP_STONE']
+# deferred locations (17): ['RC_GY_ROCK', 'RC_GY_WONDER_DAMPE_RACE_1', 'RC_GY_WONDER_DAMPE_RACE_2', 'RC_GY_WONDER_DAMPE_RACE_3', 'RC_GY_WONDER_DAMPE_RACE_4', 'RC_GY_WONDER_DAMPE_RACE_5', 'RC_GY_WONDER_DAMPE_RACE_6', 'RC_GY_WONDER_DAMPE_RACE_7', 'RC_GY_WONDER_DAMPE_RACE_8', 'RC_GY_WONDER_DAMPE_RACE_9', 'RC_GY_WONDER_DAMPE_RACE_10', 'RC_GY_WONDER_DAMPE_RACE_11', 'RC_GY_WONDER_DAMPE_RACE_12', 'RC_GY_WONDER_DAMPE_RACE_13', 'RC_GY_WONDER_DAMPE_RACE_14', 'RC_GY_WONDER_DAMPE_RACE_15', 'RC_GRAVEYARD_GOSSIP_STONE']

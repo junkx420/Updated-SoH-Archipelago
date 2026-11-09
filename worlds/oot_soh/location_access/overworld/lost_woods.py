@@ -226,7 +226,8 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_use_mask(bundle, "SKULL_MASK")),
         (Locations.LW_DEKU_THEATER_MASK_OF_TRUTH,
          lambda bundle: can_use_mask(bundle, "MASK_OF_TRUTH") & has_speak(bundle, "DEKU")),
-        # DEFERRED RC_LW_THEATER_RECTANGLE_SIGN: logic->CanRead()
+        (Locations.LW_THEATER_RECTANGLE_SIGN,
+         lambda bundle: can_read(bundle)),
     ])
     # Connections
     connect_regions(Regions.DEKU_THEATER, world, [
@@ -284,4 +285,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (9): ['RC_LW_BOULDER_BY_GORON_CITY', 'RC_LW_WONDER_BACK_SKULL_KIDS_GRASS_1', 'RC_LW_WONDER_BACK_SKULL_KIDS_GRASS_2', 'RC_LW_WONDER_FRONT_SKULL_KIDS_GRASS', 'RC_LW_GOSSIP_STONE', 'RC_LW_BOULDER_BY_SACRED_FOREST_MEADOW', 'RC_LW_RUPEE_BOULDER', 'RC_LW_NEAR_SHORTCUTS_GROTTO_GOSSIP_STONE', 'RC_LW_THEATER_RECTANGLE_SIGN']
+# deferred locations (8): ['RC_LW_BOULDER_BY_GORON_CITY', 'RC_LW_WONDER_BACK_SKULL_KIDS_GRASS_1', 'RC_LW_WONDER_BACK_SKULL_KIDS_GRASS_2', 'RC_LW_WONDER_FRONT_SKULL_KIDS_GRASS', 'RC_LW_GOSSIP_STONE', 'RC_LW_BOULDER_BY_SACRED_FOREST_MEADOW', 'RC_LW_RUPEE_BOULDER', 'RC_LW_NEAR_SHORTCUTS_GROTTO_GOSSIP_STONE']

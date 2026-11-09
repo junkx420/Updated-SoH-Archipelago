@@ -61,8 +61,10 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_break_crates(bundle)),
         (Locations.WASTELAND_AFTER_QUICKSAND_CRATE3,
          lambda bundle: can_break_crates(bundle)),
-        # DEFERRED RC_HW_CARPET_SALESMAN_ARROW_SIGN: logic->CanRead()
-        # DEFERRED RC_HW_POE_ALTAR: logic->CanRead()
+        (Locations.HW_CARPET_SALESMAN_ARROW_SIGN,
+         lambda bundle: can_read(bundle)),
+        (Locations.HW_POE_ALTAR,
+         lambda bundle: can_read(bundle)),
     ])
     # Connections
     connect_regions(Regions.HAUNTED_WASTELAND, world, [
@@ -95,4 +97,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (2): ['RC_HW_CARPET_SALESMAN_ARROW_SIGN', 'RC_HW_POE_ALTAR']
+# deferred locations (0): []

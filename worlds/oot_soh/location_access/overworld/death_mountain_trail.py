@@ -84,14 +84,22 @@ def set_region_rules(world: "SohWorld") -> None:
         # DEFERRED RC_DMT_BRONZE_BOULDER_6: logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)
         # DEFERRED RC_DMT_BRONZE_BOULDER_7: logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)
         # DEFERRED RC_DMT_BRONZE_BOULDER_11: logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_DMT_ABOVE_DODONGO_RECTANGLE_SIGN: logic->IsChild && logic->CanRead()
-        # DEFERRED RC_DMT_ADULT_CENTER_EXIT_ARROW_SIGN: logic->IsAdult && logic->CanRead()
-        # DEFERRED RC_DMT_CHILD_CENTER_EXIT_RECTANGLE_SIGN: logic->IsChild && logic->CanRead()
-        # DEFERRED RC_DMT_DODONGOS_CAVERN_RECTANGLE_SIGN: logic->CanRead()
-        # DEFERRED RC_DMT_CENTER_TRAIL_RECTANGLE_SIGN: logic->CanRead()
-        # DEFERRED RC_DMT_TO_UPPER_TRAIL_ARROW_SIGN: logic->CanRead()
-        # DEFERRED RC_DMT_TO_CENTER_EXIT_ARROW_SIGN: logic->CanRead()
-        # DEFERRED RC_DMT_LOWER_EXIT_ARROW_SIGN: logic->CanRead()
+        (Locations.DMT_ABOVE_DODONGO_RECTANGLE_SIGN,
+         lambda bundle: is_child(bundle) & can_read(bundle)),
+        (Locations.DMT_ADULT_CENTER_EXIT_ARROW_SIGN,
+         lambda bundle: is_adult(bundle) & can_read(bundle)),
+        (Locations.DMT_CHILD_CENTER_EXIT_RECTANGLE_SIGN,
+         lambda bundle: is_child(bundle) & can_read(bundle)),
+        (Locations.DMT_DODONGOS_CAVERN_RECTANGLE_SIGN,
+         lambda bundle: can_read(bundle)),
+        (Locations.DMT_CENTER_TRAIL_RECTANGLE_SIGN,
+         lambda bundle: can_read(bundle)),
+        (Locations.DMT_TO_UPPER_TRAIL_ARROW_SIGN,
+         lambda bundle: can_read(bundle)),
+        (Locations.DMT_TO_CENTER_EXIT_ARROW_SIGN,
+         lambda bundle: can_read(bundle)),
+        (Locations.DMT_LOWER_EXIT_ARROW_SIGN,
+         lambda bundle: can_read(bundle)),
     ])
     # Connections
     connect_regions(Regions.DEATH_MOUNTAIN_TRAIL, world, [
@@ -161,7 +169,8 @@ def set_region_rules(world: "SohWorld") -> None:
         # DEFERRED RC_DMT_SUMMIT_ROCK: logic->IsChild && logic->CanBreakRocks()
         # DEFERRED RC_DMT_GOSSIP_STONE: true
         # DEFERRED RC_BIGGORON_HINT: logic->IsAdult && logic->HasItem(RG_SPEAK_GORON)
-        # DEFERRED RC_DMT_UPPER_EXIT_ARROW_SIGN: logic->CanRead()
+        (Locations.DMT_UPPER_EXIT_ARROW_SIGN,
+         lambda bundle: can_read(bundle)),
     ])
     # Connections
     connect_regions(Regions.DEATH_MOUNTAIN_SUMMIT, world, [
@@ -285,4 +294,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (41): ['RC_DMT_ROCK_1', 'RC_DMT_ROCK_2', 'RC_DMT_ROCK_3', 'RC_DMT_ROCK_4', 'RC_DMT_ROCK_5', 'RC_DMT_CIRCLE_ROCK_1', 'RC_DMT_CIRCLE_ROCK_2', 'RC_DMT_CIRCLE_ROCK_3', 'RC_DMT_CIRCLE_ROCK_4', 'RC_DMT_CIRCLE_ROCK_5', 'RC_DMT_CIRCLE_ROCK_6', 'RC_DMT_CIRCLE_ROCK_7', 'RC_DMT_CIRCLE_ROCK_8', 'RC_DMT_CHILD_BOULDER', 'RC_DMT_BOULDER_1', 'RC_DMT_BOULDER_2', 'RC_DMT_BRONZE_BOULDER_1', 'RC_DMT_BRONZE_BOULDER_2', 'RC_DMT_BRONZE_BOULDER_3', 'RC_DMT_BRONZE_BOULDER_4', 'RC_DMT_BRONZE_BOULDER_5', 'RC_DMT_BRONZE_BOULDER_6', 'RC_DMT_BRONZE_BOULDER_7', 'RC_DMT_BRONZE_BOULDER_11', 'RC_DMT_ABOVE_DODONGO_RECTANGLE_SIGN', 'RC_DMT_ADULT_CENTER_EXIT_ARROW_SIGN', 'RC_DMT_CHILD_CENTER_EXIT_RECTANGLE_SIGN', 'RC_DMT_DODONGOS_CAVERN_RECTANGLE_SIGN', 'RC_DMT_CENTER_TRAIL_RECTANGLE_SIGN', 'RC_DMT_TO_UPPER_TRAIL_ARROW_SIGN', 'RC_DMT_TO_CENTER_EXIT_ARROW_SIGN', 'RC_DMT_LOWER_EXIT_ARROW_SIGN', 'RC_DMT_BRONZE_BOULDER_8', 'RC_DMT_BRONZE_BOULDER_9', 'RC_DMT_BRONZE_BOULDER_10', 'RC_DMT_COW_BOULDER', 'RC_DMT_SUMMIT_ROCK', 'RC_DMT_GOSSIP_STONE', 'RC_BIGGORON_HINT', 'RC_DMT_UPPER_EXIT_ARROW_SIGN']
+# deferred locations (32): ['RC_DMT_ROCK_1', 'RC_DMT_ROCK_2', 'RC_DMT_ROCK_3', 'RC_DMT_ROCK_4', 'RC_DMT_ROCK_5', 'RC_DMT_CIRCLE_ROCK_1', 'RC_DMT_CIRCLE_ROCK_2', 'RC_DMT_CIRCLE_ROCK_3', 'RC_DMT_CIRCLE_ROCK_4', 'RC_DMT_CIRCLE_ROCK_5', 'RC_DMT_CIRCLE_ROCK_6', 'RC_DMT_CIRCLE_ROCK_7', 'RC_DMT_CIRCLE_ROCK_8', 'RC_DMT_CHILD_BOULDER', 'RC_DMT_BOULDER_1', 'RC_DMT_BOULDER_2', 'RC_DMT_BRONZE_BOULDER_1', 'RC_DMT_BRONZE_BOULDER_2', 'RC_DMT_BRONZE_BOULDER_3', 'RC_DMT_BRONZE_BOULDER_4', 'RC_DMT_BRONZE_BOULDER_5', 'RC_DMT_BRONZE_BOULDER_6', 'RC_DMT_BRONZE_BOULDER_7', 'RC_DMT_BRONZE_BOULDER_11', 'RC_DMT_BRONZE_BOULDER_8', 'RC_DMT_BRONZE_BOULDER_9', 'RC_DMT_BRONZE_BOULDER_10', 'RC_DMT_COW_BOULDER', 'RC_DMT_SUMMIT_ROCK', 'RC_DMT_GOSSIP_STONE', 'RC_BIGGORON_HINT', 'RC_DMT_STORMS_GROTTO_GOSSIP_STONE']

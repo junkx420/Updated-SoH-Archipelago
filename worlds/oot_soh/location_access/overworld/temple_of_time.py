@@ -61,7 +61,8 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: is_adult(bundle)),
         (Locations.MARKET_OCARINA_OF_TIME_HINT,
          lambda bundle: is_adult(bundle) & has_speak(bundle, "HYLIAN")),
-        # DEFERRED RC_TOT_ALTAR: logic->CanRead()
+        (Locations.TOT_ALTAR,
+         lambda bundle: can_read(bundle)),
     ])
     # Connections
     connect_regions(Regions.TEMPLE_OF_TIME, world, [
@@ -96,4 +97,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (5): ['RC_TOT_LEFTMOST_GOSSIP_STONE', 'RC_TOT_LEFT_CENTER_GOSSIP_STONE', 'RC_TOT_RIGHT_CENTER_GOSSIP_STONE', 'RC_TOT_RIGHTMOST_GOSSIP_STONE', 'RC_TOT_ALTAR']
+# deferred locations (4): ['RC_TOT_LEFTMOST_GOSSIP_STONE', 'RC_TOT_LEFT_CENTER_GOSSIP_STONE', 'RC_TOT_RIGHT_CENTER_GOSSIP_STONE', 'RC_TOT_RIGHTMOST_GOSSIP_STONE']
