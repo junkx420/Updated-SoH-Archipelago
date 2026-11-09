@@ -146,8 +146,10 @@ def setup_options_from_slot_data(world: "SohWorld") -> None:
                 "shuffle_tycoon_wallet", 1)
             world.options.enable_all_tricks.value = world.passthrough.get(
                 "enable_all_tricks", 0)
-            world.options.tricks_in_logic.value = world.passthrough.get(
-                "tricks_in_logic", set())
+            # slot data lists upstream enum names ("RT_LW_BRIDGE") since apworld 1.5; older ones sent option values
+            world.options.tricks_in_logic.value = {
+                Tricks[name[3:]].value if name.startswith("RT_") and name[3:] in Tricks.__members__ else name
+                for name in world.passthrough.get("tricks_in_logic", [])}
             world.options.item_pool.value = world.passthrough.get(
                 "item_pool", 0)
             world.options.medallion_locked_trials.value = world.passthrough.get("medallion_locked_trials", MedallionLockedTrials.default)

@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from Options import Choice, Toggle, DefaultOnToggle, Range, PerGameCommonOptions, StartInventoryPool, Visibility, OptionGroup, OptionSet, Accessibility
 from .Enums import Tricks, Items, TokenCounts
+from .TrickNames import TRICK_SOH_NAMES
 
 wallet_capacities: dict[Items, int] = {
     Items.CHILD_WALLET: 99,
@@ -1352,14 +1353,50 @@ class EnableAllTricks(Toggle):
     display_name = "Enable All Tricks and Glitches"
 
 
+# Tricks the apworld used to offer that SoH 9.3.1 no longer has (feature 1.3, docs/ap-update/feature-plan.md).
+# A Tricks member as value: upstream renamed the trick 1:1, so the old YAML name turns the new trick on.
+# A string: upstream merged it into a broader trick; turning that on would allow more than the YAML asked for, so the
+# old name has no effect (a warning names the replacement). None: removed upstream without replacement.
+LEGACY_TRICKS: dict[Tricks, Tricks | str | None] = {
+    Tricks.FOREST_OUTDOORS_EAST_GS: Tricks.FOREST_COURTYARD_EAST_GS,
+    Tricks.FOREST_OUTDOORS_LEDGE: Tricks.FOREST_COURTYARD_LEDGE,
+    Tricks.FOREST_OUTDOORS_HEARTS_BOOMERANG: Tricks.FOREST_COURTYARD_HEARTS_BOOMERANG,
+    Tricks.SPIRIT_LOBBY_GS: Tricks.SPIRIT_WEST_LEDGE,
+    Tricks.SPIRIT_LOBBY_JUMP: Tricks.SPIRIT_STATUE_JUMP,
+    Tricks.FIRE_FLAME_MAZE: Tricks.FIRE_SKIP_FLAME_WALLS,
+    Tricks.KAK_MAN_ON_ROOF: Tricks.UNINTUITIVE_JUMPS.value,
+    Tricks.KAK_ADULT_WINDMILL_POH: Tricks.UNINTUITIVE_JUMPS.value,
+    Tricks.GF_JUMP: Tricks.UNINTUITIVE_JUMPS.value,
+    Tricks.DC_JUMP: Tricks.UNINTUITIVE_JUMPS.value,
+    Tricks.JABU_ALCOVE_JUMP_DIVE: Tricks.UNINTUITIVE_JUMPS.value,
+    Tricks.FIRE_BOSS_DOOR_JUMP: Tricks.UNINTUITIVE_JUMPS.value,
+    Tricks.WATER_BK_JUMP_DIVE: Tricks.UNINTUITIVE_JUMPS.value,
+    Tricks.DMT_HOOKSHOT_LOWER_GS: Tricks.ITEM_EXTENSION.value,
+    Tricks.HOOKSHOT_EXTENSION: Tricks.ITEM_EXTENSION.value,
+    Tricks.DAMAGE_BOOST: Tricks.DAMAGE_BOOST_SIMPLE.value,
+    Tricks.RUSTED_SWITCHES: None,
+    Tricks.FLAMING_CHESTS: None,
+}
+
+
+def _trick_doc_line(trick: Tricks) -> str:
+    if trick in LEGACY_TRICKS:
+        target = LEGACY_TRICKS[trick]
+        if isinstance(target, Tricks):
+            return f"{trick.value} (old name, now {target.value})"
+        return f"{trick.value} (no effect since SoH 9.3.1" + (f", see {target})" if target else ")")
+    soh_name = TRICK_SOH_NAMES.get(trick.name)
+    return f"{trick.value} ({soh_name})" if soh_name and soh_name != trick.value else trick.value
+
+
 class TricksInLogic(OptionSet):
     display_name = "Tricks in Logic"
     valid_keys = [str(trick) for trick in Tricks]
     __doc__ = ("Define what tricks or glitches are considered in logic. "
                "For more information on what each trick does, check the Ship of Harkinian "
-               "Randomizer -> Tricks/Glitches settings.\n"
+               "Randomizer -> Tricks/Glitches settings (the name in brackets is the one used there).\n"
                "Trick names: "
-               f"{', '.join(valid_keys)}")
+               f"{', '.join(_trick_doc_line(trick) for trick in Tricks)}")
 
 
 class ShuffleTycoonWallet(Toggle):

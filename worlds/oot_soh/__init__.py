@@ -10,7 +10,7 @@ from worlds.AutoWorld import WebWorld, World
 from Fill import fill_restrictive
 from .Items import SohItem, item_data_table, item_table, SohItemData, progressive_items
 from .Locations import location_table, token_amounts, SohLocData, location_data_table
-from .Options import SohOptions, soh_option_groups, wallet_capacities
+from .Options import SohOptions, soh_option_groups, wallet_capacities, LEGACY_TRICKS
 from .Regions import create_regions_and_locations, place_locked_items
 from .Enums import *
 from .ItemPool import create_item_pool, create_filler_item_pool, create_triforce_pieces, get_filler_item, give_starting_items
@@ -142,6 +142,7 @@ class SohWorld(CachedRuleBuilderWorld):
                               "your host.yaml settings.")
 
         self.options.apply_any_required_option_adjustments()
+        self.apply_legacy_tricks()
      
         self.randomized_progressive_skulltula_count = self.options.calculate_progression_skulltula_count(token_reward_counts=token_amounts)
 
@@ -308,6 +309,26 @@ class SohWorld(CachedRuleBuilderWorld):
         self.multiworld.itempool.extend(self.item_pool)
 
         self.set_completion_rule()
+
+    def apply_legacy_tricks(self) -> None:
+        """Tricks that SoH 9.3.1 renamed or dropped (Options.LEGACY_TRICKS): a 1:1 rename turns the new trick on,
+        the others stay without effect and get a warning."""
+        tricks = self.options.tricks_in_logic.value
+        for old, target in LEGACY_TRICKS.items():
+            if old.value not in tricks:
+                continue
+            if isinstance(target, Tricks):
+                tricks.add(target.value)
+            else:
+                replacement = f" Its replacement is the broader trick \"{target}\"." if target else ""
+                logger.warning(f"Ship of Harkinian (player {self.player_name}): the trick \"{old.value}\" no longer "
+                               f"exists in SoH 9.3.1 and has no effect.{replacement}")
+
+    def slot_data_tricks(self) -> list[str]:
+        """Enabled tricks as upstream enum names ("RT_LW_BRIDGE"): the client looks these up independent of the
+        UI language. Legacy tricks are left out; the client doesn't know them."""
+        return sorted(f"RT_{trick.name}" for trick in Tricks
+                      if trick.value in self.options.tricks_in_logic.value and trick not in LEGACY_TRICKS)
 
     def remove_unreachable_events(self) -> None:
         """Drop event locations that stay unreachable even with every item of this world.
@@ -567,7 +588,7 @@ class SohWorld(CachedRuleBuilderWorld):
             "no_logic": self.options.true_no_logic.value,
             "apworld_version": self.apworld_version,
             "enable_all_tricks": self.options.enable_all_tricks.value,
-            "tricks_in_logic": self.options.tricks_in_logic.value,
+            "tricks_in_logic": self.slot_data_tricks(),
             "medallion_locked_trials": self.options.medallion_locked_trials.value,
             "starting_hearts": self.options.starting_hearts.value,
             "hint_clarity": self.options.hint_clarity.value,
