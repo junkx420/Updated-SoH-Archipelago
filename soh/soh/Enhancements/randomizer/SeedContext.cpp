@@ -845,9 +845,8 @@ void Context::ParseArchipelagoOptions() {
     mOptions[RSK_BIG_POE_COUNT].Set(slotData["big_poe_target_count"]);
     mOptions[RSK_SKIP_EPONA_RACE].Set(slotData["skip_epona_race"]);
     // 9.3.1 removed "Complete Mask Quest" (upstream #7104): "Completed" is now starting with every mask.
-    // Upstream's migration additionally turns on Shuffle Masks; that is NOT done here, because Shuffle Masks
-    // adds checks the apworld doesn't know yet.
-    mOptions[RSK_SHUFFLE_MASKS].Set(RO_GENERIC_OFF);
+    // Shuffle Masks (apworld 1.5+) puts the masks into the item pool; the apworld turns Complete Mask Quest off then.
+    mOptions[RSK_SHUFFLE_MASKS].Set(slotData.value("shuffle_masks", static_cast<int>(RO_GENERIC_OFF)));
     if (slotData["complete_mask_quest"] != 0) {
         for (RandomizerSettingKey mask : { RSK_STARTING_KEATON_MASK, RSK_STARTING_SKULL_MASK, RSK_STARTING_SPOOKY_MASK,
                                            RSK_STARTING_BUNNY_HOOD, RSK_STARTING_GORON_MASK, RSK_STARTING_ZORA_MASK,
