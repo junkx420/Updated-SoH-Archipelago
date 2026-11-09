@@ -30,6 +30,7 @@ class TestSohOptionsForRequiredSkulltulaCount(TestCase):
         self.win_condition_skull_tokens_required = SimpleNamespace(value=0)
 
         self.shuffle_skull_tokens = ShuffleTokens.option_off
+        self.starting_skulltula_tokens = SimpleNamespace(value=0)
     
     def set_rainbow_bridge_tokens(self, amount):
         self.rainbow_bridge = RainbowBridge.option_tokens
@@ -98,6 +99,14 @@ class TestSohOptionsForRequiredSkulltulaCount(TestCase):
     def test_shuffle_all_tokens(self):
         self.shuffle_skull_tokens = ShuffleTokens.option_all
         self.assertEqual(self.calculate_progression_skulltula_count(), 50)
+
+    def test_starting_tokens_lower_the_requirement(self):
+        # 3drando/fill.cpp GetMaxGSCount: maxUseful minus the starting tokens
+        self.shuffle_skull_tokens = ShuffleTokens.option_all
+        self.starting_skulltula_tokens.value = 30
+        self.assertEqual(self.calculate_progression_skulltula_count(), 20)
+        self.starting_skulltula_tokens.value = 80
+        self.assertEqual(self.calculate_progression_skulltula_count(), 0)
 
     def test_shuffle_overworld_tokens(self):
         self.shuffle_skull_tokens = ShuffleTokens.option_overworld

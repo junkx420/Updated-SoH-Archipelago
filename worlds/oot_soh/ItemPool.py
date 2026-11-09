@@ -724,6 +724,25 @@ def give_starting_items(world: "SohWorld") -> None:
             world.get_item_from_pool(pool_bottle, world.item_pool)
         # as an event item (no ID), like precollect_from_pool: the client gives it at the start, not the server
         world.push_precollected(world.create_item(wanted[0] if bottle.value != 1 else (pool_bottle or wanted[0]), True))
+    give_starting_skulltula_tokens(world)
+
+
+def give_starting_skulltula_tokens(world: "SohWorld") -> None:
+    # SoH 9.3.1 RSK_STARTING_SKULLTULA_TOKEN: 3drando/item_pool.cpp only adds (shuffled tokens - starting tokens) to the
+    # pool, vanilla-placed tokens stay; 3drando/starting_inventory.cpp gives all starting tokens
+    starting_tokens = world.options.starting_skulltula_tokens.value
+    if not starting_tokens:
+        return
+    vanilla_tokens = {ShuffleTokens.option_off: TokenCounts.TOTAL, ShuffleTokens.option_dungeon: TokenCounts.OVERWORLD,
+                      ShuffleTokens.option_overworld: TokenCounts.DUNGEON}.get(world.options.shuffle_skull_tokens.value, 0)
+    pool_tokens = [item for item in world.item_pool if item.name == Items.GOLD_SKULLTULA_TOKEN.value]
+    # the tokens not needed for progression go first, so the pool keeps its progression tokens
+    pool_tokens.sort(key=lambda item: item.advancement)
+    for item in pool_tokens[:max(0, min(starting_tokens, len(pool_tokens) - vanilla_tokens))]:
+        world.item_pool.remove(item)
+    # as event items (no ID) and progression, so they count in logic and the server doesn't send them
+    for _ in range(starting_tokens):
+        world.push_precollected(world.create_item(Items.GOLD_SKULLTULA_TOKEN, True))
 
 
 def in_pool(world: "SohWorld", item: Items) -> bool:

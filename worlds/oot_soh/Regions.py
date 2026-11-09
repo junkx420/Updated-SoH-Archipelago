@@ -222,7 +222,14 @@ def create_regions_and_locations(world: "SohWorld") -> None:
 
     # Fish (Pond)
     if world.options.shuffle_fish == "pond" or world.options.shuffle_fish == "all":
-        world.included_locations.update(fish_pond_location_table)
+        # fishsanity.cpp GetFishLocationIncluded: child fish 1..count, adult fish 1..count only with age split
+        pond_count = world.options.fishsanity_pond_count.value
+        for number in range(1, pond_count + 1):
+            child_fish = Locations[f"LH_CHILD_POND_FISH{number}"]
+            world.included_locations[child_fish] = fish_pond_location_table[child_fish]
+            if world.options.fishsanity_age_split:
+                adult_fish = Locations[f"LH_ADULT_POND_FISH{number}"]
+                world.included_locations[adult_fish] = fish_pond_location_table[adult_fish]
 
     # Fish (Overworld)
     if world.options.shuffle_fish == "overworld" or world.options.shuffle_fish == "all":

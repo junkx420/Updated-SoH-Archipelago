@@ -1849,8 +1849,8 @@ def can_avoid_enemy(bundle: tuple[Regions, "SohWorld"], enemy: Enemies, distance
 # --- beans ---------------------------------------------------------------------------------------------------------
 def can_plant_bean(bundle: tuple[Regions, "SohWorld"]) -> Rule:
     # location_access.cpp CanPlantBean: bean soul (always held, no bean soul shuffle) && beans && (child || Skip
-    # Planting Beans, which the client always sets to off)
-    return has_item(Items.MAGIC_BEAN, bundle) & is_child(bundle)
+    # Planting Beans)
+    return has_item(Items.MAGIC_BEAN, bundle) & (is_child(bundle) | True_(options=[OptionFilter(SkipPlantingBeans, True)]))
 
 
 def bean_planted(bundle: tuple[Regions, "SohWorld"], plant_event: Events) -> Rule:

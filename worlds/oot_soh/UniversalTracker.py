@@ -64,6 +64,9 @@ def setup_options_from_slot_data(world: "SohWorld") -> None:
                 "shuffle_shops_item_amount"]
             # shop_prices and shop_vanilla_items are handled in pre_fill
             world.options.shuffle_fish.value = world.passthrough["shuffle_fish"]
+            # apworld 1.5+; older seeds had 15 fish per age
+            world.options.fishsanity_pond_count.value = world.passthrough.get("fishsanity_pond_count", 15)
+            world.options.fishsanity_age_split.value = world.passthrough.get("fishsanity_age_split", 1)
             world.options.shuffle_scrubs.value = world.passthrough["shuffle_scrubs"]
             # scrub_prices is handled in generate_scrub_prices
             world.options.shuffle_beehives.value = world.passthrough["shuffle_beehives"]
@@ -130,7 +133,7 @@ def setup_options_from_slot_data(world: "SohWorld") -> None:
             world.options.start_with_nocturne.value = world.passthrough.get("start_with_nocturne", StartWithNocturne.default)
             world.options.start_with_prelude.value = world.passthrough.get("start_with_prelude", StartWithPrelude.default)
             # starting items added for SoH 9.3.1 (apworld 1.5+)
-            for key in ("start_with_megaton_hammer", "start_with_boomerang", "start_with_lens_of_truth", "start_with_dins_fire", "start_with_farores_wind", "start_with_nayrus_love", "start_with_fire_arrows", "start_with_ice_arrows", "start_with_light_arrows", "start_with_iron_boots", "start_with_hover_boots", "start_with_hylian_shield", "start_with_mirror_shield", "start_with_goron_tunic", "start_with_zora_tunic", "start_with_stone_of_agony", "start_with_weird_egg", "start_with_claim_check", "start_with_gerudo_card", "start_with_keaton_mask", "start_with_skull_mask", "start_with_spooky_mask", "start_with_bunny_hood", "start_with_goron_mask", "start_with_zora_mask", "start_with_gerudo_mask", "start_with_mask_of_truth", "start_with_hookshot", "start_with_bow", "start_with_slingshot", "start_with_bomb_bag", "start_with_strength", "start_with_scale", "start_with_wallet", "start_with_magic_meter", "start_with_bombchu_bag", "start_with_biggorons_sword", "start_with_bottle_1", "start_with_bottle_2", "start_with_bottle_3", "start_with_bottle_4"):
+            for key in ("start_with_megaton_hammer", "start_with_boomerang", "start_with_lens_of_truth", "start_with_dins_fire", "start_with_farores_wind", "start_with_nayrus_love", "start_with_fire_arrows", "start_with_ice_arrows", "start_with_light_arrows", "start_with_iron_boots", "start_with_hover_boots", "start_with_hylian_shield", "start_with_mirror_shield", "start_with_goron_tunic", "start_with_zora_tunic", "start_with_stone_of_agony", "start_with_weird_egg", "start_with_claim_check", "start_with_gerudo_card", "start_with_keaton_mask", "start_with_skull_mask", "start_with_spooky_mask", "start_with_bunny_hood", "start_with_goron_mask", "start_with_zora_mask", "start_with_gerudo_mask", "start_with_mask_of_truth", "start_with_hookshot", "start_with_bow", "start_with_slingshot", "start_with_bomb_bag", "start_with_strength", "start_with_scale", "start_with_wallet", "start_with_magic_meter", "start_with_bombchu_bag", "start_with_biggorons_sword", "start_with_bottle_1", "start_with_bottle_2", "start_with_bottle_3", "start_with_bottle_4", "starting_skulltula_tokens"):
                 if key in world.passthrough:
                     getattr(world.options, key).value = world.passthrough[key]
             world.options.shuffle_songs.value = world.passthrough.get("shuffle_songs", ShuffleSongs.default)
@@ -149,7 +152,7 @@ def setup_options_from_slot_data(world: "SohWorld") -> None:
             world.options.shuffle_tycoon_wallet.value = world.passthrough.get(
                 "shuffle_tycoon_wallet", 1)
             for key in ("ice_trap_names", "bunny_hood_effect", "progressive_goron_sword", "masks_as_adult", "early_grannys_shop", "swordless_epona_items",
-                        "shop_shields_and_tunics_only_refill"):
+                        "shop_shields_and_tunics_only_refill", "skip_child_stealth", "skip_planting_beans"):
                 if key in world.passthrough:
                     getattr(world.options, key).value = world.passthrough[key]
             if "links_pocket_reward" in world.passthrough:

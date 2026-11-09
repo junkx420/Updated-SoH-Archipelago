@@ -459,7 +459,8 @@ class ShuffleFish(Choice):
     """
     Shuffles various fish in the game. The Hylian Loach is not included.
     Off - Fish will not be shuffled. No changes will be made to fish behavior.
-    Pond - Only the fishing pond's fish will be shuffled. Catching a fish in the fishing pond will grant a reward, and there are 15 fish for each age.
+    Pond - Only the fishing pond's fish will be shuffled. Catching a fish in the fishing pond will grant a reward
+    (how many: "Pond Fish Count", per age with "Pond Fish Age Split").
     Overworld - Only fish in generic grottos and Zora's domain will be shuffled. These fish will need a bottle in order to scoop them up.
     All - All fish will be shuffled.
     """
@@ -469,6 +470,25 @@ class ShuffleFish(Choice):
     option_overworld = 2
     option_all = 3
     default = 0
+
+
+class FishsanityPondCount(Range):
+    """
+    How many fish in the fishing pond give a reward when Shuffle Fish includes the pond (Ship of Harkinian 9.3.1:
+    "Pond Fish Count"). The Hylian Loach values 16 and 17 are not supported yet.
+    """
+    display_name = "Pond Fish Count"
+    range_start = 0
+    range_end = 15
+    default = 15
+
+
+class FishsanityAgeSplit(DefaultOnToggle):
+    """
+    Child and adult each have their own set of pond fish rewards (Ship of Harkinian 9.3.1: "Pond Age Split").
+    When off, there is only one set, which can be caught as either age.
+    """
+    display_name = "Pond Fish Age Split"
 
 
 class ShuffleScrubs(Choice):
@@ -1231,6 +1251,23 @@ class SkipEponaRace(DefaultOnToggle):
     Epona can be summoned with Epona's Song without needing to race Ingo.
     """
     display_name = "Skip Epona Race"
+
+
+class SkipChildStealth(Toggle):
+    """
+    The crawlspace into Hyrule Castle goes straight to Zelda's Courtyard, skipping the guard stealth section
+    (Ship of Harkinian 9.3.1: "Skip Child Stealth"). Has no effect on logic.
+    """
+    display_name = "Skip Child Stealth"
+
+
+class SkipPlantingBeans(Toggle):
+    """
+    Getting the Magic Bean Pack (or buying the beans from the salesman) plants a Magic Bean in every soft soil patch
+    at once, so beans don't have to be planted as child (Ship of Harkinian 9.3.1: "Skip Planting Beans").
+    Logic then lets adult Link "plant" beans too.
+    """
+    display_name = "Skip Planting Beans"
 
 
 class CompleteMaskQuest(DefaultOnToggle):
@@ -2205,6 +2242,18 @@ class MedallionLockedTrials(Toggle):
     display_name = "Medallion Locked Trials"
     
     
+class StartingSkulltulaTokens(Range):
+    """
+    Start with this many Gold Skulltula Tokens (Ship of Harkinian 9.3.1: "Starting Skulltula Tokens").
+    They are taken out of the shuffled tokens in the item pool (vanilla-placed tokens stay where they are), and fewer
+    tokens are needed from the pool for the Skulltula rewards and for token requirements of the bridge, Ganon's Boss Key etc.
+    """
+    display_name = "Starting Skulltula Tokens"
+    range_start = 0
+    range_end = 100
+    default = 0
+
+
 class StartingHearts(Range):
     """
     Specify the number of starting hearts Link will have. Modifies how many Heart Containers and Heart Pieces are in the pool.
@@ -2294,6 +2343,8 @@ class SohOptions(PerGameCommonOptions):
     shuffle_shops_minimum_price: ShuffleShopsMinimumPrice
     shuffle_shops_maximum_price: ShuffleShopsMaximumPrice
     shuffle_fish: ShuffleFish
+    fishsanity_pond_count: FishsanityPondCount
+    fishsanity_age_split: FishsanityAgeSplit
     shuffle_scrubs: ShuffleScrubs
     shuffle_scrubs_minimum_price: ShuffleScrubsMinimumPrice
     shuffle_scrubs_maximum_price: ShuffleScrubsMaximumPrice
@@ -2347,6 +2398,8 @@ class SohOptions(PerGameCommonOptions):
     big_poe_target_count: BigPoeTargetCount
     skip_child_zelda: SkipChildZelda
     skip_epona_race: SkipEponaRace
+    skip_child_stealth: SkipChildStealth
+    skip_planting_beans: SkipPlantingBeans
     complete_mask_quest: CompleteMaskQuest
     skip_scarecrows_song: SkipScarecrowsSong
     start_with_links_pocket: StartWithLinksPocket
@@ -2417,7 +2470,7 @@ class SohOptions(PerGameCommonOptions):
     start_with_bottle_2: StartWithBottle2
     start_with_bottle_3: StartWithBottle3
     start_with_bottle_4: StartWithBottle4
-    #StartingTokens
+    starting_skulltula_tokens: StartingSkulltulaTokens
     full_wallets: FullWallets
     bombchu_bag: BombchuBag
     bombchu_drops: BombchuDrops
@@ -2603,6 +2656,8 @@ class SohOptions(PerGameCommonOptions):
 
         required_skulltula_count = max(required_skulltula_count, rainbow_bridge_tokens, ganons_castle_boss_key_tokens,
                                        ganons_soul_tokens, win_condition_tokens)
+        # 3drando/fill.cpp GetMaxGSCount: "minus the tokens in the starting inventory"
+        required_skulltula_count = max(0, required_skulltula_count - self.starting_skulltula_tokens.value)
 
         if self.accessibility == Accessibility.option_full:
             # If full accessibility is enabled, assume all vanilla tokens are available and calculate the required shuffled tokens
@@ -2802,6 +2857,8 @@ soh_option_groups = [
         ShopAffordablePrices,
         # Other shop weight stuff
         ShuffleFish,
+        FishsanityPondCount,
+        FishsanityAgeSplit,
         ShuffleScrubs,
         ShuffleScrubsMinimumPrice,
         ShuffleScrubsMaximumPrice,
@@ -2872,6 +2929,8 @@ soh_option_groups = [
         BigPoeTargetCount,
         SkipChildZelda,
         SkipEponaRace,
+        SkipChildStealth,
+        SkipPlantingBeans,
         CompleteMaskQuest,
         SkipScarecrowsSong,
     ]),
@@ -2976,7 +3035,7 @@ soh_option_groups = [
         StartWithBottle2,
         StartWithBottle3,
         StartWithBottle4,
-        #StartingTokens,
+        StartingSkulltulaTokens,
         #StartingHearts,
     ]),
     OptionGroup("Additional Features", [
