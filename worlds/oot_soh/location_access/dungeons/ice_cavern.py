@@ -33,18 +33,30 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_use(Items.SONG_OF_STORMS, bundle)),
         (Locations.ICE_CAVERN_LOBBY_RUPEE,
          lambda bundle: blue_fire(bundle) | (can_do_trick(Tricks.VISIBLE_COLLISION, bundle) & can_jump_slash(bundle))),
-        # DEFERRED RC_ICE_CAVERN_ENTRANCE_LEFT_STALAGMITE: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_ENTRANCE_MIDDLE_STALAGMITE: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_ENTRANCE_RIGHT_STALAGMITE: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_ENTRANCE_STALACTITE_1: true
-        # DEFERRED RC_ICE_CAVERN_ENTRANCE_STALACTITE_2: true
-        # DEFERRED RC_ICE_CAVERN_LOBBY_STALACTITE: true
-        # DEFERRED RC_ICE_CAVERN_LOBBY_LEFT_STALAGMITE: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_LOBBY_MIDDLE_STALAGMITE: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_LOBBY_RIGHT_STALAGMITE: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_ENTRANCE_RED_ICE: logic->BlueFire()
-        # DEFERRED RC_ICE_CAVERN_LOBBY_LEFT_RED_ICE: logic->BlueFire()
-        # DEFERRED RC_ICE_CAVERN_LOBBY_RIGHT_RED_ICE: logic->BlueFire()
+        (Locations.ICE_CAVERN_ENTRANCE_LEFT_STALAGMITE,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_ENTRANCE_MIDDLE_STALAGMITE,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_ENTRANCE_RIGHT_STALAGMITE,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_ENTRANCE_STALACTITE_1,
+         lambda bundle: True_()),
+        (Locations.ICE_CAVERN_ENTRANCE_STALACTITE_2,
+         lambda bundle: True_()),
+        (Locations.ICE_CAVERN_LOBBY_STALACTITE,
+         lambda bundle: True_()),
+        (Locations.ICE_CAVERN_LOBBY_LEFT_STALAGMITE,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_LOBBY_MIDDLE_STALAGMITE,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_LOBBY_RIGHT_STALAGMITE,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_ENTRANCE_RED_ICE,
+         lambda bundle: blue_fire(bundle)),
+        (Locations.ICE_CAVERN_LOBBY_LEFT_RED_ICE,
+         lambda bundle: blue_fire(bundle)),
+        (Locations.ICE_CAVERN_LOBBY_RIGHT_RED_ICE,
+         lambda bundle: blue_fire(bundle)),
     ])
     # Connections
     connect_regions(Regions.ICE_CAVERN_BEGINNING, world, [
@@ -76,16 +88,26 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_break_pots(bundle)),
         (Locations.ICE_CAVERN_SPINNING_BLADE_POT3,
          lambda bundle: can_break_pots(bundle)),
-        # DEFERRED RC_ICE_CAVERN_AFTER_LOBBY_STALACTITE: true
-        # DEFERRED RC_ICE_CAVERN_AFTER_LOBBY_LEFT_STALAGMITE: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_AFTER_LOBBY_CENTER_LEFT_STALAGMITE: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_AFTER_LOBBY_CENTER_RIGHT_STALAGMITE: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_AFTER_LOBBY_RIGHT_STALAGMITE: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_SPINNING_BLADE_LEFT_STALAGMITE: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_SPINNING_BLADE_MIDDLE_STALAGMITE: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_SPINNING_BLADE_RIGHT_STALAGMITE: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_SPINNING_BLADE_EAST_RED_ICE: logic->BlueFire()
-        # DEFERRED RC_ICE_CAVERN_SPINNING_BLADE_WEST_RED_ICE: logic->BlueFire()
+        (Locations.ICE_CAVERN_AFTER_LOBBY_STALACTITE,
+         lambda bundle: True_()),
+        (Locations.ICE_CAVERN_AFTER_LOBBY_LEFT_STALAGMITE,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_AFTER_LOBBY_CENTER_LEFT_STALAGMITE,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_AFTER_LOBBY_CENTER_RIGHT_STALAGMITE,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_AFTER_LOBBY_RIGHT_STALAGMITE,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_SPINNING_BLADE_LEFT_STALAGMITE,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_SPINNING_BLADE_MIDDLE_STALAGMITE,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_SPINNING_BLADE_RIGHT_STALAGMITE,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_SPINNING_BLADE_EAST_RED_ICE,
+         lambda bundle: blue_fire(bundle)),
+        (Locations.ICE_CAVERN_SPINNING_BLADE_WEST_RED_ICE,
+         lambda bundle: blue_fire(bundle)),
         # DEFERRED RC_ICE_CAVERN_ICICLES_BLADE_SILVER: logic->CanClearStalagmite()
         # DEFERRED RC_ICE_CAVERN_W_INNER_BLADE_SILVER: true
         # DEFERRED RC_ICE_CAVERN_OUTER_BLADE_SILVER: true
@@ -122,16 +144,26 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: True_()),
         (Locations.ICE_CAVERN_MAP_ROOM_RIGHT_HEART,
          lambda bundle: True_()),
-        # DEFERRED RC_ICE_CAVERN_MAP_HALLWAY_STALACTITE_1: true
-        # DEFERRED RC_ICE_CAVERN_MAP_HALLWAY_STALACTITE_2: true
-        # DEFERRED RC_ICE_CAVERN_MAP_HALLWAY_STALACTITE_3: true
-        # DEFERRED RC_ICE_CAVERN_MAP_HALLWAY_STALACTITE_4: true
-        # DEFERRED RC_ICE_CAVERN_MAP_HALLWAY_STALACTITE_5: true
-        # DEFERRED RC_ICE_CAVERN_MAP_HALLWAY_LEFT_STALAGMITE: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_MAP_HALLWAY_MIDDLE_STALAGMITE: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_MAP_HALLWAY_RIGHT_STALAGMITE: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_MAP_ROOM_POT_RED_ICE: logic->BlueFire()
-        # DEFERRED RC_ICE_CAVERN_MAP_ROOM_CHEST_RED_ICE: logic->BlueFire()
+        (Locations.ICE_CAVERN_MAP_HALLWAY_STALACTITE_1,
+         lambda bundle: True_()),
+        (Locations.ICE_CAVERN_MAP_HALLWAY_STALACTITE_2,
+         lambda bundle: True_()),
+        (Locations.ICE_CAVERN_MAP_HALLWAY_STALACTITE_3,
+         lambda bundle: True_()),
+        (Locations.ICE_CAVERN_MAP_HALLWAY_STALACTITE_4,
+         lambda bundle: True_()),
+        (Locations.ICE_CAVERN_MAP_HALLWAY_STALACTITE_5,
+         lambda bundle: True_()),
+        (Locations.ICE_CAVERN_MAP_HALLWAY_LEFT_STALAGMITE,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_MAP_HALLWAY_MIDDLE_STALAGMITE,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_MAP_HALLWAY_RIGHT_STALAGMITE,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_MAP_ROOM_POT_RED_ICE,
+         lambda bundle: blue_fire(bundle)),
+        (Locations.ICE_CAVERN_MAP_ROOM_CHEST_RED_ICE,
+         lambda bundle: blue_fire(bundle)),
     ])
     # Connections
     connect_regions(Regions.ICE_CAVERN_MAP_ROOM, world, [
@@ -153,28 +185,50 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: (can_clear_stalagmite(bundle) | can_do_trick(Tricks.ICE_STALAGMITE_CLIP, bundle)) & blue_fire(bundle)),
         (Locations.ICE_CAVERN_GS_HEART_PIECE_ROOM,
          lambda bundle: hookshot_or_boomerang(bundle)),
-        # DEFERRED RC_ICE_CAVERN_HEART_PIECE_ROOM_CENTER_STALACTITE_1: true
-        # DEFERRED RC_ICE_CAVERN_HEART_PIECE_ROOM_CENTER_STALACTITE_2: true
-        # DEFERRED RC_ICE_CAVERN_HEART_PIECE_ROOM_CENTER_STALACTITE_3: true
-        # DEFERRED RC_ICE_CAVERN_HEART_PIECE_ROOM_CENTER_STALACTITE_4: true
-        # DEFERRED RC_ICE_CAVERN_HEART_PIECE_ROOM_CENTER_STALACTITE_5: true
-        # DEFERRED RC_ICE_CAVERN_HEART_PIECE_ROOM_LEFT_STALACTITE_1: logic->CanClearStalagmite() || ctx->GetTrickOption(RT_ICE_STALAGMITE_CLIP)
-        # DEFERRED RC_ICE_CAVERN_HEART_PIECE_ROOM_LEFT_STALACTITE_2: logic->CanClearStalagmite() || ctx->GetTrickOption(RT_ICE_STALAGMITE_CLIP)
-        # DEFERRED RC_ICE_CAVERN_HEART_PIECE_ROOM_CENTER_STALAGMITE_1: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_HEART_PIECE_ROOM_CENTER_STALAGMITE_2: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_HEART_PIECE_ROOM_CENTER_STALAGMITE_3: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_HEART_PIECE_ROOM_CENTER_STALAGMITE_4: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_HEART_PIECE_ROOM_CENTER_STALAGMITE_5: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_HEART_PIECE_ROOM_CENTER_STALAGMITE_6: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_HEART_PIECE_ROOM_LEFT_STALAGMITE_1: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_HEART_PIECE_ROOM_LEFT_STALAGMITE_2: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_HEART_PIECE_ROOM_LEFT_STALAGMITE_3: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_HEART_PIECE_ROOM_RIGHT_STALAGMITE_1: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_HEART_PIECE_ROOM_RIGHT_STALAGMITE_2: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_HEART_PIECE_ROOM_RIGHT_STALAGMITE_3: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_HEART_PIECE_ROOM_RIGHT_STALAGMITE_4: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_HEART_PIECE_ROOM_FREESTANDING_RED_ICE: (logic->CanClearStalagmite() || ctx->GetTrickOption(RT_ICE_STALAGMITE_CLIP)) && logic->BlueFire()
-        # DEFERRED RC_ICE_CAVERN_HEART_PIECE_ROOM_CHEST_RED_ICE: (logic->IsChild || logic->CanClearStalagmite() || ctx->GetTrickOption(RT_ICE_STALAGMITE_CLIP)) && logic->BlueFire()
+        (Locations.ICE_CAVERN_HEART_PIECE_ROOM_CENTER_STALACTITE_1,
+         lambda bundle: True_()),
+        (Locations.ICE_CAVERN_HEART_PIECE_ROOM_CENTER_STALACTITE_2,
+         lambda bundle: True_()),
+        (Locations.ICE_CAVERN_HEART_PIECE_ROOM_CENTER_STALACTITE_3,
+         lambda bundle: True_()),
+        (Locations.ICE_CAVERN_HEART_PIECE_ROOM_CENTER_STALACTITE_4,
+         lambda bundle: True_()),
+        (Locations.ICE_CAVERN_HEART_PIECE_ROOM_CENTER_STALACTITE_5,
+         lambda bundle: True_()),
+        (Locations.ICE_CAVERN_HEART_PIECE_ROOM_LEFT_STALACTITE_1,
+         lambda bundle: can_clear_stalagmite(bundle) | can_do_trick(Tricks.ICE_STALAGMITE_CLIP, bundle)),
+        (Locations.ICE_CAVERN_HEART_PIECE_ROOM_LEFT_STALACTITE_2,
+         lambda bundle: can_clear_stalagmite(bundle) | can_do_trick(Tricks.ICE_STALAGMITE_CLIP, bundle)),
+        (Locations.ICE_CAVERN_HEART_PIECE_ROOM_CENTER_STALAGMITE_1,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_HEART_PIECE_ROOM_CENTER_STALAGMITE_2,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_HEART_PIECE_ROOM_CENTER_STALAGMITE_3,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_HEART_PIECE_ROOM_CENTER_STALAGMITE_4,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_HEART_PIECE_ROOM_CENTER_STALAGMITE_5,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_HEART_PIECE_ROOM_CENTER_STALAGMITE_6,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_HEART_PIECE_ROOM_LEFT_STALAGMITE_1,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_HEART_PIECE_ROOM_LEFT_STALAGMITE_2,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_HEART_PIECE_ROOM_LEFT_STALAGMITE_3,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_HEART_PIECE_ROOM_RIGHT_STALAGMITE_1,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_HEART_PIECE_ROOM_RIGHT_STALAGMITE_2,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_HEART_PIECE_ROOM_RIGHT_STALAGMITE_3,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_HEART_PIECE_ROOM_RIGHT_STALAGMITE_4,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_HEART_PIECE_ROOM_FREESTANDING_RED_ICE,
+         lambda bundle: (can_clear_stalagmite(bundle) | can_do_trick(Tricks.ICE_STALAGMITE_CLIP, bundle)) & blue_fire(bundle)),
+        (Locations.ICE_CAVERN_HEART_PIECE_ROOM_CHEST_RED_ICE,
+         lambda bundle: (is_child(bundle) | can_clear_stalagmite(bundle) | can_do_trick(Tricks.ICE_STALAGMITE_CLIP, bundle)) & blue_fire(bundle)),
     ])
     # Connections
     connect_regions(Regions.ICE_CAVERN_COMPASS_ROOM, world, [
@@ -193,14 +247,22 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_use(Items.BOOMERANG, bundle)),
         (Locations.ICE_CAVERN_SLIDING_BLOCK_ROOM_RUPEE3,
          lambda bundle: can_use(Items.BOOMERANG, bundle)),
-        # DEFERRED RC_ICE_CAVERN_PUSH_BLOCK_HALL_LEFT_STALAGMITE: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_PUSH_BLOCK_HALL_CENTER_LEFT_STALAGMITE: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_PUSH_BLOCK_HALL_CENTER_STALAGMITE: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_PUSH_BLOCK_HALL_CENTER_RIGHT_STALAGMITE: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_PUSH_BLOCK_HALL_RIGHT_STALAGMITE: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_PUSH_BLOCK_HALL_STALACTITE_1: true
-        # DEFERRED RC_ICE_CAVERN_PUSH_BLOCK_HALL_STALACTITE_2: true
-        # DEFERRED RC_ICE_CAVERN_PUSH_BLOCK_HALL_STALACTITE_3: true
+        (Locations.ICE_CAVERN_PUSH_BLOCK_HALL_LEFT_STALAGMITE,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_PUSH_BLOCK_HALL_CENTER_LEFT_STALAGMITE,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_PUSH_BLOCK_HALL_CENTER_STALAGMITE,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_PUSH_BLOCK_HALL_CENTER_RIGHT_STALAGMITE,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_PUSH_BLOCK_HALL_RIGHT_STALAGMITE,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_PUSH_BLOCK_HALL_STALACTITE_1,
+         lambda bundle: True_()),
+        (Locations.ICE_CAVERN_PUSH_BLOCK_HALL_STALACTITE_2,
+         lambda bundle: True_()),
+        (Locations.ICE_CAVERN_PUSH_BLOCK_HALL_STALACTITE_3,
+         lambda bundle: True_()),
         # DEFERRED RC_ICE_CAVERN_LOWER_BLOCK_SILVER: true
         # DEFERRED RC_ICE_CAVERN_NEAR_BLOCK_SILVER: logic->IsAdult || logic->HasItem(RG_POWER_BRACELET) || logic->CanUse(RG_HOVER_BOOTS) || logic->BunnyHood()
         # DEFERRED RC_ICE_CAVERN_NEAR_GS_BLOCK_SILVER: logic->IsAdult || logic->HasItem(RG_POWER_BRACELET) || logic->CanUse(RG_HOVER_BOOTS) || logic->BunnyHood()
@@ -231,7 +293,8 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_use(Items.SONG_OF_TIME, bundle)),
         (Locations.ICE_CAVERN_SLIDING_BLOCK_ROOM_RUPEE3,
          lambda bundle: can_use(Items.SONG_OF_TIME, bundle)),
-        # DEFERRED RC_ICE_CAVERN_SILVER_RUPEE_RED_ICE: logic->BlueFire()
+        (Locations.ICE_CAVERN_SILVER_RUPEE_RED_ICE,
+         lambda bundle: blue_fire(bundle)),
         # DEFERRED RC_ICE_CAVERN_NEAR_FIRE_BLOCK_SILVER: true
         # DEFERRED RC_ICE_CAVERN_FROZEN_BLOCK_SILVER: logic->BlueFire() || (ctx->GetTrickOption(RT_VISIBLE_COLLISION) && logic->CanJumpslash())
     ])
@@ -246,18 +309,30 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.ICE_CAVERN_AFTER_BLOCK_ROOM, world, [
         (Locations.ICE_CAVERN_GS_PUSH_BLOCK_ROOM,
          lambda bundle: can_do_trick(Tricks.ICE_BLOCK_GS, bundle) & is_adult(bundle) & can_use(Items.HOVER_BOOTS, bundle) & blue_fire(bundle) & has_grab(bundle)),
-        # DEFERRED RC_ICE_CAVERN_NEAR_END_STALACTITE_1: true
-        # DEFERRED RC_ICE_CAVERN_NEAR_END_STALACTITE_2: true
-        # DEFERRED RC_ICE_CAVERN_NEAR_END_STALACTITE_3: true
-        # DEFERRED RC_ICE_CAVERN_NEAR_END_STALACTITE_4: true
-        # DEFERRED RC_ICE_CAVERN_NEAR_END_STALAGMITE_1: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_NEAR_END_STALAGMITE_2: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_NEAR_END_STALAGMITE_3: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_NEAR_END_STALAGMITE_4: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_NEAR_END_STALAGMITE_5: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_NEAR_END_STALAGMITE_6: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_NEAR_END_STALAGMITE_7: logic->CanClearStalagmite()
-        # DEFERRED RC_ICE_CAVERN_NEAR_END_STALAGMITE_8: logic->CanClearStalagmite()
+        (Locations.ICE_CAVERN_NEAR_END_STALACTITE_1,
+         lambda bundle: True_()),
+        (Locations.ICE_CAVERN_NEAR_END_STALACTITE_2,
+         lambda bundle: True_()),
+        (Locations.ICE_CAVERN_NEAR_END_STALACTITE_3,
+         lambda bundle: True_()),
+        (Locations.ICE_CAVERN_NEAR_END_STALACTITE_4,
+         lambda bundle: True_()),
+        (Locations.ICE_CAVERN_NEAR_END_STALAGMITE_1,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_NEAR_END_STALAGMITE_2,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_NEAR_END_STALAGMITE_3,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_NEAR_END_STALAGMITE_4,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_NEAR_END_STALAGMITE_5,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_NEAR_END_STALAGMITE_6,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_NEAR_END_STALAGMITE_7,
+         lambda bundle: can_clear_stalagmite(bundle)),
+        (Locations.ICE_CAVERN_NEAR_END_STALAGMITE_8,
+         lambda bundle: can_clear_stalagmite(bundle)),
     ])
     # Connections
     connect_regions(Regions.ICE_CAVERN_AFTER_BLOCK_ROOM, world, [
@@ -274,9 +349,12 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_break_pots(bundle) & blue_fire(bundle)),
         (Locations.ICE_CAVERN_NEAR_END_POT2,
          lambda bundle: can_break_pots(bundle) & blue_fire(bundle)),
-        # DEFERRED RC_ICE_CAVERN_NEAR_END_LEFT_RED_ICE: logic->BlueFire()
-        # DEFERRED RC_ICE_CAVERN_NEAR_END_MIDDLE_RED_ICE: logic->BlueFire()
-        # DEFERRED RC_ICE_CAVERN_NEAR_END_RIGHT_RED_ICE: logic->BlueFire()
+        (Locations.ICE_CAVERN_NEAR_END_LEFT_RED_ICE,
+         lambda bundle: blue_fire(bundle)),
+        (Locations.ICE_CAVERN_NEAR_END_MIDDLE_RED_ICE,
+         lambda bundle: blue_fire(bundle)),
+        (Locations.ICE_CAVERN_NEAR_END_RIGHT_RED_ICE,
+         lambda bundle: blue_fire(bundle)),
     ])
     # Connections
     connect_regions(Regions.ICE_CAVERN_BEFORE_FINAL_ROOM, world, [
@@ -329,4 +407,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (88): ['RC_ICE_CAVERN_ENTRANCE_LEFT_STALAGMITE', 'RC_ICE_CAVERN_ENTRANCE_MIDDLE_STALAGMITE', 'RC_ICE_CAVERN_ENTRANCE_RIGHT_STALAGMITE', 'RC_ICE_CAVERN_ENTRANCE_STALACTITE_1', 'RC_ICE_CAVERN_ENTRANCE_STALACTITE_2', 'RC_ICE_CAVERN_LOBBY_STALACTITE', 'RC_ICE_CAVERN_LOBBY_LEFT_STALAGMITE', 'RC_ICE_CAVERN_LOBBY_MIDDLE_STALAGMITE', 'RC_ICE_CAVERN_LOBBY_RIGHT_STALAGMITE', 'RC_ICE_CAVERN_ENTRANCE_RED_ICE', 'RC_ICE_CAVERN_LOBBY_LEFT_RED_ICE', 'RC_ICE_CAVERN_LOBBY_RIGHT_RED_ICE', 'RC_ICE_CAVERN_AFTER_LOBBY_STALACTITE', 'RC_ICE_CAVERN_AFTER_LOBBY_LEFT_STALAGMITE', 'RC_ICE_CAVERN_AFTER_LOBBY_CENTER_LEFT_STALAGMITE', 'RC_ICE_CAVERN_AFTER_LOBBY_CENTER_RIGHT_STALAGMITE', 'RC_ICE_CAVERN_AFTER_LOBBY_RIGHT_STALAGMITE', 'RC_ICE_CAVERN_SPINNING_BLADE_LEFT_STALAGMITE', 'RC_ICE_CAVERN_SPINNING_BLADE_MIDDLE_STALAGMITE', 'RC_ICE_CAVERN_SPINNING_BLADE_RIGHT_STALAGMITE', 'RC_ICE_CAVERN_SPINNING_BLADE_EAST_RED_ICE', 'RC_ICE_CAVERN_SPINNING_BLADE_WEST_RED_ICE', 'RC_ICE_CAVERN_ICICLES_BLADE_SILVER', 'RC_ICE_CAVERN_W_INNER_BLADE_SILVER', 'RC_ICE_CAVERN_OUTER_BLADE_SILVER', 'RC_ICE_CAVERN_E_INNER_BLADE_SILVER', 'RC_ICE_CAVERN_AIRBORNE_BLADE_SILVER', 'RC_ICE_CAVERN_MAP_HALLWAY_STALACTITE_1', 'RC_ICE_CAVERN_MAP_HALLWAY_STALACTITE_2', 'RC_ICE_CAVERN_MAP_HALLWAY_STALACTITE_3', 'RC_ICE_CAVERN_MAP_HALLWAY_STALACTITE_4', 'RC_ICE_CAVERN_MAP_HALLWAY_STALACTITE_5', 'RC_ICE_CAVERN_MAP_HALLWAY_LEFT_STALAGMITE', 'RC_ICE_CAVERN_MAP_HALLWAY_MIDDLE_STALAGMITE', 'RC_ICE_CAVERN_MAP_HALLWAY_RIGHT_STALAGMITE', 'RC_ICE_CAVERN_MAP_ROOM_POT_RED_ICE', 'RC_ICE_CAVERN_MAP_ROOM_CHEST_RED_ICE', 'RC_ICE_CAVERN_HEART_PIECE_ROOM_CENTER_STALACTITE_1', 'RC_ICE_CAVERN_HEART_PIECE_ROOM_CENTER_STALACTITE_2', 'RC_ICE_CAVERN_HEART_PIECE_ROOM_CENTER_STALACTITE_3']
+# deferred locations (10): ['RC_ICE_CAVERN_ICICLES_BLADE_SILVER', 'RC_ICE_CAVERN_W_INNER_BLADE_SILVER', 'RC_ICE_CAVERN_OUTER_BLADE_SILVER', 'RC_ICE_CAVERN_E_INNER_BLADE_SILVER', 'RC_ICE_CAVERN_AIRBORNE_BLADE_SILVER', 'RC_ICE_CAVERN_LOWER_BLOCK_SILVER', 'RC_ICE_CAVERN_NEAR_BLOCK_SILVER', 'RC_ICE_CAVERN_NEAR_GS_BLOCK_SILVER', 'RC_ICE_CAVERN_NEAR_FIRE_BLOCK_SILVER', 'RC_ICE_CAVERN_FROZEN_BLOCK_SILVER']

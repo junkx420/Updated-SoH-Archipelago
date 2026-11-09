@@ -94,8 +94,10 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_read(bundle)),
         (Locations.ZD_NEAR_KING_ZORA_ARROW_SIGN,
          lambda bundle: can_read(bundle)),
-        # DEFERRED RC_ZD_KING_ZORA_RED_ICE: logic->IsAdult && logic->Get(LOGIC_KING_ZORA_THAWED)
-        # DEFERRED RC_ZD_ZORA_SHOP_RED_ICE: logic->IsAdult && logic->BlueFire()
+        (Locations.ZD_KING_ZORA_RED_ICE,
+         lambda bundle: is_adult(bundle) & has_item(Events.KING_ZORA_THAWED, bundle)),
+        (Locations.ZD_ZORA_SHOP_RED_ICE,
+         lambda bundle: is_adult(bundle) & blue_fire(bundle)),
         # DEFERRED RC_ZD_GOSSIP_STONE: true
     ])
     # Connections
@@ -131,7 +133,8 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.ZD_BEHIND_KING_ZORA, world, [
         (Locations.ZD_BEHIND_KING_ZORA_BEEHIVE,
          lambda bundle: is_child(bundle) & can_break_upper_beehives(bundle)),
-        # DEFERRED RC_ZD_KING_ZORA_RED_ICE: logic->IsAdult && logic->Get(LOGIC_KING_ZORA_THAWED)
+        (Locations.ZD_KING_ZORA_RED_ICE,
+         lambda bundle: is_adult(bundle) & has_item(Events.KING_ZORA_THAWED, bundle)),
     ])
     # Connections
     connect_regions(Regions.ZD_BEHIND_KING_ZORA, world, [
@@ -207,4 +210,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (12): ['RC_ZD_CIRCLE_ROCK_1', 'RC_ZD_CIRCLE_ROCK_2', 'RC_ZD_CIRCLE_ROCK_3', 'RC_ZD_CIRCLE_ROCK_4', 'RC_ZD_CIRCLE_ROCK_5', 'RC_ZD_CIRCLE_ROCK_6', 'RC_ZD_CIRCLE_ROCK_7', 'RC_ZD_CIRCLE_ROCK_8', 'RC_ZD_KING_ZORA_RED_ICE', 'RC_ZD_ZORA_SHOP_RED_ICE', 'RC_ZD_GOSSIP_STONE', 'RC_ZD_KING_ZORA_RED_ICE']
+# deferred locations (9): ['RC_ZD_CIRCLE_ROCK_1', 'RC_ZD_CIRCLE_ROCK_2', 'RC_ZD_CIRCLE_ROCK_3', 'RC_ZD_CIRCLE_ROCK_4', 'RC_ZD_CIRCLE_ROCK_5', 'RC_ZD_CIRCLE_ROCK_6', 'RC_ZD_CIRCLE_ROCK_7', 'RC_ZD_CIRCLE_ROCK_8', 'RC_ZD_GOSSIP_STONE']

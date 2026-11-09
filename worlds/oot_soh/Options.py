@@ -591,6 +591,22 @@ class ShuffleWonderItems(Choice):
     default = 0
 
 
+class ShuffleIcicles(Toggle):
+    """
+    Icicles and stalagmites give a randomized item the first time they are broken
+    (Ship of Harkinian 9.3.1: "Shuffle Icicles"). 90 new locations in the Ice Cavern and Ganon's Castle.
+    """
+    display_name = "Shuffle Icicles"
+
+
+class ShuffleRedIce(Toggle):
+    """
+    Red ice gives a randomized item the first time it is melted with Blue Fire
+    (Ship of Harkinian 9.3.1: "Shuffle Red Ice"). 17 new locations in Zora's Domain, the Ice Cavern and Ganon's Castle.
+    """
+    display_name = "Shuffle Red Ice"
+
+
 class ShuffleCrates(Choice):
     """
     Large and small crates will drop a randomized item the first time they're broken and collected.
@@ -2403,6 +2419,8 @@ class SohOptions(PerGameCommonOptions):
     shuffle_pots: ShufflePots
     shuffle_signs: ShuffleSigns
     shuffle_wonder_items: ShuffleWonderItems
+    shuffle_icicles: ShuffleIcicles
+    shuffle_red_ice: ShuffleRedIce
     shuffle_crates: ShuffleCrates
     shuffle_trees: ShuffleTrees
     shuffle_merchants: ShuffleMerchants
@@ -2922,6 +2940,8 @@ soh_option_groups = [
         ShufflePots,
         ShuffleSigns,
         ShuffleWonderItems,
+        ShuffleIcicles,
+        ShuffleRedIce,
         ShuffleCrates,
         ShuffleTrees,
         ShuffleMerchants,

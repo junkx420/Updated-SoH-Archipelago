@@ -25,7 +25,7 @@ from .Locations import SohLocation, base_location_table, \
     fairies_fountain_location_table, \
     fairies_stone_location_table, \
     fairies_bean_location_table, \
-    fairies_song_location_table,     fairies_butterfly_location_table,     signs_overworld_location_table,     signs_dungeon_location_table,     wonder_items_overworld_location_table,     wonder_items_dungeon_location_table, \
+    fairies_song_location_table,     fairies_butterfly_location_table,     signs_overworld_location_table,     signs_dungeon_location_table,     wonder_items_overworld_location_table,     wonder_items_dungeon_location_table,     icicle_location_table,     red_ice_location_table, \
     grass_overworld_location_table, \
     grass_dungeon_location_table, \
     fish_pond_location_table, \
@@ -183,6 +183,12 @@ def create_regions_and_locations(world: "SohWorld") -> None:
         world.included_locations.update(wonder_items_overworld_location_table)
     if world.options.shuffle_wonder_items in ("dungeon", "all"):
         world.included_locations.update(wonder_items_dungeon_location_table)
+
+    # Icicles / Red Ice (SoH 9.3.1 RSK_SHUFFLE_ICICLES, RSK_SHUFFLE_RED_ICE)
+    if world.options.shuffle_icicles:
+        world.included_locations.update(icicle_location_table)
+    if world.options.shuffle_red_ice:
+        world.included_locations.update(red_ice_location_table)
 
     # Pots (Overworld)
     if world.options.shuffle_pots == "overworld" or world.options.shuffle_pots == "all":
