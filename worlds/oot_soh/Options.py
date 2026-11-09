@@ -1371,6 +1371,23 @@ class IceTrapFillerReplacement(Range):
     range_end = 100
     default = 0
 
+
+class IceTrapNames(Choice):
+    """
+    How Ice Traps disguised as other items are named in the game (Ship of Harkinian 9.3.1).
+    Identical - The exact name of the item they look like.
+    Similar - A similar sounding name.
+    Misspelled Vowel / Misspelled Duplicate - The item's name with a changed vowel or a doubled letter.
+    Revealed - Always "Ice Trap".
+    """
+    display_name = "Ice Trap Names"
+    option_identical = 0
+    option_similar = 1
+    option_misspelled_vowel = 2
+    option_misspelled_duplicate = 3
+    option_revealed = 4
+    default = 1
+
 class HintClarity(Choice):
     """
     Sets the clarity of hints.
@@ -2023,6 +2040,7 @@ class SohOptions(PerGameCommonOptions):
     shuffle_100_gs_reward: Shuffle100GSReward
     ice_trap_count: IceTrapCount
     ice_trap_filler_replacement: IceTrapFillerReplacement
+    ice_trap_names: IceTrapNames
     true_no_logic: TrueNoLogic
     shuffle_tycoon_wallet: ShuffleTycoonWallet
     tricks_in_logic: TricksInLogic
@@ -2468,7 +2486,8 @@ soh_option_groups = [
     OptionGroup("Item Pool & Traps", [
         ItemPool,
         IceTrapCount,
-        IceTrapFillerReplacement
+        IceTrapFillerReplacement,
+        IceTrapNames
     ]),
     OptionGroup("Hints", [
         HintClarity,
