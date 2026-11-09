@@ -829,7 +829,7 @@ void Context::ParseArchipelagoOptions() {
     } else if (slotData["ganons_castle_boss_key"] == 8) {
         mOptions[RSK_GANONS_BOSS_KEY].Set(RO_GANON_BOSS_KEY_TRIFORCE_PIECES);
     }
-    mOptions[RSK_SKIP_CHILD_STEALTH].Set(RO_GENERIC_NO);
+    mOptions[RSK_SKIP_CHILD_STEALTH].Set(slotData.value("skip_child_stealth", static_cast<int>(RO_GENERIC_NO)));
     mOptions[RSK_STARTING_STICKS].Set(slotData["start_with_stick_ammo"]);
     mOptions[RSK_STARTING_NUTS].Set(slotData["start_with_nut_ammo"]);
     mOptions[RSK_STARTING_BEANS].Set(slotData["start_with_magic_beans"]);
@@ -902,7 +902,7 @@ void Context::ParseArchipelagoOptions() {
                              ? RO_GENERIC_ON : RO_GENERIC_OFF);
     mOptions[RSK_STARTING_MASK_OF_TRUTH].Set((slotData["complete_mask_quest"] != 0 || slotData.value("start_with_mask_of_truth", 0) != 0)
                              ? RO_GENERIC_ON : RO_GENERIC_OFF);
-    mOptions[RSK_SKIP_PLANTING_BEANS].Set(RO_GENERIC_NO);
+    mOptions[RSK_SKIP_PLANTING_BEANS].Set(slotData.value("skip_planting_beans", static_cast<int>(RO_GENERIC_NO)));
     mOptions[RSK_SKULLS_SUNS_SONG].Set(slotData["skulls_sun_song"]);
     mOptions[RSK_SHUFFLE_ADULT_TRADE].Set(slotData["shuffle_adult_trade_items"]);
     mOptions[RSK_SHUFFLE_MERCHANTS].Set(slotData["shuffle_merchants"]);
@@ -1004,10 +1004,10 @@ void Context::ParseArchipelagoOptions() {
     mOptions[RSK_MIX_THIEVES_HIDEOUT_ENTRANCES].Set(0);
     mOptions[RSK_MIX_GROTTO_ENTRANCES].Set(0);
     mOptions[RSK_DECOUPLED_ENTRANCES].Set(0);
-    mOptions[RSK_STARTING_SKULLTULA_TOKEN].Set(0);
+    mOptions[RSK_STARTING_SKULLTULA_TOKEN].Set(slotData.value("starting_skulltula_tokens", 0));
     uint8_t slotDataStartingHearts = slotData["starting_hearts"];
     mOptions[RSK_STARTING_HEARTS].Set(slotDataStartingHearts - 1);
-    mOptions[RSK_DAMAGE_MULTIPLIER].Set(0);
+    mOptions[RSK_DAMAGE_MULTIPLIER].Set(RO_DAMAGE_MULTIPLIER_DEFAULT); // was 0 = x1/2; the apworld logic assumes x1
     mOptions[RSK_ALL_CHECKS_REACHABLE].Set(0);
     mOptions[RSK_SHUFFLE_BOSS_ENTRANCES].Set(0);
     mOptions[RSK_SHUFFLE_100_GS_REWARD].Set(slotData["shuffle_100_gs_reward"]);
@@ -1079,8 +1079,8 @@ void Context::ParseArchipelagoOptions() {
     } else if (slotData["shuffle_fish"] == 3) {
         mOptions[RSK_FISHSANITY].Set(RO_FISHSANITY_BOTH);
     }
-    mOptions[RSK_FISHSANITY_POND_COUNT].Set(15);
-    mOptions[RSK_FISHSANITY_AGE_SPLIT].Set(1);
+    mOptions[RSK_FISHSANITY_POND_COUNT].Set(slotData.value("fishsanity_pond_count", 15));
+    mOptions[RSK_FISHSANITY_AGE_SPLIT].Set(slotData.value("fishsanity_age_split", 1));
     mOptions[RSK_SHUFFLE_FISHING_POLE].Set(slotData["shuffle_fishing_pole"]);
     mOptions[RSK_INFINITE_UPGRADES].Set(slotData["infinite_upgrades"]);
     mOptions[RSK_SKELETON_KEY].Set(slotData["skeleton_key"]);
