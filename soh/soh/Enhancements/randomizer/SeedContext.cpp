@@ -717,6 +717,8 @@ void Context::ParseArchipelagoOptions() {
     mOptions[RSK_SHUFFLE_POTS].Set(slotData["shuffle_pots"]);
     mOptions[RSK_SHUFFLE_SIGNS].Set(slotData.value("shuffle_signs", static_cast<int>(RO_SHUFFLE_SIGNS_OFF)));
     mOptions[RSK_SHUFFLE_WONDER_ITEMS].Set(slotData.value("shuffle_wonder_items", static_cast<int>(RO_SHUFFLE_WONDER_ITEMS_OFF)));
+    mOptions[RSK_SHUFFLE_ICICLES].Set(slotData.value("shuffle_icicles", static_cast<int>(RO_GENERIC_OFF)));
+    mOptions[RSK_SHUFFLE_RED_ICE].Set(slotData.value("shuffle_red_ice", static_cast<int>(RO_GENERIC_OFF)));
     mOptions[RSK_SHUFFLE_CRATES].Set(slotData["shuffle_crates"]);
     mOptions[RSK_SHUFFLE_TREES].Set(slotData["shuffle_trees"]);
     mOptions[RSK_SHUFFLE_BUSHES].Set(RO_GENERIC_NO);
