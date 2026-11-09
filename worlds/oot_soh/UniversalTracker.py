@@ -117,6 +117,7 @@ def setup_options_from_slot_data(world: "SohWorld") -> None:
             world.options.key_rings.value = world.passthrough["key_rings"]
             world.options.big_poe_target_count.value = world.passthrough["big_poe_target_count"]
             world.options.skip_child_zelda.value = world.passthrough["skip_child_zelda"]
+            world.options.shuffle_zeldas_letter.value = world.passthrough.get("shuffle_zeldas_letter", 0)  # apworld 1.5+
             world.options.skip_epona_race.value = world.passthrough["skip_epona_race"]
             world.options.complete_mask_quest.value = world.passthrough["complete_mask_quest"]
             world.options.shuffle_masks.value = world.passthrough.get("shuffle_masks", 0)  # apworld 1.5+

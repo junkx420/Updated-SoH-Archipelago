@@ -43,7 +43,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (EventLocations.ROOT_SHOWED_MIDO_SWORD_AND_SHIELD, Events.SHOWED_MIDO_SWORD_AND_SHIELD,
          lambda bundle: True_(options=[OptionFilter(ClosedForest, ClosedForest.option_off)])),
         (EventLocations.ROOT_MET_ZELDA, Events.MET_ZELDA,
-         lambda bundle: starting_zeldas_letter(bundle) & Not(False_())),
+         lambda bundle: starting_zeldas_letter(bundle) & Not(True_(options=[OptionFilter(ShuffleZeldasLetter, True)]))),
         (EventLocations.ROOT_MALON_RETURNED_FROM_CASTLE, Events.MALON_RETURNED_FROM_CASTLE,
          lambda bundle: True_(options=[OptionFilter(ShuffleWeirdEgg, ShuffleWeirdEgg.option_skip_waking_talon)])),
         (EventLocations.ROOT_TALON_RETURNED_FROM_CASTLE, Events.TALON_RETURNED_FROM_CASTLE,
@@ -59,11 +59,11 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.MAGIC_HINT_VIA_SARIAS_SONG,
          lambda bundle: can_use(Items.SARIAS_SONG, bundle)),
         (Locations.SONG_FROM_IMPA,
-         lambda bundle: starting_zeldas_letter(bundle) & Not(False_())),
+         lambda bundle: starting_zeldas_letter(bundle) & Not(True_(options=[OptionFilter(ShuffleZeldasLetter, True)]))),
         (Locations.HC_MALON_EGG,
          lambda bundle: True_(options=[OptionFilter(ShuffleWeirdEgg, ShuffleWeirdEgg.option_skip_waking_talon)])),
         (Locations.HC_ZELDAS_LETTER,
-         lambda bundle: starting_zeldas_letter(bundle) & Not(False_())),
+         lambda bundle: starting_zeldas_letter(bundle) & Not(True_(options=[OptionFilter(ShuffleZeldasLetter, True)]))),
         (Locations.MARKET_TOT_MASTER_SWORD,
          lambda bundle: True_(options=[OptionFilter(StartingAge, StartingAge.option_adult)])),
     ])
@@ -151,7 +151,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
 
 # ---- summary
-# notes: ['TODO feature 3.9']
+# notes: []
 # helpers not in LogicHelpers yet: []
 # TODO count: 0
 # new regions: []

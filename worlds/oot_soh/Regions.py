@@ -464,8 +464,11 @@ def place_locked_items(world: "SohWorld") -> None:
 
     # If skip_child_zelda, connect the locations to root and push items precollected
     if not world.options.skip_child_zelda:
-        # Zeldas Letter gets placed to it's location
-        place_from_pool(Locations.HC_ZELDAS_LETTER, Items.ZELDAS_LETTER, world)
+        # Zeldas Letter gets placed to it's location, unless it's shuffled (SoH 9.3.1 RSK_SHUFFLE_ZELDAS_LETTER,
+        # 3drando/item_pool.cpp). Shuffled, it is never a starting item: the option adjustments turn Skip Child Zelda
+        # off and close the Kakariko Gate (decisions 2026-11-09).
+        if not world.options.shuffle_zeldas_letter:
+            place_from_pool(Locations.HC_ZELDAS_LETTER, Items.ZELDAS_LETTER, world)
 
         # If the egg isn't shuffled, Malon has it (with Skip Waking Talon the check is already done at the start,
         # 9.3.1 savefile.cpp, and the egg isn't needed)

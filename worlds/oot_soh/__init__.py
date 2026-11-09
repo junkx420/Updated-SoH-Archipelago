@@ -567,6 +567,7 @@ class SohWorld(CachedRuleBuilderWorld):
             "ganons_castle_key_ring": self.options.ganons_castle_key_ring.value,
             "big_poe_target_count": self.options.big_poe_target_count.value,
             "skip_child_zelda": self.options.skip_child_zelda.value,
+            "shuffle_zeldas_letter": self.options.shuffle_zeldas_letter.value,
             "skip_epona_race": self.options.skip_epona_race.value,
             "skip_child_stealth": self.options.skip_child_stealth.value,
             "skip_planting_beans": self.options.skip_planting_beans.value,

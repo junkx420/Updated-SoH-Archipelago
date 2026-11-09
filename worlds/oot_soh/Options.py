@@ -1330,6 +1330,16 @@ class BigPoeTargetCount(Range):
     default = 1
 
 
+class ShuffleZeldasLetter(Toggle):
+    """
+    Zelda's Letter becomes an item in the pool, and Zelda in the castle courtyard gives a randomized item instead
+    (Ship of Harkinian 9.3.1: "Shuffle Zelda's Letter"). The child Zelda sequence is then never skipped.
+    Turns "Skip Child Zelda" off and sets "Kakariko Gate" to closed, since both would mean starting with the letter.
+    The gate then opens as in the vanilla game: by showing the letter to the guard.
+    """
+    display_name = "Shuffle Zelda's Letter"
+
+
 class SkipChildZelda(DefaultOnToggle):
     """
     Start with Zelda's Letter and the item Impa would normally give you and skip the sequence up until after meeting Zelda. Disables the ability to shuffle Weird Egg.
@@ -2515,6 +2525,7 @@ class SohOptions(PerGameCommonOptions):
     ganons_castle_key_ring: GanonsCastleKeyring
     big_poe_target_count: BigPoeTargetCount
     skip_child_zelda: SkipChildZelda
+    shuffle_zeldas_letter: ShuffleZeldasLetter
     skip_epona_race: SkipEponaRace
     skip_child_stealth: SkipChildStealth
     skip_planting_beans: SkipPlantingBeans
@@ -2691,6 +2702,16 @@ class SohOptions(PerGameCommonOptions):
         if self.shuffle_masks and self.complete_mask_quest:
             logging.warning("Shuffle Masks is on: Complete Mask Quest is turned off, so the masks get shuffled.")
             self.complete_mask_quest.value = CompleteMaskQuest.option_false
+
+        # same for Shuffle Zelda's Letter over Skip Child Zelda (= starting with the letter); decision 2026-11-09.
+        # Has to come before the Skip Child Zelda -> Weird Egg adjustment below.
+        if self.shuffle_zeldas_letter and self.skip_child_zelda:
+            logging.warning("Shuffle Zelda's Letter is on: Skip Child Zelda is turned off, so the letter gets shuffled.")
+            self.skip_child_zelda.value = SkipChildZelda.option_false
+        # Kakariko Gate "open" is mapped to starting with the letter as well (9.3.1 has no open gate of its own)
+        if self.shuffle_zeldas_letter and self.kakariko_gate == KakarikoGate.option_open:
+            logging.warning("Shuffle Zelda's Letter is on: Kakariko Gate is set to closed, so the letter gets shuffled.")
+            self.kakariko_gate.value = KakarikoGate.option_closed
 
         # SoH 9.3.1: Skip Child Zelda = starting with Zelda's Letter + Weird Egg "Skip Waking Talon"
         if self.skip_child_zelda:
@@ -3066,6 +3087,7 @@ soh_option_groups = [
     OptionGroup("Timesavers", [
         BigPoeTargetCount,
         SkipChildZelda,
+        ShuffleZeldasLetter,
         SkipEponaRace,
         SkipChildStealth,
         SkipPlantingBeans,
