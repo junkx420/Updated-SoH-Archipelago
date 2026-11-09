@@ -705,8 +705,13 @@ void Context::ParseArchipelagoOptions() {
         mOptions[RSK_SHUFFLE_WEIRD_EGG].Set(RO_WEIRD_EGG_SKIP_TALON);
     } else {
         mOptions[RSK_STARTING_ZELDAS_LETTER].Set(slotData["kakariko_gate"] != 0 ? RO_GENERIC_ON : RO_GENERIC_OFF);
-        mOptions[RSK_SHUFFLE_WEIRD_EGG].Set(slotData["shuffle_weird_egg"] != 0 ? RO_WEIRD_EGG_SHUFFLED
-                                                                               : RO_WEIRD_EGG_VANILLA);
+        // apworld 1.5: 0 off, 1 on (shuffled), 2 Skip Waking Talon (same order as RandoOptionWeirdEgg)
+        if (slotData["shuffle_weird_egg"] == 2) {
+            mOptions[RSK_SHUFFLE_WEIRD_EGG].Set(RO_WEIRD_EGG_SKIP_TALON);
+        } else {
+            mOptions[RSK_SHUFFLE_WEIRD_EGG].Set(slotData["shuffle_weird_egg"] != 0 ? RO_WEIRD_EGG_SHUFFLED
+                                                                                   : RO_WEIRD_EGG_VANILLA);
+        }
     }
     mOptions[RSK_SHUFFLE_GERUDO_MEMBERSHIP_CARD].Set(slotData["shuffle_gerudo_membership_card"]);
     mOptions[RSK_SHUFFLE_POTS].Set(slotData["shuffle_pots"]);
