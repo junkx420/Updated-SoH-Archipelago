@@ -58,6 +58,7 @@ class GroupTag(IntFlag):
     Item_Retriever = auto()
     Golden_Item = auto()
     Movement_Upgrade = auto()
+    Mask = auto()
     Ability_Upgrade = auto()
     Deku_Tree_Item = auto()
     Dodongos_Cavern_Item = auto()
@@ -368,6 +369,15 @@ item_data_table: dict[Items, SohItemData] = {
     Items.FISHING_HOLE_KEY: SohItemData(274, IC.progression, 0, tags=GroupTag.Overworld_Key | GroupTag.Key),
     Items.DISTANT_SCARECROW: SohItemData(275, IC.progression, 0, adult_only=True),
     Items.ROCS_FEATHER: SohItemData(276, IC.progression, 0, tags=GroupTag.Movement_Upgrade),
+    # SoH 9.3.1 Shuffle Masks: new IDs 277-284 (after the highest ID in use, upstream RG order)
+    Items.KEATON_MASK: SohItemData(277, IC.progression, 0, tags=GroupTag.Mask | GroupTag.Trade_Item),
+    Items.SKULL_MASK: SohItemData(278, IC.progression, 0, tags=GroupTag.Mask | GroupTag.Trade_Item),
+    Items.SPOOKY_MASK: SohItemData(279, IC.progression, 0, tags=GroupTag.Mask | GroupTag.Trade_Item),
+    Items.BUNNY_HOOD: SohItemData(280, IC.progression, 0, tags=GroupTag.Mask | GroupTag.Trade_Item),
+    Items.GORON_MASK: SohItemData(281, IC.useful, 0, tags=GroupTag.Mask | GroupTag.Trade_Item),
+    Items.ZORA_MASK: SohItemData(282, IC.useful, 0, tags=GroupTag.Mask | GroupTag.Trade_Item),
+    Items.GERUDO_MASK: SohItemData(283, IC.useful, 0, tags=GroupTag.Mask | GroupTag.Trade_Item),
+    Items.MASK_OF_TRUTH: SohItemData(284, IC.progression, 0, tags=GroupTag.Mask | GroupTag.Trade_Item),
     Items.STICKS: SohItemData(None, child_only=True),
     Items.NUTS: SohItemData(None),
     Items.EPONA: SohItemData(None),

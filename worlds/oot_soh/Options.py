@@ -1,3 +1,4 @@
+import logging
 from dataclasses import dataclass
 from Options import Choice, Toggle, DefaultOnToggle, Range, PerGameCommonOptions, StartInventoryPool, Visibility, OptionGroup, OptionSet, Accessibility, OptionError
 from .Enums import Tricks, Items, TokenCounts
@@ -1361,6 +1362,15 @@ class SkipPlantingBeans(Toggle):
     display_name = "Skip Planting Beans"
 
 
+class ShuffleMasks(Toggle):
+    """
+    The 8 masks are shuffled into the item pool and the Happy Mask Shop keeper is gone (Ship of Harkinian 9.3.1:
+    "Shuffle Masks"). Masks you start with (Start With ... options) are not added to the pool.
+    Turns "Complete Mask Quest" off, since that would mean starting with every mask.
+    """
+    display_name = "Shuffle Masks"
+
+
 class CompleteMaskQuest(DefaultOnToggle):
     """
     Once the Happy Mask Shop is opened, all masks will be available to be borrowed.
@@ -2500,6 +2510,7 @@ class SohOptions(PerGameCommonOptions):
     skip_child_stealth: SkipChildStealth
     skip_planting_beans: SkipPlantingBeans
     complete_mask_quest: CompleteMaskQuest
+    shuffle_masks: ShuffleMasks
     skip_scarecrows_song: SkipScarecrowsSong
     start_with_links_pocket: StartWithLinksPocket
     links_pocket_reward: LinksPocketReward
@@ -2661,6 +2672,12 @@ class SohOptions(PerGameCommonOptions):
         
 
     def adjust_starting_items(self):
+        # Shuffle Masks wins over Complete Mask Quest (which the client turns into starting with every mask);
+        # decision 2026-11-09
+        if self.shuffle_masks and self.complete_mask_quest:
+            logging.warning("Shuffle Masks is on: Complete Mask Quest is turned off, so the masks get shuffled.")
+            self.complete_mask_quest.value = CompleteMaskQuest.option_false
+
         # SoH 9.3.1: Skip Child Zelda = starting with Zelda's Letter + Weird Egg "Skip Waking Talon"
         if self.skip_child_zelda:
             self.shuffle_weird_egg.value = ShuffleWeirdEgg.option_skip_waking_talon
@@ -3039,6 +3056,7 @@ soh_option_groups = [
         SkipChildStealth,
         SkipPlantingBeans,
         CompleteMaskQuest,
+        ShuffleMasks,
         SkipScarecrowsSong,
     ]),
     OptionGroup("Item Pool & Traps", [

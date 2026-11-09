@@ -119,6 +119,7 @@ def setup_options_from_slot_data(world: "SohWorld") -> None:
             world.options.skip_child_zelda.value = world.passthrough["skip_child_zelda"]
             world.options.skip_epona_race.value = world.passthrough["skip_epona_race"]
             world.options.complete_mask_quest.value = world.passthrough["complete_mask_quest"]
+            world.options.shuffle_masks.value = world.passthrough.get("shuffle_masks", 0)  # apworld 1.5+
             world.options.skip_scarecrows_song.value = world.passthrough["skip_scarecrows_song"]
             world.options.start_with_links_pocket.value = world.passthrough.get("start_with_links_pocket", StartWithLinksPocket.default)
             world.options.start_with_kokiri_sword.value = world.passthrough.get("start_with_kokiri_sword", StartWithKokiriSword.default)

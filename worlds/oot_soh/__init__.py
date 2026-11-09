@@ -571,6 +571,7 @@ class SohWorld(CachedRuleBuilderWorld):
             "skip_child_stealth": self.options.skip_child_stealth.value,
             "skip_planting_beans": self.options.skip_planting_beans.value,
             "complete_mask_quest": self.options.complete_mask_quest.value,
+            "shuffle_masks": self.options.shuffle_masks.value,
             "skip_scarecrows_song": self.options.skip_scarecrows_song.value,
             "start_with_links_pocket": self.options.start_with_links_pocket.value,
             "links_pocket_reward": self.options.links_pocket_reward.value,

@@ -217,6 +217,25 @@ def create_item_pool(world: "SohWorld") -> None:
     if world.options.rocs_feather:
         items_to_create[Items.ROCS_FEATHER] = 1
 
+    # Shuffle Masks (3drando/item_pool.cpp): every mask that isn't a starting mask goes into the pool
+    if world.options.shuffle_masks:
+        if not world.options.start_with_keaton_mask:
+            items_to_create[Items.KEATON_MASK] = 1
+        if not world.options.start_with_skull_mask:
+            items_to_create[Items.SKULL_MASK] = 1
+        if not world.options.start_with_spooky_mask:
+            items_to_create[Items.SPOOKY_MASK] = 1
+        if not world.options.start_with_bunny_hood:
+            items_to_create[Items.BUNNY_HOOD] = 1
+        if not world.options.start_with_goron_mask:
+            items_to_create[Items.GORON_MASK] = 1
+        if not world.options.start_with_zora_mask:
+            items_to_create[Items.ZORA_MASK] = 1
+        if not world.options.start_with_gerudo_mask:
+            items_to_create[Items.GERUDO_MASK] = 1
+        if not world.options.start_with_mask_of_truth:
+            items_to_create[Items.MASK_OF_TRUTH] = 1
+
     # Max Hearts logic for Item Pool
     max_hearts: int = 20
     if world.options.item_pool == "scarce":
