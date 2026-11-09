@@ -1120,7 +1120,9 @@ BOSS_SOULS = {Items.GOHMAS_SOUL, Items.KING_DODONGOS_SOUL, Items.BARINADES_SOUL,
 def has_boss_soul(soul: Items, bundle: tuple[Regions, "SohWorld"]):
     # only check for possesion of gannons soul if the option 'on_plus_ganons' is selected
     if soul == Items.GANONS_SOUL:
-        return OptionFilter(ShuffleBossSouls, [ShuffleBossSouls.option_off,ShuffleBossSouls.option_on], operator="in") | Has(soul)
+        # 9.3.1 Logic::HasItem(RG_GANON_SOUL): RSK_GANONS_SOUL "Start With" or found (the old "On + Ganon" boss soul
+        # setting is migrated to Ganon's Soul "Anywhere" in Options.adjust_ganons_soul)
+        return OptionFilter(GanonsSoul, GanonsSoul.option_start_with) | Has(soul)
         
     return OptionFilter(ShuffleBossSouls, ShuffleBossSouls.option_off) | Has(soul)
 
@@ -1388,6 +1390,42 @@ def can_build_rainbow_bridge(bundle: tuple[Regions, "SohWorld"]) -> Rule:
          | (OptionFilter(RainbowBridge, RainbowBridge.option_dungeons) & ItemsPlusGregEnough(target=FromOption(RainbowBridgeDungeonsRequired), item_tag=dungeon_events, greg=greg)) \
          | (OptionFilter(RainbowBridge, RainbowBridge.option_tokens) & Has(Items.GOLD_SKULLTULA_TOKEN, count=FromOption(RainbowBridgeSkullTokensRequired))) \
          | (OptionFilter(RainbowBridge, RainbowBridge.option_greg) & Has(Items.GREG_THE_GREEN_RUPEE))
+
+
+GANONS_SOUL_TRIGGER_OPTIONS = [GanonsSoul.option_trigger_stones, GanonsSoul.option_trigger_medallions,
+                               GanonsSoul.option_trigger_dungeon_rewards, GanonsSoul.option_trigger_dungeons,
+                               GanonsSoul.option_trigger_skull_tokens, GanonsSoul.option_trigger_triforce_pieces]
+
+
+@dataclasses.dataclass
+class GanonsSoulTriforcePieces(Rule, game="Ship of Harkinian"):
+    """Triforce Pieces for the Ganon's Soul trigger; the count is capped at the pieces actually in the pool, which is
+    only known after create_triforce_pieces (ItemPool.py)."""
+    def _instantiate(self, world: "SohWorld") -> Rule.Resolved:  # type: ignore
+        return self.Resolved(player=world.player, caching_enabled=getattr(world, "rule_caching_enabled", False))
+
+    class Resolved(Rule.Resolved):
+        item_name: str = str(Items.TRIFORCE_PIECE)
+        player: int
+
+        def _evaluate(self, state: CollectionState) -> bool:
+            world = cast("SohWorld", state.multiworld.worlds[self.player])
+            return state.prog_items[self.player][self.item_name] >= world.ganons_soul_triforce_pieces_required
+
+        def item_dependencies(self) -> dict[str, set[int]]:
+            return {self.item_name: {id(self)}}
+
+
+def can_trigger_ganons_soul(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    """9.3.1 Logic::CanTriggerGanonsSoul (pseudo-location RC_GANON_SOUL in Root). Greg counts in logic only with the
+    "reward" modifier (RO_CHECK_TRIGGER_GREG_REWARD)."""
+    greg = FromOption(GanonsSoulGregModifier)
+    return (OptionFilter(GanonsSoul, GanonsSoul.option_trigger_stones) & ItemsPlusGregEnough(target=FromOption(GanonsSoulStonesRequired), item_tag=GroupTag.Spiritual_Stone, greg=greg)) \
+         | (OptionFilter(GanonsSoul, GanonsSoul.option_trigger_medallions) & ItemsPlusGregEnough(target=FromOption(GanonsSoulMedallionsRequired), item_tag=GroupTag.Medallion, greg=greg)) \
+         | (OptionFilter(GanonsSoul, GanonsSoul.option_trigger_dungeon_rewards) & ItemsPlusGregEnough(target=FromOption(GanonsSoulDungeonRewardsRequired), item_tag=GroupTag.Spiritual_Stone | GroupTag.Medallion, greg=greg)) \
+         | (OptionFilter(GanonsSoul, GanonsSoul.option_trigger_dungeons) & ItemsPlusGregEnough(target=FromOption(GanonsSoulDungeonsRequired), item_tag=dungeon_events, greg=greg)) \
+         | (OptionFilter(GanonsSoul, GanonsSoul.option_trigger_skull_tokens) & Has(Items.GOLD_SKULLTULA_TOKEN, count=FromOption(GanonsSoulSkullTokensRequired))) \
+         | (OptionFilter(GanonsSoul, GanonsSoul.option_trigger_triforce_pieces) & GanonsSoulTriforcePieces())
 
 
 GBK_TRIGGER_OPTIONS = [GanonsCastleBossKey.option_lacs_vanilla, GanonsCastleBossKey.option_lacs_stones,

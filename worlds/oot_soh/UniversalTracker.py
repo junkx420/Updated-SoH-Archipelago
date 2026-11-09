@@ -144,6 +144,15 @@ def setup_options_from_slot_data(world: "SohWorld") -> None:
             world.options.true_no_logic.value = world.passthrough["no_logic"]
             world.options.shuffle_tycoon_wallet.value = world.passthrough.get(
                 "shuffle_tycoon_wallet", 1)
+            # Ganon's Soul (apworld 1.5+; older slot data only had shuffle_boss_souls "on_plus_ganons")
+            for key in ("ganons_soul", "ganons_soul_greg_modifier", "ganons_soul_stones_required",
+                        "ganons_soul_medallions_required", "ganons_soul_dungeon_rewards_required",
+                        "ganons_soul_dungeons_required", "ganons_soul_skull_tokens_required"):
+                if key in world.passthrough:
+                    getattr(world.options, key).value = world.passthrough[key]
+            if "ganons_soul_triforce_pieces_required" in world.passthrough:
+                world.options.ganons_soul_triforce_pieces_required.value = max(
+                    1, world.passthrough["ganons_soul_triforce_pieces_required"])
             world.options.enable_all_tricks.value = world.passthrough.get(
                 "enable_all_tricks", 0)
             # slot data lists upstream enum names ("RT_LW_BRIDGE") since apworld 1.5; older ones sent option values

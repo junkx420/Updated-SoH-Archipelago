@@ -10,7 +10,7 @@ from worlds.AutoWorld import WebWorld, World
 from Fill import fill_restrictive
 from .Items import SohItem, item_data_table, item_table, SohItemData, progressive_items
 from .Locations import location_table, token_amounts, SohLocData, location_data_table
-from .Options import SohOptions, soh_option_groups, wallet_capacities, LEGACY_TRICKS
+from .Options import SohOptions, soh_option_groups, wallet_capacities, LEGACY_TRICKS, GanonsSoul
 from .Regions import create_regions_and_locations, place_locked_items
 from .Enums import *
 from .ItemPool import create_item_pool, create_filler_item_pool, create_triforce_pieces, get_filler_item, give_starting_items
@@ -121,6 +121,7 @@ class SohWorld(CachedRuleBuilderWorld):
         self.shop_prices = dict[Locations, int]()
         self.shop_vanilla_items = dict[str, str]()
         self.triforce_pieces_required: int = 0
+        self.ganons_soul_triforce_pieces_required: int = 0
         self.randomized_progressive_skulltula_count: int = 0
         self.ganons_trials = list[GanonsTrials]()
         self.pre_fill_pool = list[SohItem]()
@@ -589,6 +590,16 @@ class SohWorld(CachedRuleBuilderWorld):
             "apworld_version": self.apworld_version,
             "enable_all_tricks": self.options.enable_all_tricks.value,
             "tricks_in_logic": self.slot_data_tricks(),
+            # Ganon's Soul (9.3.1 RSK_GANONS_SOUL); values follow the upstream order Start With ... Trigger-Triforce
+            "ganons_soul": self.options.ganons_soul.value,
+            "ganons_soul_greg_modifier": self.options.ganons_soul_greg_modifier.value,
+            "ganons_soul_stones_required": self.options.ganons_soul_stones_required.value,
+            "ganons_soul_medallions_required": self.options.ganons_soul_medallions_required.value,
+            "ganons_soul_dungeon_rewards_required": self.options.ganons_soul_dungeon_rewards_required.value,
+            "ganons_soul_dungeons_required": self.options.ganons_soul_dungeons_required.value,
+            "ganons_soul_skull_tokens_required": self.options.ganons_soul_skull_tokens_required.value,
+            "ganons_soul_triforce_pieces_required": self.ganons_soul_triforce_pieces_required
+            if self.options.ganons_soul == GanonsSoul.option_trigger_triforce_pieces else 0,
             "medallion_locked_trials": self.options.medallion_locked_trials.value,
             "starting_hearts": self.options.starting_hearts.value,
             "hint_clarity": self.options.hint_clarity.value,

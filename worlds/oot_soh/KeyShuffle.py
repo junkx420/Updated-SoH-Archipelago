@@ -112,6 +112,10 @@ def get_dungeon_item_prefill_items(world: "SohWorld", overworld_shuffle: bool) -
         if world.options.shuffle_dungeon_rewards == shuffle_setting:
             shuffle_items += list(dungeon_reward_item_mapping.values())
 
+        # Ganon's Soul (9.3.1 RSK_GANONS_SOUL "Any Dungeon" / "Overworld")
+        if world.options.ganons_soul == shuffle_setting:
+            shuffle_items.append(Items.GANONS_SOUL)
+
         return shuffle_items
         
 

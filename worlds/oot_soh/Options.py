@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Choice, Toggle, DefaultOnToggle, Range, PerGameCommonOptions, StartInventoryPool, Visibility, OptionGroup, OptionSet, Accessibility
+from Options import Choice, Toggle, DefaultOnToggle, Range, PerGameCommonOptions, StartInventoryPool, Visibility, OptionGroup, OptionSet, Accessibility, OptionError
 from .Enums import Tricks, Items, TokenCounts
 from .TrickNames import TRICK_SOH_NAMES
 
@@ -613,6 +613,97 @@ class ShuffleBossSouls(Choice):
     option_on = 1
     option_on_plus_ganons = 2
     default = 0
+
+
+class GanonsSoul(Choice):
+    """
+    Ganon's Soul hides Ganon and Ganondorf until it is found (Ship of Harkinian 9.3.1 setting, independent of
+    Shuffle Boss Souls).
+    Start With - You start with Ganon's Soul.
+    Any Dungeon / Overworld / Anywhere - Ganon's Soul is shuffled into a dungeon, the overworld or anywhere.
+    Trigger - You receive Ganon's Soul wherever you are as soon as the requirement below is met.
+    "Shuffle Boss Souls: On + Ganon" from older settings counts as Anywhere while this is left on Start With.
+    Trigger Triforce Pieces needs Triforce Hunt.
+    """
+    display_name = "Ganon's Soul"
+    option_start_with = 0
+    option_any_dungeon = 1
+    option_overworld = 2
+    option_anywhere = 3
+    option_trigger_stones = 4
+    option_trigger_medallions = 5
+    option_trigger_dungeon_rewards = 6
+    option_trigger_dungeons = 7
+    option_trigger_skull_tokens = 8
+    option_trigger_triforce_pieces = 9
+    default = 0
+
+
+class GanonsSoulGregModifier(Choice):
+    """
+    If Ganon's Soul is a trigger, Greg will count toward the requirement.
+    Off - Greg will not count.
+    Reward - Greg will count and be considered in the logic.
+    Wildcard - Greg will count but not be considered in the logic.
+    """
+    display_name = "Ganon's Soul Greg Wildcard"
+    option_off = 0
+    option_reward = 1
+    option_wildcard = 2
+    default = 0
+
+
+class GanonsSoulStonesRequired(Range):
+    """If Ganon's Soul is set to Trigger Stones, this is how many Spiritual Stones are required.
+    If the Greg Modifier is not set to Reward, the max will be 3."""
+    display_name = "Ganon's Soul Stones Required"
+    range_start = 1
+    range_end = 4
+    default = 3
+
+
+class GanonsSoulMedallionsRequired(Range):
+    """If Ganon's Soul is set to Trigger Medallions, this is how many medallions are required.
+    If the Greg Modifier is not set to Reward, the max will be 6."""
+    display_name = "Ganon's Soul Medallions Required"
+    range_start = 1
+    range_end = 7
+    default = 6
+
+
+class GanonsSoulDungeonRewardsRequired(Range):
+    """If Ganon's Soul is set to Trigger Dungeon Rewards, this is how many Spiritual Stones and medallions are
+    required. If the Greg Modifier is not set to Reward, the max will be 9."""
+    display_name = "Ganon's Soul Dungeon Rewards Required"
+    range_start = 1
+    range_end = 10
+    default = 9
+
+
+class GanonsSoulDungeonsRequired(Range):
+    """If Ganon's Soul is set to Trigger Dungeons, this is how many dungeons must be completed (stepping into the blue
+    warp after the boss). If the Greg Modifier is not set to Reward, the max will be 8."""
+    display_name = "Ganon's Soul Dungeons Required"
+    range_start = 1
+    range_end = 9
+    default = 8
+
+
+class GanonsSoulSkullTokensRequired(Range):
+    """If Ganon's Soul is set to Trigger Skull Tokens, this is how many Gold Skulltula Tokens are required."""
+    display_name = "Ganon's Soul Skull Tokens Required"
+    range_start = 1
+    range_end = 100
+    default = 100
+
+
+class GanonsSoulTriforcePiecesRequired(Range):
+    """If Ganon's Soul is set to Trigger Triforce Pieces, this is how many Triforce Pieces are required (at most the
+    number of pieces in the item pool)."""
+    display_name = "Ganon's Soul Triforce Pieces Required"
+    range_start = 1
+    range_end = 100
+    default = 100
 
 
 class ShuffleFountainFairies(Toggle):
@@ -1653,6 +1744,14 @@ class SohOptions(PerGameCommonOptions):
     shuffle_frog_song_rupees: ShuffleFrogSongRupees
     shuffle_adult_trade_items: ShuffleAdultTradeItems
     shuffle_boss_souls: ShuffleBossSouls
+    ganons_soul: GanonsSoul
+    ganons_soul_greg_modifier: GanonsSoulGregModifier
+    ganons_soul_stones_required: GanonsSoulStonesRequired
+    ganons_soul_medallions_required: GanonsSoulMedallionsRequired
+    ganons_soul_dungeon_rewards_required: GanonsSoulDungeonRewardsRequired
+    ganons_soul_dungeons_required: GanonsSoulDungeonsRequired
+    ganons_soul_skull_tokens_required: GanonsSoulSkullTokensRequired
+    ganons_soul_triforce_pieces_required: GanonsSoulTriforcePiecesRequired
     shuffle_fountain_fairies: ShuffleFountainFairies
     shuffle_stone_fairies: ShuffleStoneFairies
     shuffle_bean_fairies: ShuffleBeanFairies
@@ -1762,6 +1861,7 @@ class SohOptions(PerGameCommonOptions):
     mask_shop_hint: MaskShopHint
 
     def apply_any_required_option_adjustments(self):
+        self.adjust_ganons_soul()
         self.adjust_for_forced_child_starts()
         self.adjust_prices()
         self.adjust_starting_items()
@@ -1876,7 +1976,12 @@ class SohOptions(PerGameCommonOptions):
         if self.ganons_castle_boss_key == GanonsCastleBossKey.option_lacs_skull_tokens:
             ganons_castle_boss_key_tokens = self.ganons_castle_boss_key_skull_tokens_required.value
         
-        required_skulltula_count = max(required_skulltula_count, rainbow_bridge_tokens, ganons_castle_boss_key_tokens)
+        ganons_soul_tokens = 0
+        if self.ganons_soul == GanonsSoul.option_trigger_skull_tokens:
+            ganons_soul_tokens = self.ganons_soul_skull_tokens_required.value
+
+        required_skulltula_count = max(required_skulltula_count, rainbow_bridge_tokens, ganons_castle_boss_key_tokens,
+                                       ganons_soul_tokens)
 
         if self.accessibility == Accessibility.option_full:
             # If full accessibility is enabled, assume all vanilla tokens are available and calculate the required shuffled tokens
@@ -1922,6 +2027,19 @@ class SohOptions(PerGameCommonOptions):
 
             decrement_option(option)
 
+        if self.ganons_soul_greg_modifier != GanonsSoulGregModifier.option_reward:
+            option = None
+            if self.ganons_soul == GanonsSoul.option_trigger_stones:
+                option = self.ganons_soul_stones_required
+            elif self.ganons_soul == GanonsSoul.option_trigger_medallions:
+                option = self.ganons_soul_medallions_required
+            elif self.ganons_soul == GanonsSoul.option_trigger_dungeon_rewards:
+                option = self.ganons_soul_dungeon_rewards_required
+            elif self.ganons_soul == GanonsSoul.option_trigger_dungeons:
+                option = self.ganons_soul_dungeons_required
+            decrement_option(option)
+            option = None
+
         if self.ganons_castle_boss_key_greg_modifier != GanonsCastleBossKeyGregModifier.option_reward:
             if self.ganons_castle_boss_key == GanonsCastleBossKey.option_lacs_stones:
                 option = self.ganons_castle_boss_key_stones_required
@@ -1933,6 +2051,14 @@ class SohOptions(PerGameCommonOptions):
                 option = self.ganons_castle_boss_key_dungeons_required
 
             decrement_option(option)
+
+    def adjust_ganons_soul(self):
+        # SoH 9.3.1 split "Shuffle Boss Souls: On + Ganon" into "On" plus its own Ganon's Soul setting (upstream
+        # ConfigVersion7Updater maps it to Ganon's Soul "Anywhere"); older YAMLs keep playing the same.
+        if self.shuffle_boss_souls == ShuffleBossSouls.option_on_plus_ganons and self.ganons_soul == GanonsSoul.option_start_with:
+            self.ganons_soul.value = GanonsSoul.option_anywhere
+        if self.ganons_soul == GanonsSoul.option_trigger_triforce_pieces and not self.triforce_hunt:
+            raise OptionError("Ganon's Soul \"trigger_triforce_pieces\" needs Triforce Hunt.")
 
     def adjust_key_rings(self):
         if self.small_key_shuffle not in (SmallKeyShuffle.option_start_with, SmallKeyShuffle.option_vanilla):
@@ -2036,6 +2162,14 @@ soh_option_groups = [
         ShuffleAdultTradeItems,
         Shuffle100GSReward,
         ShuffleBossSouls,
+        GanonsSoul,
+        GanonsSoulStonesRequired,
+        GanonsSoulMedallionsRequired,
+        GanonsSoulDungeonRewardsRequired,
+        GanonsSoulDungeonsRequired,
+        GanonsSoulSkullTokensRequired,
+        GanonsSoulTriforcePiecesRequired,
+        GanonsSoulGregModifier,
         ShuffleFountainFairies,
         ShuffleStoneFairies,
         ShuffleBeanFairies,

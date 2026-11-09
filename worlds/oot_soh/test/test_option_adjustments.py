@@ -4,7 +4,7 @@ from typing import cast
 from types import SimpleNamespace
 
 from Options import Accessibility
-from ..Options import SohOptions, RainbowBridge, GanonsCastleBossKey, ShuffleTokens
+from ..Options import SohOptions, RainbowBridge, GanonsCastleBossKey, ShuffleTokens, GanonsSoul
 from ..Locations import token_amounts
 from ..Enums import TokenCounts
 
@@ -22,6 +22,9 @@ class TestSohOptionsForRequiredSkulltulaCount(TestCase):
 
         self.ganons_castle_boss_key = GanonsCastleBossKey.option_vanilla
         self.ganons_castle_boss_key_skull_tokens_required = SimpleNamespace(value=0)
+
+        self.ganons_soul = GanonsSoul.option_start_with
+        self.ganons_soul_skull_tokens_required = SimpleNamespace(value=0)
 
         self.shuffle_skull_tokens = ShuffleTokens.option_off
     
@@ -68,6 +71,13 @@ class TestSohOptionsForRequiredSkulltulaCount(TestCase):
     def test_ganons_castle_tokens(self):
         self.set_ganons_castle_key_tokens(70)
         self.assertEqual(self.calculate_progression_skulltula_count(), 0)
+
+    def test_ganons_soul_tokens(self):
+        # Ganon's Soul "Trigger Skull Tokens" (SoH 9.3.1) counts like the other token requirements
+        self.ganons_soul = GanonsSoul.option_trigger_skull_tokens
+        self.ganons_soul_skull_tokens_required.value = 120 - 70
+        self.shuffle_skull_tokens = ShuffleTokens.option_all
+        self.assertEqual(self.calculate_progression_skulltula_count(), 50)
 
     def test_max_requirement_used(self):
         self.set_rainbow_bridge_tokens(80)

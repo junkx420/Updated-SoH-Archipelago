@@ -16,6 +16,7 @@ class EventLocations(StrEnum):
     TRIFORCE_HUNT_COMPLETION = "Triforce Hunt Completion"
     MAGIC_BEAN_SALESMAN_SHOP = "Magic Bean Salesman Shop"
     GANONS_BOSS_KEY_TRIGGER = "Ganon's Boss Key Trigger"
+    GANONS_SOUL_TRIGGER = "Ganon's Soul Trigger"
 
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -41,6 +42,13 @@ def set_region_rules(world: "SohWorld") -> None:
     if world.options.ganons_castle_boss_key.value in GBK_TRIGGER_OPTIONS and not bool(world.options.triforce_hunt):
         add_events(Regions.ROOT, world, [
             (EventLocations.GANONS_BOSS_KEY_TRIGGER, Items.GANONS_CASTLE_BOSS_KEY, lambda bundle: can_trigger_gbk(bundle)),
+        ])
+
+    # Ganon's Soul trigger (9.3.1 root.cpp LOCATION(RC_GANON_SOUL, logic->CanTriggerGanonsSoul())); the client grants
+    # the soul itself (PlaceArchipelagoTriggerItems), the multiworld only needs the event.
+    if world.options.ganons_soul.value in GANONS_SOUL_TRIGGER_OPTIONS:
+        add_events(Regions.ROOT, world, [
+            (EventLocations.GANONS_SOUL_TRIGGER, Items.GANONS_SOUL, lambda bundle: can_trigger_ganons_soul(bundle)),
         ])
 
     # Win condition (the apworld's goal; upstream 9.3.1 uses the RC_GANON / RC_WINCON trigger locations, see

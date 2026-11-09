@@ -102,7 +102,9 @@ def create_item_pool(world: "SohWorld") -> None:
         items_to_create[Items.BONGO_BONGOS_SOUL] = 1
         items_to_create[Items.TWINROVAS_SOUL] = 1
 
-    if world.options.shuffle_boss_souls == "on_plus_ganons":
+    # Ganon's Soul (own setting since 9.3.1; "On + Ganon" is migrated to "anywhere" in Options.adjust_ganons_soul).
+    # any_dungeon / overworld are placed by the dungeon item prefill (KeyShuffle.get_dungeon_item_prefill_items).
+    if world.options.ganons_soul in (GanonsSoul.option_any_dungeon, GanonsSoul.option_overworld, GanonsSoul.option_anywhere):
         items_to_create[Items.GANONS_SOUL] = 1
 
     # Maps and Compasses
@@ -493,18 +495,27 @@ def create_triforce_pieces(world: "SohWorld") -> None:
     triforce_pieces_to_win: int = max(1, round(
         total_triforce_pieces * (world.options.triforce_hunt_pieces_required_percentage.value * .01)))
 
+    # pieces the logic needs: the win condition, or more if the Ganon's Soul trigger asks for more
+    progression_pieces = triforce_pieces_to_win
+    if world.options.ganons_soul == GanonsSoul.option_trigger_triforce_pieces:
+        progression_pieces = max(progression_pieces, min(world.options.ganons_soul_triforce_pieces_required.value,
+                                                         total_triforce_pieces))
+
     triforce_pieces_made = [world.create_item(Items.TRIFORCE_PIECE) 
-                            for _ in range(triforce_pieces_to_win)]
+                            for _ in range(progression_pieces)]
     triforce_pieces_made += [world.create_item(Items.TRIFORCE_PIECE, classification=ItemClassification.useful | ItemClassification.skip_balancing) 
-                             for _ in range(total_triforce_pieces - triforce_pieces_to_win)]
+                             for _ in range(total_triforce_pieces - progression_pieces)]
 
     world.add_items_to_item_pool_list(triforce_pieces_made)
 
     world.options.triforce_hunt_pieces_total.value = total_triforce_pieces
+    world.ganons_soul_triforce_pieces_required = min(world.options.ganons_soul_triforce_pieces_required.value,
+                                                     total_triforce_pieces)
     world.triforce_pieces_required = triforce_pieces_to_win
 
     if world.using_ut:
         world.triforce_pieces_required = world.passthrough["triforce_hunt_pieces_required"]
+        world.ganons_soul_triforce_pieces_required = world.passthrough.get("ganons_soul_triforce_pieces_required", 0)
 
 
 def create_filler_item_pool(world: "SohWorld") -> None:
