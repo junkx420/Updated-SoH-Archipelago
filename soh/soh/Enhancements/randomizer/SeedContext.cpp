@@ -956,6 +956,18 @@ void Context::ParseArchipelagoOptions() {
         mOptions[RSK_SHUFFLE_BOSS_SOULS].Set(slotData["shuffle_boss_souls"]);
         mOptions[RSK_GANONS_SOUL].Set(RO_GANONS_SOUL_STARTWITH);
     }
+    // apworld 1.5+ has its own Ganon's Soul option (values in upstream RandoOptionGanonsSoul order); it already
+    // accounts for the old "On + Ganon" above, so it overrides that when present.
+    if (slotData.contains("ganons_soul")) {
+        mOptions[RSK_GANONS_SOUL].Set(slotData["ganons_soul"].get<uint8_t>());
+        mOptions[RSK_GANONS_SOUL_OPTIONS].Set(slotData.value("ganons_soul_greg_modifier", 0));
+        mOptions[RSK_GANONS_SOUL_STONE_COUNT].Set(slotData.value("ganons_soul_stones_required", 3));
+        mOptions[RSK_GANONS_SOUL_MEDALLION_COUNT].Set(slotData.value("ganons_soul_medallions_required", 6));
+        mOptions[RSK_GANONS_SOUL_REWARD_COUNT].Set(slotData.value("ganons_soul_dungeon_rewards_required", 9));
+        mOptions[RSK_GANONS_SOUL_DUNGEON_COUNT].Set(slotData.value("ganons_soul_dungeons_required", 8));
+        mOptions[RSK_GANONS_SOUL_TOKEN_COUNT].Set(slotData.value("ganons_soul_skull_tokens_required", 100));
+        mOptions[RSK_GANONS_SOUL_TRIFORCE_COUNT].Set(slotData.value("ganons_soul_triforce_pieces_required", 0));
+    }
     if (slotData["shuffle_fish"] == 0) {
         mOptions[RSK_FISHSANITY].Set(RO_FISHSANITY_OFF);
     } else if (slotData["shuffle_fish"] == 1) {
