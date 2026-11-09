@@ -871,6 +871,8 @@ class ShuffleDungeonRewards(Choice):
     Any Dungeon - Spiritual Stones and medallions can only appear inside any dungeon.
     Overworld - Spiritual Stones and medallions can only appear outside of dungeons.
     Anywhere - Spiritual Stones and medallions can appear anywhere.
+    Own Dungeon - Each Spiritual Stone and medallion is somewhere inside the dungeon it normally comes from. The Light
+    Medallion is the Gift from Rauru, unless Link's Pocket gets a dungeon reward (then it can appear anywhere).
     """
     display_name = "Shuffle Dungeon Rewards"
     option_off = 0
@@ -878,6 +880,7 @@ class ShuffleDungeonRewards(Choice):
     option_any_dungeon = 2
     option_overworld = 3
     option_anywhere = 4
+    option_own_dungeon = 5  # 9.3.1 RO_DUNGEON_REWARDS_OWN_DUNGEON, appended so existing values keep their numbers
     default = 0
     alias_dungeons = option_end_of_dungeons
 
@@ -1635,6 +1638,20 @@ class StartWithLinksPocket(Choice):
     option_nothing = 3
     default = 0
 
+class LinksPocketReward(Choice):
+    """
+    If Link's Pocket is set to Dungeon Reward, which kind of reward it can be (Ship of Harkinian 9.3.1).
+    Any Reward / Any Stone / Any Medallion / Light Medallion.
+    Doesn't apply when Shuffle Dungeon Rewards is Off (Link's Pocket then has the Light Medallion as in the vanilla game).
+    """
+    display_name = "Link's Pocket Reward"
+    option_any_reward = 0
+    option_any_stone = 1
+    option_any_medallion = 2
+    option_light_medallion = 3
+    default = 0
+
+
 class StartWithKokiriSword(Toggle):
     """
     Start with the Kokiri Sword in your inventory.
@@ -1907,6 +1924,7 @@ class SohOptions(PerGameCommonOptions):
     complete_mask_quest: CompleteMaskQuest
     skip_scarecrows_song: SkipScarecrowsSong
     start_with_links_pocket: StartWithLinksPocket
+    links_pocket_reward: LinksPocketReward
     start_with_kokiri_sword: StartWithKokiriSword
     start_with_master_sword: StartWithMasterSword
     start_with_deku_shield: StartWithDekuShield
@@ -2410,6 +2428,7 @@ soh_option_groups = [
     ]),
     OptionGroup("Starting Items", [
         StartWithLinksPocket,
+        LinksPocketReward,
         StartWithKokiriSword,
         StartWithMasterSword,
         StartWithDekuShield,

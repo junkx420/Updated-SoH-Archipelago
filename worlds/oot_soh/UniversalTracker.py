@@ -144,6 +144,8 @@ def setup_options_from_slot_data(world: "SohWorld") -> None:
             world.options.true_no_logic.value = world.passthrough["no_logic"]
             world.options.shuffle_tycoon_wallet.value = world.passthrough.get(
                 "shuffle_tycoon_wallet", 1)
+            if "links_pocket_reward" in world.passthrough:
+                world.options.links_pocket_reward.value = world.passthrough["links_pocket_reward"]
             # Win Condition, Triforce Piece triggers (apworld 1.5+)
             for key in ("win_condition", "win_condition_greg_modifier", "win_condition_stones_required",
                         "win_condition_medallions_required", "win_condition_dungeon_rewards_required",

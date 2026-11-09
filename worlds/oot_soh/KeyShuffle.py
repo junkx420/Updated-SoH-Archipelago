@@ -13,6 +13,18 @@ if TYPE_CHECKING:
 
 option_mapping = namedtuple('Key_Mapping', ['Dungeon', 'Option', 'Quantity'])
 
+own_dungeon_rewards: dict[DungeonLocations, Items] = {
+    DungeonLocations.DEKU_TREE: Items.KOKIRIS_EMERALD,
+    DungeonLocations.DODONGOS_CAVERN: Items.GORONS_RUBY,
+    DungeonLocations.JABU_JABUS_BELLY: Items.ZORAS_SAPPHIRE,
+    DungeonLocations.FOREST_TEMPLE: Items.FOREST_MEDALLION,
+    DungeonLocations.FIRE_TEMPLE: Items.FIRE_MEDALLION,
+    DungeonLocations.WATER_TEMPLE: Items.WATER_MEDALLION,
+    DungeonLocations.SPIRIT_TEMPLE: Items.SPIRIT_MEDALLION,
+    DungeonLocations.SHADOW_TEMPLE: Items.SHADOW_MEDALLION,
+}
+
+
 def get_own_dungeon_prefill_items(world: "SohWorld") -> dict[DungeonLocations, list[Items]]:
         key_shuffle_locations = dict[DungeonLocations, list[Items]]()
         for location_type in DungeonLocations:
@@ -44,6 +56,12 @@ def get_own_dungeon_prefill_items(world: "SohWorld") -> dict[DungeonLocations, l
 
                 for _ in range(count):
                     key_shuffle_locations[dungeon].append(item)
+
+        # Dungeon Rewards (9.3.1 RO_DUNGEON_REWARDS_OWN_DUNGEON: each reward in the dungeon it comes from; the one in
+        # Link's Pocket is already out of the pool and gets skipped when extracting)
+        if world.options.shuffle_dungeon_rewards == "own_dungeon":
+            for dungeon, reward in own_dungeon_rewards.items():
+                key_shuffle_locations[dungeon].append(reward)
 
         # Maps and Compasses
         if world.options.maps_and_compasses == "own_dungeon":

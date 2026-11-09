@@ -476,7 +476,15 @@ def place_locked_items(world: "SohWorld") -> None:
 
     if world.options.start_with_links_pocket == StartWithLinksPocket.option_dungeon_reward:
         # put the first reward from the randomized list that's also in the pool into links pocket
+        # (9.3.1 fill.cpp RandomizeDungeonRewards: RSK_LINKS_POCKET_REWARD limits which kind of reward)
         dungeon_rewards = list(dungeon_reward_item_mapping.values())
+        pocket_reward = world.options.links_pocket_reward
+        if pocket_reward == LinksPocketReward.option_any_stone:
+            dungeon_rewards = [r for r in dungeon_rewards if r in (Items.KOKIRIS_EMERALD, Items.GORONS_RUBY, Items.ZORAS_SAPPHIRE)]
+        elif pocket_reward == LinksPocketReward.option_any_medallion:
+            dungeon_rewards = [r for r in dungeon_rewards if r not in (Items.KOKIRIS_EMERALD, Items.GORONS_RUBY, Items.ZORAS_SAPPHIRE)]
+        elif pocket_reward == LinksPocketReward.option_light_medallion:
+            dungeon_rewards = [Items.LIGHT_MEDALLION]
         world.random.shuffle(dungeon_rewards)
         for reward in dungeon_rewards:
             reward_item = world.get_item_from_pool(reward, world.item_pool)
@@ -484,6 +492,12 @@ def place_locked_items(world: "SohWorld") -> None:
                 continue
             place_locked_item(Locations.LINKS_POCKET, reward_item, world)
             break
+
+    # Own Dungeon rewards: the Light Medallion has no dungeon, it stays the Gift from Rauru unless Link's Pocket gets a
+    # dungeon reward (9.3.1 fill.cpp RandomizeDungeonRewards)
+    if (world.options.shuffle_dungeon_rewards == ShuffleDungeonRewards.option_own_dungeon
+            and world.options.start_with_links_pocket != StartWithLinksPocket.option_dungeon_reward):
+        place_from_pool(Locations.GIFT_FROM_RAURU, Items.LIGHT_MEDALLION, world)
 
     # Place Ganons Boss Key. Since SoH 9.3.1 the Light Arrow Cutscene is a normal location again; the lacs_* options are
     # triggers that grant the key (location_access/archipelago.py).

@@ -557,6 +557,7 @@ class SohWorld(CachedRuleBuilderWorld):
             "complete_mask_quest": self.options.complete_mask_quest.value,
             "skip_scarecrows_song": self.options.skip_scarecrows_song.value,
             "start_with_links_pocket": self.options.start_with_links_pocket.value,
+            "links_pocket_reward": self.options.links_pocket_reward.value,
             "start_with_kokiri_sword": self.options.start_with_kokiri_sword.value,
             "start_with_deku_shield": self.options.start_with_deku_shield.value,
             "start_with_master_sword": self.options.start_with_master_sword.value,
