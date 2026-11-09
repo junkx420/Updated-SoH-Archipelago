@@ -423,7 +423,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.KAK_TRADE_ODD_MUSHROOM,
          lambda bundle: is_adult(bundle) & can_use(Items.ODD_MUSHROOM, bundle)),
         (Locations.KAK_GRANNYS_SHOP,
-         lambda bundle: is_adult(bundle) & has_speak(bundle, "HYLIAN") & (can_use(Items.ODD_MUSHROOM, bundle) | (True_(options=[OptionFilter(ShuffleAdultTradeItems, False)]) & (has_item(Items.CLAIM_CHECK, bundle) | False_())) & can_afford_slot(Locations.KAK_GRANNYS_SHOP, bundle))),
+         lambda bundle: is_adult(bundle) & has_speak(bundle, "HYLIAN") & (can_use(Items.ODD_MUSHROOM, bundle) | (True_(options=[OptionFilter(ShuffleAdultTradeItems, False)]) & (has_item(Items.CLAIM_CHECK, bundle) | True_(options=[OptionFilter(EarlyGrannysShop, True)]))) & can_afford_slot(Locations.KAK_GRANNYS_SHOP, bundle))),
     ])
     # Connections
     connect_regions(Regions.KAK_ODD_POTION_BUILDING, world, [
@@ -494,7 +494,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
 
 # ---- summary
-# notes: ['TODO feature 2.4', 'TODO feature 4.1']
+# notes: ['TODO feature 4.1']
 # helpers not in LogicHelpers yet: []
 # TODO count: 0
 # new regions: []

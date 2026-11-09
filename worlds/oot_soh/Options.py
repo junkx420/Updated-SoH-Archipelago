@@ -734,6 +734,47 @@ class GanonsCastleBossKeyTriforcePiecesRequired(Range):
     default = 100
 
 
+class BunnyHoodEffect(Toggle):
+    """
+    Wearing the Bunny Hood makes Link run 1.5x faster and jump 1.5x further, like in Majora's Mask.
+    The logic respects this, so it might be required to use it to progress (Ship of Harkinian 9.3.1 "Bunny Hood Effect").
+    """
+    display_name = "Bunny Hood Effect"
+
+
+class MasksAsAdult(Toggle):
+    """
+    Masks can be equipped as adult instead of being child only.
+    The logic respects this, so it might be required to use this to progress (Ship of Harkinian 9.3.1).
+    """
+    display_name = "Masks as Adult"
+
+
+class EarlyGrannysShop(Toggle):
+    """
+    Granny's Potion Shop is available from the start instead of requiring the Claim Check.
+    Only applies when Shuffle Adult Trade Items is off (Ship of Harkinian 9.3.1).
+    """
+    display_name = "Early Granny's Potion Shop"
+
+
+class SwordlessEponaItems(Toggle):
+    """
+    Restores the vanilla glitch that lets a swordless player use C-button items (bottles, bombs, magic, ...) while
+    riding Epona. Off blocks it (Ship of Harkinian 9.3.1). Doesn't change the logic.
+    """
+    display_name = "Swordless Epona Items"
+
+
+class ShopShieldsAndTunicsOnlyRefill(Toggle):
+    """
+    Non-randomized shields and tunics sold in shops can't be bought until you have first found that shield or tunic
+    elsewhere (Ship of Harkinian 9.3.1 "Gate Shop Shields & Tunics"). The found shields and tunics then count in the
+    logic.
+    """
+    display_name = "Gate Shop Shields & Tunics"
+
+
 class GanonsSoul(Choice):
     """
     Ganon's Soul hides Ganon and Ganondorf until it is found (Ship of Harkinian 9.3.1 setting, independent of
@@ -1934,6 +1975,11 @@ class SohOptions(PerGameCommonOptions):
     skip_scarecrows_song: SkipScarecrowsSong
     start_with_links_pocket: StartWithLinksPocket
     links_pocket_reward: LinksPocketReward
+    bunny_hood_effect: BunnyHoodEffect
+    masks_as_adult: MasksAsAdult
+    early_grannys_shop: EarlyGrannysShop
+    swordless_epona_items: SwordlessEponaItems
+    shop_shields_and_tunics_only_refill: ShopShieldsAndTunicsOnlyRefill
     start_with_kokiri_sword: StartWithKokiriSword
     start_with_master_sword: StartWithMasterSword
     start_with_deku_shield: StartWithDekuShield
@@ -2395,6 +2441,13 @@ soh_option_groups = [
         GanonsCastleKeyring
     ]),
     # todo: decide whether these should be in the yaml or just let you change them locally on the fly
+    OptionGroup("Gameplay (SoH 9.3.1)", [
+        BunnyHoodEffect,
+        MasksAsAdult,
+        EarlyGrannysShop,
+        SwordlessEponaItems,
+        ShopShieldsAndTunicsOnlyRefill,
+    ]),
     OptionGroup("Timesavers", [
         BigPoeTargetCount,
         SkipChildZelda,

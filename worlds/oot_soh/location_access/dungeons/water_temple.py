@@ -816,7 +816,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.WATER_TEMPLE_RIVER, world, [
         (Regions.WATER_TEMPLE_RIVER_PLATFORM,
-         lambda bundle: (can_use(Items.IRON_BOOTS, bundle) & water_timer_at_least(bundle, 16) & ((((bunny_hood(bundle)) & can_use(Items.HOOKSHOT, bundle) | (Not(bunny_hood(bundle))) & can_use(Items.LONGSHOT, bundle))) | (is_adult(bundle) & bunny_hood(bundle)))) | has_item(Items.BRONZE_SCALE, bundle)),
+         lambda bundle: (can_use(Items.IRON_BOOTS, bundle) & water_timer_at_least(bundle, 16) & ((((bunny_hood(bundle)) & can_use(Items.HOOKSHOT, bundle) | can_use(Items.LONGSHOT, bundle))) | (is_adult(bundle) & bunny_hood(bundle)))) | has_item(Items.BRONZE_SCALE, bundle)),
     ])
 
     # Water Temple River Platform  (upstream RR_WATER_TEMPLE_RIVER_PLATFORM, SCENE_WATER_TEMPLE)

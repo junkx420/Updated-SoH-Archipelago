@@ -317,6 +317,8 @@ def has_item(item: Items | Events | StrEnum, bundle: tuple[Regions, "SohWorld"],
     if item == Items.MAGIC_BEAN:
         return HasAny(Items.MAGIC_BEAN_PACK, Events.CAN_BUY_BEANS)
 
+    # apworld rule: found shields can be lost (fire, Like-Likes), so only buyable ones count. With "Gate Shop Shields &
+    # Tunics" the found shield is what unlocks buying it (CanAffordSlot).
     if item == Items.DEKU_SHIELD:
         return Has(Items.BUY_DEKU_SHIELD)
 
@@ -374,6 +376,15 @@ def has_item(item: Items | Events | StrEnum, bundle: tuple[Regions, "SohWorld"],
 
 
 
+# shop item -> item that has to be found first with "Gate Shop Shields & Tunics" (9.3.1 Logic::ShopItemNotForSale)
+SHOP_GATED_ITEMS: dict[str, str] = {
+    str(Items.BUY_DEKU_SHIELD): str(Items.DEKU_SHIELD),
+    str(Items.BUY_HYLIAN_SHIELD): str(Items.HYLIAN_SHIELD),
+    str(Items.BUY_GORON_TUNIC): str(Items.GORON_TUNIC),
+    str(Items.BUY_ZORA_TUNIC): str(Items.ZORA_TUNIC),
+}
+
+
 @dataclasses.dataclass
 class CanAffordSlot(Rule, game="Ship of Harkinian"):
     location: Locations
@@ -390,10 +401,22 @@ class CanAffordSlot(Rule, game="Ship of Harkinian"):
             world = state.multiworld.worlds[self.player]
             wallet = get_wallet_for_shop_slot(self.location, world)[0] #type: ignore
             prog_wallet_count = progressive_items[Items.PROGRESSIVE_WALLET].index(wallet) + 1
-            return state.has(Items.PROGRESSIVE_WALLET, self.player, prog_wallet_count)
+            if not state.has(Items.PROGRESSIVE_WALLET, self.player, prog_wallet_count):
+                return False
+            # 9.3.1 Logic::ShopItemNotForSale ("Gate Shop Shields & Tunics"): a non-randomized shield or tunic in a
+            # shop slot can't be bought before the same item has been found elsewhere
+            if world.options.shop_shields_and_tunics_only_refill:  # type: ignore
+                location = state.multiworld.regions.location_cache[self.player].get(str(self.location))
+                item = location.item if location is not None else None  # events use slots that aren't locations
+                if item is not None and item.player == self.player and item.name in SHOP_GATED_ITEMS:
+                    return state.has(SHOP_GATED_ITEMS[item.name], self.player)
+            return True
 
         def item_dependencies(self) -> dict[str, set[int]]:
-            return {str(Items.PROGRESSIVE_WALLET): {id(self)}}
+            deps = {str(Items.PROGRESSIVE_WALLET): {id(self)}}
+            for found in SHOP_GATED_ITEMS.values():
+                deps[found] = {id(self)}
+            return deps
         
         @override
         def explain_json(self, state: CollectionState | None = None) -> list[JSONMessagePart]:
@@ -1625,15 +1648,15 @@ def has_mask(bundle: tuple[Regions, "SohWorld"], mask: str) -> Rule:
 
 
 def can_use_mask(bundle: tuple[Regions, "SohWorld"], mask: str) -> Rule:
-    # Logic::CanUse: masks need child, unless Masks as Adult (feature 2.4)
+    # Logic::CanUse: masks need child, unless Masks as Adult (RSK_MASKS_AS_ADULT)
     if not mask_use_allowed(bundle[0]):  # Logic::ItemUseAllowed
         return False_()
-    return has_mask(bundle, mask) & is_child(bundle)
+    return has_mask(bundle, mask) & (is_child(bundle) | True_(options=[OptionFilter(MasksAsAdult, True)]))
 
 
 def bunny_hood(bundle: tuple[Regions, "SohWorld"]) -> Rule:
-    # Logic::BunnyHood: RSK_BUNNY_HOOD ("logical bunny hood") && CanUse(RG_BUNNY_HOOD)
-    return False_()  # TODO feature 2.4 (Bunny Hood option), then: option & can_use_mask(bundle, "BUNNY_HOOD")
+    # Logic::BunnyHood: RSK_BUNNY_HOOD ("Bunny Hood Effect") && CanUse(RG_BUNNY_HOOD)
+    return True_(options=[OptionFilter(BunnyHoodEffect, True)]) & can_use_mask(bundle, "BUNNY_HOOD")
 
 
 def bunny_hovers(bundle: tuple[Regions, "SohWorld"]) -> Rule:

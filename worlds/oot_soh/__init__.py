@@ -235,6 +235,10 @@ class SohWorld(CachedRuleBuilderWorld):
 
     def create_item(self, name: str, create_as_event: bool = False, classification: ItemClassification = None) -> SohItem:
         item_entry = Items(name)
+        # "Gate Shop Shields & Tunics": found shields and tunics unlock their shop slots, so the logic needs them
+        if (classification is None and self.options.shop_shields_and_tunics_only_refill
+                and item_entry in (Items.DEKU_SHIELD, Items.HYLIAN_SHIELD, Items.GORON_TUNIC, Items.ZORA_TUNIC)):
+            classification = item_data_table[item_entry].classification | ItemClassification.progression
         return SohItem(str(name), item_data_table[item_entry].classification if classification == None else classification,
                        None if create_as_event else item_data_table[item_entry].item_id, self.player)
 
@@ -558,6 +562,11 @@ class SohWorld(CachedRuleBuilderWorld):
             "skip_scarecrows_song": self.options.skip_scarecrows_song.value,
             "start_with_links_pocket": self.options.start_with_links_pocket.value,
             "links_pocket_reward": self.options.links_pocket_reward.value,
+            "bunny_hood_effect": self.options.bunny_hood_effect.value,
+            "masks_as_adult": self.options.masks_as_adult.value,
+            "early_grannys_shop": self.options.early_grannys_shop.value,
+            "swordless_epona_items": self.options.swordless_epona_items.value,
+            "shop_shields_and_tunics_only_refill": self.options.shop_shields_and_tunics_only_refill.value,
             "start_with_kokiri_sword": self.options.start_with_kokiri_sword.value,
             "start_with_deku_shield": self.options.start_with_deku_shield.value,
             "start_with_master_sword": self.options.start_with_master_sword.value,
