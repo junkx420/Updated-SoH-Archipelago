@@ -534,6 +534,7 @@ class SohWorld(CachedRuleBuilderWorld):
             "shuffle_stone_fairies": self.options.shuffle_stone_fairies.value,
             "shuffle_bean_fairies": self.options.shuffle_bean_fairies.value,
             "shuffle_song_fairies": self.options.shuffle_song_fairies.value,
+            "shuffle_butterfly_fairies": self.options.shuffle_butterfly_fairies.value,
             "shuffle_grass": self.options.shuffle_grass.value,
             "shuffle_dungeon_rewards": self.options.shuffle_dungeon_rewards.value,
             "maps_and_compasses": self.options.maps_and_compasses.value,

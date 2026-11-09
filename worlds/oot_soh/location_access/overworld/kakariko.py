@@ -202,7 +202,8 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.KAK_WATCHTOWER, world, [
         (Locations.KAK_GS_WATCHTOWER,
          lambda bundle: is_child(bundle) & can_use(Items.DINS_FIRE, bundle) & can_get_nighttime_gs(bundle)),
-        # DEFERRED RC_KAK_WATCHTOWER_BUTTERFLY_FAIRY: logic->IsChild && logic->AtDay && logic->CanUse(RG_STICKS)
+        (Locations.KAK_WATCHTOWER_BUTTERFLY_FAIRY,
+         lambda bundle: is_child(bundle) & at_day(bundle) & can_use(Items.STICKS, bundle)),
     ])
     # Connections
     connect_regions(Regions.KAK_WATCHTOWER, world, [
@@ -470,7 +471,8 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_cut_shrubs(bundle)),
         (Locations.KAK_OPEN_GROTTO_GRASS4,
          lambda bundle: can_cut_shrubs(bundle)),
-        # DEFERRED RC_KAK_OPEN_GROTTO_BUTTERFLY_FAIRY: logic->CanUse(RG_STICKS)
+        (Locations.KAK_OPEN_GROTTO_BUTTERFLY_FAIRY,
+         lambda bundle: can_use(Items.STICKS, bundle)),
     ])
     # Connections
     connect_regions(Regions.KAK_OPEN_GROTTO, world, [
@@ -505,4 +507,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (13): ['RC_KAK_SILVER_BOULDER', 'RC_KAK_ROCK_1', 'RC_KAK_ROCK_2', 'RC_KAK_GUARD_GATE_RECTANGLE_SIGN', 'RC_KAK_WELL_RECTANGLE_SIGN', 'RC_KAK_SOUTHEAST_EXIT_ARROW_SIGN', 'RC_KAK_FRONT_GATE_ARROW_SIGN', 'RC_KAK_WONDER_UNDER_CONSTRUCTION', 'RC_KAK_WATCHTOWER_BUTTERFLY_FAIRY', 'RC_KAK_WONDER_ABOVE_COW', 'RC_KAK_SHOOTING_GALLERY_RECTANGLE_SIGN', 'RC_KAK_OPEN_GROTTO_GOSSIP_STONE', 'RC_KAK_OPEN_GROTTO_BUTTERFLY_FAIRY']
+# deferred locations (11): ['RC_KAK_SILVER_BOULDER', 'RC_KAK_ROCK_1', 'RC_KAK_ROCK_2', 'RC_KAK_GUARD_GATE_RECTANGLE_SIGN', 'RC_KAK_WELL_RECTANGLE_SIGN', 'RC_KAK_SOUTHEAST_EXIT_ARROW_SIGN', 'RC_KAK_FRONT_GATE_ARROW_SIGN', 'RC_KAK_WONDER_UNDER_CONSTRUCTION', 'RC_KAK_WONDER_ABOVE_COW', 'RC_KAK_SHOOTING_GALLERY_RECTANGLE_SIGN', 'RC_KAK_OPEN_GROTTO_GOSSIP_STONE']

@@ -93,6 +93,7 @@ class LocTag(IntFlag):
     Bee_Hive = auto()
     Carpenter_Reward = auto()
     Beggar = auto()
+    Butterfly_Fairy = auto()
     # no_logic = auto()
 
 class SohLocData(NamedTuple):
@@ -2575,6 +2576,30 @@ beggar_location_table: dict[str, SohLocData] = {
     Locations.KAK_BEGGAR_BLUE_FIRE:         SohLocData(2462, LocTag.Kakariko_Village | LocTag.Beggar),
 }
 
+# SoH 9.3.1 Shuffle Butterfly Fairies (ShuffleFairies.cpp, registration order); new IDs after the beggar (2462)
+fairies_butterfly_location_table: dict[str, SohLocData] = {
+    Locations.HC_NEAR_WALL_BUTTERFLY_FAIRY:                 SohLocData(2463, LocTag.Hyrule_Castle | LocTag.Butterfly_Fairy),
+    Locations.HC_NEAR_STAIRS_BUTTERFLY_FAIRY:               SohLocData(2464, LocTag.Hyrule_Castle | LocTag.Butterfly_Fairy),
+    Locations.HC_NEAR_BOULDER_PATH_BUTTERFLY_FAIRY:         SohLocData(2465, LocTag.Hyrule_Castle | LocTag.Butterfly_Fairy),
+    Locations.HC_NEAR_ARCHWAY_BUTTERFLY_FAIRY:              SohLocData(2466, LocTag.Hyrule_Castle | LocTag.Butterfly_Fairy),
+    Locations.LW_MEADOW_BUTTERFLY_FAIRY:                    SohLocData(2467, LocTag.Lost_Woods | LocTag.Butterfly_Fairy),
+    Locations.KAK_WATCHTOWER_BUTTERFLY_FAIRY:               SohLocData(2468, LocTag.Kakariko_Village | LocTag.Butterfly_Fairy),
+    Locations.GRAVEYARD_GRAVE_BUTTERFLY_FAIRY:              SohLocData(2469, LocTag.Graveyard | LocTag.Butterfly_Fairy),
+    Locations.ZR_NEAR_ROCK_CIRCLE_BUTTERFLY_FAIRY:          SohLocData(2470, LocTag.Zoras_River | LocTag.Butterfly_Fairy),
+    Locations.ZR_WATERFALL_BUTTERFLY_FAIRY:                 SohLocData(2471, LocTag.Zoras_River | LocTag.Butterfly_Fairy),
+    Locations.ZF_LOG_BUTTERFLY_FAIRY:                       SohLocData(2472, LocTag.Zoras_Fountain | LocTag.Butterfly_Fairy),
+    Locations.LH_SCARECROW_BUTTERFLY_FAIRY:                 SohLocData(2473, LocTag.Lake_Hylia | LocTag.Butterfly_Fairy),
+    Locations.KF_STORMS_GROTTO_BUTTERFLY_FAIRY:             SohLocData(2474, LocTag.Kokiri_Forest | LocTag.Grotto | LocTag.Butterfly_Fairy),
+    Locations.LW_TUNNEL_GROTTO_BUTTERFLY_FAIRY:             SohLocData(2475, LocTag.Lost_Woods | LocTag.Grotto | LocTag.Butterfly_Fairy),
+    Locations.DMT_STORMS_GROTTO_BUTTERFLY_FAIRY:            SohLocData(2476, LocTag.Death_Mountain_Trail | LocTag.Grotto | LocTag.Butterfly_Fairy),
+    Locations.DMC_UPPER_BOULDER_GROTTO_BUTTERFLY_FAIRY:     SohLocData(2477, LocTag.Death_Mountain_Crater | LocTag.Grotto | LocTag.Butterfly_Fairy),
+    Locations.HF_NEAR_MARKET_GROTTO_BUTTERFLY_FAIRY:        SohLocData(2478, LocTag.Hyrule_Field | LocTag.Grotto | LocTag.Butterfly_Fairy),
+    Locations.HF_SOUTHEAST_BOULDER_GROTTO_BUTTERFLY_FAIRY:  SohLocData(2479, LocTag.Hyrule_Field | LocTag.Grotto | LocTag.Butterfly_Fairy),
+    Locations.HF_OPEN_GROTTO_BUTTERFLY_FAIRY:               SohLocData(2480, LocTag.Hyrule_Field | LocTag.Grotto | LocTag.Butterfly_Fairy),
+    Locations.KAK_OPEN_GROTTO_BUTTERFLY_FAIRY:              SohLocData(2481, LocTag.Kakariko_Village | LocTag.Grotto | LocTag.Butterfly_Fairy),
+    Locations.ZR_OPEN_GROTTO_BUTTERFLY_FAIRY:               SohLocData(2482, LocTag.Zoras_River | LocTag.Grotto | LocTag.Butterfly_Fairy),
+}
+
 fish_pond_location_table: dict[str, SohLocData] = {
     Locations.LH_CHILD_POND_FISH1:         SohLocData(2345, LocTag.Lake_Hylia | LocTag.Pond_Fish),
     Locations.LH_CHILD_POND_FISH2:         SohLocData(2346, LocTag.Lake_Hylia | LocTag.Pond_Fish),
@@ -2684,6 +2709,7 @@ location_data_table: dict[str, SohLocData] = {
     **fairies_stone_location_table,
     **fairies_bean_location_table,
     **fairies_song_location_table,
+    **fairies_butterfly_location_table,
     **grass_overworld_location_table,
     **grass_dungeon_location_table,
     **tree_location_table,

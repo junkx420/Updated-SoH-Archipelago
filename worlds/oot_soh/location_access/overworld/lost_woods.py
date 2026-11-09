@@ -169,7 +169,8 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_cut_shrubs(bundle)),
         # DEFERRED RC_LW_BOULDER_BY_SACRED_FOREST_MEADOW: logic->BlastOrSmash()
         # DEFERRED RC_LW_RUPEE_BOULDER: logic->BlastOrSmash()
-        # DEFERRED RC_LW_MEADOW_BUTTERFLY_FAIRY: logic->IsChild && logic->CanUse(RG_STICKS)
+        (Locations.LW_MEADOW_BUTTERFLY_FAIRY,
+         lambda bundle: is_child(bundle) & can_use(Items.STICKS, bundle)),
     ])
     # Connections
     connect_regions(Regions.LW_BEYOND_MIDO, world, [
@@ -209,7 +210,8 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_cut_shrubs(bundle)),
         (Locations.LW_NEAR_SHORTCUTS_GROTTO_GRASS4,
          lambda bundle: can_cut_shrubs(bundle)),
-        # DEFERRED RC_LW_TUNNEL_GROTTO_BUTTERFLY_FAIRY: logic->CanUse(RG_STICKS)
+        (Locations.LW_TUNNEL_GROTTO_BUTTERFLY_FAIRY,
+         lambda bundle: can_use(Items.STICKS, bundle)),
     ])
     # Connections
     connect_regions(Regions.LW_NEAR_SHORTCUTS_GROTTO, world, [
@@ -282,4 +284,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (11): ['RC_LW_BOULDER_BY_GORON_CITY', 'RC_LW_WONDER_BACK_SKULL_KIDS_GRASS_1', 'RC_LW_WONDER_BACK_SKULL_KIDS_GRASS_2', 'RC_LW_WONDER_FRONT_SKULL_KIDS_GRASS', 'RC_LW_GOSSIP_STONE', 'RC_LW_BOULDER_BY_SACRED_FOREST_MEADOW', 'RC_LW_RUPEE_BOULDER', 'RC_LW_MEADOW_BUTTERFLY_FAIRY', 'RC_LW_NEAR_SHORTCUTS_GROTTO_GOSSIP_STONE', 'RC_LW_TUNNEL_GROTTO_BUTTERFLY_FAIRY', 'RC_LW_THEATER_RECTANGLE_SIGN']
+# deferred locations (9): ['RC_LW_BOULDER_BY_GORON_CITY', 'RC_LW_WONDER_BACK_SKULL_KIDS_GRASS_1', 'RC_LW_WONDER_BACK_SKULL_KIDS_GRASS_2', 'RC_LW_WONDER_FRONT_SKULL_KIDS_GRASS', 'RC_LW_GOSSIP_STONE', 'RC_LW_BOULDER_BY_SACRED_FOREST_MEADOW', 'RC_LW_RUPEE_BOULDER', 'RC_LW_NEAR_SHORTCUTS_GROTTO_GOSSIP_STONE', 'RC_LW_THEATER_RECTANGLE_SIGN']

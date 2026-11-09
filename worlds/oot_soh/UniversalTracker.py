@@ -86,6 +86,7 @@ def setup_options_from_slot_data(world: "SohWorld") -> None:
             world.options.shuffle_stone_fairies.value = world.passthrough["shuffle_stone_fairies"]
             world.options.shuffle_bean_fairies.value = world.passthrough["shuffle_bean_fairies"]
             world.options.shuffle_song_fairies.value = world.passthrough["shuffle_song_fairies"]
+            world.options.shuffle_butterfly_fairies.value = world.passthrough.get("shuffle_butterfly_fairies", 0)  # apworld 1.5+
             world.options.shuffle_grass.value = world.passthrough["shuffle_grass"]
             world.options.shuffle_dungeon_rewards.value = world.passthrough[
                 "shuffle_dungeon_rewards"]

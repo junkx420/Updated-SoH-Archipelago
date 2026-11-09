@@ -3684,6 +3684,27 @@ class Locations(StrEnum):
     KAK_BEGGAR_BUGS = "Kak Beggar Bugs"
     KAK_BEGGAR_FISH = "Kak Beggar Fish"
     KAK_BEGGAR_BLUE_FIRE = "Kak Beggar Blue Fire"
+    # Butterfly Fairies (SoH 9.3.1 ShuffleFairies.cpp)
+    HC_NEAR_WALL_BUTTERFLY_FAIRY = "HC Near Wall Butterfly Fairy"
+    HC_NEAR_STAIRS_BUTTERFLY_FAIRY = "HC Near Stairs Butterfly Fairy"
+    HC_NEAR_BOULDER_PATH_BUTTERFLY_FAIRY = "HC Near Boulder Path Butterfly Fairy"
+    HC_NEAR_ARCHWAY_BUTTERFLY_FAIRY = "HC Near Archway Butterfly Fairy"
+    LW_MEADOW_BUTTERFLY_FAIRY = "LW Meadow Butterfly Fairy"
+    KAK_WATCHTOWER_BUTTERFLY_FAIRY = "Kak Watchtower Butterfly Fairy"
+    GRAVEYARD_GRAVE_BUTTERFLY_FAIRY = "Graveyard Grave Butterfly Fairy"
+    ZR_NEAR_ROCK_CIRCLE_BUTTERFLY_FAIRY = "ZR Near Rock Circle Butterfly Fairy"
+    ZR_WATERFALL_BUTTERFLY_FAIRY = "ZR Waterfall Butterfly Fairy"
+    ZF_LOG_BUTTERFLY_FAIRY = "ZF Log Butterfly Fairy"
+    LH_SCARECROW_BUTTERFLY_FAIRY = "LH Scarecrow Butterfly Fairy"
+    KF_STORMS_GROTTO_BUTTERFLY_FAIRY = "KF Storms Grotto Butterfly Fairy"
+    LW_TUNNEL_GROTTO_BUTTERFLY_FAIRY = "LW Tunnel Grotto Butterfly Fairy"
+    DMT_STORMS_GROTTO_BUTTERFLY_FAIRY = "DMT Storms Grotto Butterfly Fairy"
+    DMC_UPPER_BOULDER_GROTTO_BUTTERFLY_FAIRY = "DMC Upper Boulder Grotto Butterfly Fairy"
+    HF_NEAR_MARKET_GROTTO_BUTTERFLY_FAIRY = "HF Near Market Grotto Butterfly Fairy"
+    HF_SOUTHEAST_BOULDER_GROTTO_BUTTERFLY_FAIRY = "HF Southeast Boulder Grotto Butterfly Fairy"
+    HF_OPEN_GROTTO_BUTTERFLY_FAIRY = "HF Open Grotto Butterfly Fairy"
+    KAK_OPEN_GROTTO_BUTTERFLY_FAIRY = "Kak Open Grotto Butterfly Fairy"
+    ZR_OPEN_GROTTO_BUTTERFLY_FAIRY = "ZR Open Grotto Butterfly Fairy"
 
 
 class Enemies(StrEnum):

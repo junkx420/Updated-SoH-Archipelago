@@ -54,7 +54,8 @@ def set_region_rules(world: "SohWorld") -> None:
         # DEFERRED RC_ZF_BUSH_4: logic->IsChild
         # DEFERRED RC_ZF_BUSH_5: logic->IsChild
         # DEFERRED RC_ZF_BUSH_6: logic->IsChild
-        # DEFERRED RC_ZF_LOG_BUTTERFLY_FAIRY: logic->IsChild && logic->AtDay && logic->CanUse(RG_STICKS)
+        (Locations.ZF_LOG_BUTTERFLY_FAIRY,
+         lambda bundle: is_child(bundle) & at_day(bundle) & can_use(Items.STICKS, bundle)),
         # DEFERRED RC_ZF_JABU_JABU_PLATFORM_RECTANGLE_SIGN: logic->IsChild && logic->CanRead()
         # DEFERRED RC_ZF_ENTRANCE_ARROW_SIGN: logic->CanRead()
         # DEFERRED RC_ZF_WONDER_ROCK: logic->IsAdult && logic->ReachScarecrow()
@@ -212,4 +213,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (15): ['RC_ZF_FAIRY_GOSSIP_STONE', 'RC_ZF_JABU_GOSSIP_STONE', 'RC_ZF_BOULDER', 'RC_ZF_SILVER_BOULDER', 'RC_ZF_UNDERGROUND_BOULDER', 'RC_ZF_BUSH_1', 'RC_ZF_BUSH_2', 'RC_ZF_BUSH_3', 'RC_ZF_BUSH_4', 'RC_ZF_BUSH_5', 'RC_ZF_BUSH_6', 'RC_ZF_LOG_BUTTERFLY_FAIRY', 'RC_ZF_JABU_JABU_PLATFORM_RECTANGLE_SIGN', 'RC_ZF_ENTRANCE_ARROW_SIGN', 'RC_ZF_WONDER_ROCK']
+# deferred locations (14): ['RC_ZF_FAIRY_GOSSIP_STONE', 'RC_ZF_JABU_GOSSIP_STONE', 'RC_ZF_BOULDER', 'RC_ZF_SILVER_BOULDER', 'RC_ZF_UNDERGROUND_BOULDER', 'RC_ZF_BUSH_1', 'RC_ZF_BUSH_2', 'RC_ZF_BUSH_3', 'RC_ZF_BUSH_4', 'RC_ZF_BUSH_5', 'RC_ZF_BUSH_6', 'RC_ZF_JABU_JABU_PLATFORM_RECTANGLE_SIGN', 'RC_ZF_ENTRANCE_ARROW_SIGN', 'RC_ZF_WONDER_ROCK']

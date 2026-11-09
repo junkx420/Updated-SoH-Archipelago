@@ -933,6 +933,14 @@ class ShuffleSongFairies(Toggle):
     display_name = "Shuffle Fairy Spots"
 
 
+class ShuffleButterflyFairies(Toggle):
+    """
+    Shuffle the fairies that appear when you swing a Deku Stick at a butterfly (Ship of Harkinian 9.3.1:
+    "Shuffle Butterfly Fairies"). 20 new locations, 9 of them in grottos.
+    """
+    display_name = "Shuffle Butterfly Fairies"
+
+
 class ShuffleGrass(Choice):
     """
     Grass/Bushes will drop a randomized item the first time they're cut and collected.
@@ -2380,6 +2388,7 @@ class SohOptions(PerGameCommonOptions):
     shuffle_stone_fairies: ShuffleStoneFairies
     shuffle_bean_fairies: ShuffleBeanFairies
     shuffle_song_fairies: ShuffleSongFairies
+    shuffle_butterfly_fairies: ShuffleButterflyFairies
     shuffle_grass: ShuffleGrass
     shuffle_dungeon_rewards: ShuffleDungeonRewards
     maps_and_compasses: MapsAndCompasses
@@ -2898,6 +2907,7 @@ soh_option_groups = [
         ShuffleStoneFairies,
         ShuffleBeanFairies,
         ShuffleSongFairies,
+        ShuffleButterflyFairies,
         ShuffleGrass,
     ]),
     OptionGroup("Shuffle Dungeon Items", [

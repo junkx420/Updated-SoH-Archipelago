@@ -171,7 +171,8 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_cut_shrubs(bundle) | summon_epona(bundle)),
         (Locations.LH_WARP_PAD_GRASS_2,
          lambda bundle: can_cut_shrubs(bundle) | summon_epona(bundle)),
-        # DEFERRED RC_LH_SCARECROW_BUTTERFLY_FAIRY: logic->IsChild && logic->CanUse(RG_STICKS)
+        (Locations.LH_SCARECROW_BUTTERFLY_FAIRY,
+         lambda bundle: is_child(bundle) & can_use(Items.STICKS, bundle)),
         # DEFERRED RC_LH_LAB_RECTANGLE_SIGN: logic->CanRead()
         # DEFERRED RC_LH_NORTH_EXIT_ARROW_SIGN: logic->CanRead()
         # DEFERRED RC_LH_ISLAND_PEDESTAL: logic->CanRead()
@@ -405,4 +406,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (13): ['RC_LH_SCARECROWS_SONG', 'RC_LH_LAB_GOSSIP_STONE', 'RC_LH_SOUTHEAST_GOSSIP_STONE', 'RC_LH_SOUTHWEST_GOSSIP_STONE', 'RC_LH_SCARECROW_BUTTERFLY_FAIRY', 'RC_LH_LAB_RECTANGLE_SIGN', 'RC_LH_NORTH_EXIT_ARROW_SIGN', 'RC_LH_ISLAND_PEDESTAL', 'RC_LH_WATER_SWITCH_SIGN', 'RC_LH_ROCK', 'RC_LH_FISHING_SIGN', 'RC_LH_FISHING_ISLAND_WATER_SWITCH_SIGN', 'RC_LH_FISHING_POND_RECTANGLE_SIGN']
+# deferred locations (12): ['RC_LH_SCARECROWS_SONG', 'RC_LH_LAB_GOSSIP_STONE', 'RC_LH_SOUTHEAST_GOSSIP_STONE', 'RC_LH_SOUTHWEST_GOSSIP_STONE', 'RC_LH_LAB_RECTANGLE_SIGN', 'RC_LH_NORTH_EXIT_ARROW_SIGN', 'RC_LH_ISLAND_PEDESTAL', 'RC_LH_WATER_SWITCH_SIGN', 'RC_LH_ROCK', 'RC_LH_FISHING_SIGN', 'RC_LH_FISHING_ISLAND_WATER_SWITCH_SIGN', 'RC_LH_FISHING_POND_RECTANGLE_SIGN']
