@@ -19,9 +19,11 @@
 #include "soh/Enhancements/randomizer/randomizer_check_tracker.h"
 #include "soh/Enhancements/randomizer/randomizer.h"
 #include "soh/Enhancements/randomizer/trial.h"
+#include "soh/Enhancements/randomizer/randomizerEnumStrings.h"
 
 #include <algorithm>
 #include <vector>
+#include <unordered_map>
 
 #include <fstream>
 #include <spdlog/spdlog.h>
@@ -1021,10 +1023,33 @@ void Context::ParseArchipelagoTricks() {
         nlohmann::json enabledTricksJson = slotData["tricks_in_logic"];
         const auto& settings = Rando::Settings::GetInstance();
 
+        // apworld 1.5+ sends the trick's enum name ("RT_LW_BRIDGE"), which doesn't depend on the UI language.
+        // Older apworlds sent display names; those still go through the (translated) name lookup.
+        static std::unordered_map<std::string, int> trickByEnumName;
+        if (trickByEnumName.empty()) {
+            for (int i = 0; i < RT_MAX; i++) {
+                std::string_view name = EnumToString(static_cast<RandomizerTrick>(i));
+                if (!name.empty()) {
+                    trickByEnumName.emplace(std::string(name), i);
+                }
+            }
+        }
+
         for (auto it : enabledTricksJson) {
-            int rt = settings->GetRandomizerTrickByName(it);
+            if (!it.is_string()) {
+                continue;
+            }
+            const std::string trickName = it.get<std::string>();
+            int rt = -1;
+            if (const auto found = trickByEnumName.find(trickName); found != trickByEnumName.end()) {
+                rt = found->second;
+            } else {
+                rt = settings->GetRandomizerTrickByName(trickName);
+            }
             if (rt != -1) {
                 mTrickOptions[rt].Set(RO_GENERIC_ON);
+            } else {
+                SPDLOG_WARN("Archipelago: unknown trick in slot data: {}", trickName);
             }
         }
     } else {
