@@ -172,12 +172,18 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: is_child(bundle) & can_read(bundle)),
         (Locations.KF_KNOW_IT_ALL_BROTHERS_HOUSE_ARROW_SIGN,
          lambda bundle: can_read(bundle)),
-        # DEFERRED RC_KF_WONDER_TRAINING_1: logic->IsChild
-        # DEFERRED RC_KF_WONDER_TRAINING_2: logic->IsChild
-        # DEFERRED RC_KF_WONDER_TRAINING_3: logic->IsChild
-        # DEFERRED RC_KF_WONDER_SIGN: logic->IsChild && logic->CanJumpslashExceptHammer()
-        # DEFERRED RC_KF_WONDER_PLATFORMS_1: logic->IsChild
-        # DEFERRED RC_KF_WONDER_PLATFORMS_2: logic->IsChild
+        (Locations.KF_WONDER_TRAINING_1,
+         lambda bundle: is_child(bundle)),
+        (Locations.KF_WONDER_TRAINING_2,
+         lambda bundle: is_child(bundle)),
+        (Locations.KF_WONDER_TRAINING_3,
+         lambda bundle: is_child(bundle)),
+        (Locations.KF_WONDER_SIGN,
+         lambda bundle: is_child(bundle) & can_jump_slash_except_hammer(bundle)),
+        (Locations.KF_WONDER_PLATFORMS_1,
+         lambda bundle: is_child(bundle)),
+        (Locations.KF_WONDER_PLATFORMS_2,
+         lambda bundle: is_child(bundle)),
         # DEFERRED RC_MIDO_HINT: !ctx->GetOption(RSK_FOREST).Is(RO_CLOSED_FOREST_OFF) && logic->IsChild && logic->HasItem(RG_SPEAK_KOKIRI)
     ])
     # Connections
@@ -291,8 +297,10 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: is_child(bundle) & can_read(bundle)),
         (Locations.KF_BOULDER_MAZE_RECTANGLE_SIGN,
          lambda bundle: is_child(bundle) & can_read(bundle)),
-        # DEFERRED RC_KF_WONDER_CRAWL_GRASS_1: logic->IsChild
-        # DEFERRED RC_KF_WONDER_CRAWL_GRASS_2: logic->IsChild
+        (Locations.KF_WONDER_CRAWL_GRASS_1,
+         lambda bundle: is_child(bundle)),
+        (Locations.KF_WONDER_CRAWL_GRASS_2,
+         lambda bundle: is_child(bundle)),
     ])
     # Connections
     connect_regions(Regions.KF_BOULDER_LOOP, world, [
@@ -442,7 +450,8 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: has_speak(bundle, "KOKIRI") & can_afford_slot(Locations.KF_SHOP_ITEM7, bundle)),
         (Locations.KF_SHOP_ITEM8,
          lambda bundle: has_speak(bundle, "KOKIRI") & can_afford_slot(Locations.KF_SHOP_ITEM8, bundle)),
-        # DEFERRED RC_KF_WONDER_SHOP: true
+        (Locations.KF_WONDER_SHOP,
+         lambda bundle: True_()),
     ])
     # Connections
     connect_regions(Regions.KF_KOKIRI_SHOP, world, [
@@ -492,4 +501,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (27): ['RC_KF_CIRCLE_ROCK_1', 'RC_KF_CIRCLE_ROCK_2', 'RC_KF_CIRCLE_ROCK_3', 'RC_KF_CIRCLE_ROCK_4', 'RC_KF_CIRCLE_ROCK_5', 'RC_KF_CIRCLE_ROCK_6', 'RC_KF_CIRCLE_ROCK_7', 'RC_KF_CIRCLE_ROCK_8', 'RC_KF_ROCK_BY_SARIAS_HOUSE', 'RC_KF_ROCK_BEHIND_SARIAS_HOUSE', 'RC_KF_ROCK_BY_MIDOS_HOUSE', 'RC_KF_ROCK_BY_KNOW_IT_ALLS_HOUSE', 'RC_KF_WONDER_TRAINING_1', 'RC_KF_WONDER_TRAINING_2', 'RC_KF_WONDER_TRAINING_3', 'RC_KF_WONDER_SIGN', 'RC_KF_WONDER_PLATFORMS_1', 'RC_KF_WONDER_PLATFORMS_2', 'RC_MIDO_HINT', 'RC_KF_GOSSIP_STONE', 'RC_KF_WONDER_CRAWL_GRASS_1', 'RC_KF_WONDER_CRAWL_GRASS_2', 'RC_KF_DEKU_TREE_LEFT_GOSSIP_STONE', 'RC_KF_DEKU_TREE_RIGHT_GOSSIP_STONE', 'RC_MIDO_HINT', 'RC_KF_WONDER_SHOP', 'RC_KF_STORMS_GROTTO_GOSSIP_STONE']
+# deferred locations (18): ['RC_KF_CIRCLE_ROCK_1', 'RC_KF_CIRCLE_ROCK_2', 'RC_KF_CIRCLE_ROCK_3', 'RC_KF_CIRCLE_ROCK_4', 'RC_KF_CIRCLE_ROCK_5', 'RC_KF_CIRCLE_ROCK_6', 'RC_KF_CIRCLE_ROCK_7', 'RC_KF_CIRCLE_ROCK_8', 'RC_KF_ROCK_BY_SARIAS_HOUSE', 'RC_KF_ROCK_BEHIND_SARIAS_HOUSE', 'RC_KF_ROCK_BY_MIDOS_HOUSE', 'RC_KF_ROCK_BY_KNOW_IT_ALLS_HOUSE', 'RC_MIDO_HINT', 'RC_KF_GOSSIP_STONE', 'RC_KF_DEKU_TREE_LEFT_GOSSIP_STONE', 'RC_KF_DEKU_TREE_RIGHT_GOSSIP_STONE', 'RC_MIDO_HINT', 'RC_KF_STORMS_GROTTO_GOSSIP_STONE']

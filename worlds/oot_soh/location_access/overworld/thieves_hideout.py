@@ -40,8 +40,10 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_break_pots(bundle)),
         (Locations.TH_1_TORCH_CELL_CRATE,
          lambda bundle: can_break_crates(bundle)),
-        # DEFERRED RC_TH_WONDER_1_TORCH_1: logic->CanUse(RG_FAIRY_BOW)
-        # DEFERRED RC_TH_WONDER_1_TORCH_2: logic->CanUse(RG_FAIRY_BOW)
+        (Locations.TH_WONDER_1_TORCH_1,
+         lambda bundle: can_use(Items.FAIRY_BOW, bundle)),
+        (Locations.TH_WONDER_1_TORCH_2,
+         lambda bundle: can_use(Items.FAIRY_BOW, bundle)),
         (Locations.GF_GERUDO_MEMBERSHIP_CARD,
          lambda bundle: has_item(Events.TH_RESCUED_ALL_CARPENTERS, bundle)),
     ])
@@ -83,8 +85,10 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_break_crates(bundle)),
         (Locations.TH_DOUBLE_CELL_RIGHT_CRATE,
          lambda bundle: can_break_crates(bundle)),
-        # DEFERRED RC_TH_WONDER_DOUBLE_JAIL_LOWER_EXIT: logic->CanUse(RG_FAIRY_BOW)
-        # DEFERRED RC_TH_WONDER_DOUBLE_JAIL_UPPER_EXIT: logic->CanUse(RG_FAIRY_BOW)
+        (Locations.TH_WONDER_DOUBLE_JAIL_LOWER_EXIT,
+         lambda bundle: can_use(Items.FAIRY_BOW, bundle)),
+        (Locations.TH_WONDER_DOUBLE_JAIL_UPPER_EXIT,
+         lambda bundle: can_use(Items.FAIRY_BOW, bundle)),
         (Locations.GF_GERUDO_MEMBERSHIP_CARD,
          lambda bundle: has_item(Events.TH_RESCUED_ALL_CARPENTERS, bundle)),
     ])
@@ -112,8 +116,10 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: has_item(Events.TH_COULD_FREE_DEAD_END_CARPENTER, bundle)),
         (Locations.TH_DEAD_END_CELL_CRATE,
          lambda bundle: can_break_crates(bundle)),
-        # DEFERRED RC_TH_WONDER_DEAD_END_SKULL_ENTRANCE: logic->CanUse(RG_FAIRY_BOW)
-        # DEFERRED RC_TH_WONDER_DEAD_END_SKULL_NEAR_JAIL: logic->CanUse(RG_FAIRY_BOW)
+        (Locations.TH_WONDER_DEAD_END_SKULL_ENTRANCE,
+         lambda bundle: can_use(Items.FAIRY_BOW, bundle)),
+        (Locations.TH_WONDER_DEAD_END_SKULL_NEAR_JAIL,
+         lambda bundle: can_use(Items.FAIRY_BOW, bundle)),
         (Locations.GF_GERUDO_MEMBERSHIP_CARD,
          lambda bundle: has_item(Events.TH_RESCUED_ALL_CARPENTERS, bundle)),
     ])
@@ -139,8 +145,10 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_break_pots(bundle)),
         (Locations.TH_STEEP_SLOPE_LEFT_POT,
          lambda bundle: can_break_pots(bundle)),
-        # DEFERRED RC_TH_WONDER_STEEP_SLOPE_LOWER_EXIT: logic->CanUse(RG_FAIRY_BOW)
-        # DEFERRED RC_TH_WONDER_STEEP_SLOPE_UPPER_EXIT: logic->CanUse(RG_FAIRY_BOW)
+        (Locations.TH_WONDER_STEEP_SLOPE_LOWER_EXIT,
+         lambda bundle: can_use(Items.FAIRY_BOW, bundle)),
+        (Locations.TH_WONDER_STEEP_SLOPE_UPPER_EXIT,
+         lambda bundle: can_use(Items.FAIRY_BOW, bundle)),
         (Locations.GF_GERUDO_MEMBERSHIP_CARD,
          lambda bundle: has_item(Events.TH_RESCUED_ALL_CARPENTERS, bundle)),
     ])
@@ -185,8 +193,10 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_break_crates(bundle) & can_pass_enemy(bundle, Enemies.GERUDO_GUARD)),
         (Locations.TH_KITCHEN_SUN_FAIRY,
          lambda bundle: can_pass_enemy(bundle, Enemies.GERUDO_GUARD) & can_use(Items.SUNS_SONG, bundle)),
-        # DEFERRED RC_TH_WONDER_KITCHEN_SKULL: logic->CanUse(RG_FAIRY_BOW)
-        # DEFERRED RC_TH_WONDER_KITCHEN_SOUP: (logic->TakeDamage() || logic->IsAdult || logic->CanUse(RG_GORON_TUNIC)) && logic->CanPassEnemy(RE_GERUDO_GUARD)
+        (Locations.TH_WONDER_KITCHEN_SKULL,
+         lambda bundle: can_use(Items.FAIRY_BOW, bundle)),
+        (Locations.TH_WONDER_KITCHEN_SOUP,
+         lambda bundle: (take_damage(bundle) | is_adult(bundle) | can_use(Items.GORON_TUNIC, bundle)) & can_pass_enemy(bundle, Enemies.GERUDO_GUARD)),
     ])
     # Connections
     connect_regions(Regions.TH_KITCHEN_MAIN, world, [
@@ -205,7 +215,8 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_use(Items.BOOMERANG, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_break_pots(bundle, EnemyDistance.BOMB_THROW))),
         (Locations.TH_KITCHEN_POT2,
          lambda bundle: can_use(Items.BOOMERANG, bundle)),
-        # DEFERRED RC_TH_WONDER_KITCHEN_SOUP: ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->BunnyHovers()
+        (Locations.TH_WONDER_KITCHEN_SOUP,
+         lambda bundle: can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & bunny_hovers(bundle)),
     ])
     # Connections
     connect_regions(Regions.TH_KITCHEN_BY_CORRIDOR, world, [
@@ -224,7 +235,8 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_use(Items.BOOMERANG, bundle)),
         (Locations.TH_KITCHEN_POT2,
          lambda bundle: can_use(Items.BOOMERANG, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_break_pots(bundle, EnemyDistance.BOMB_THROW))),
-        # DEFERRED RC_TH_WONDER_KITCHEN_SOUP: ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->BunnyHovers()
+        (Locations.TH_WONDER_KITCHEN_SOUP,
+         lambda bundle: can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & bunny_hovers(bundle)),
     ])
     # Connections
     connect_regions(Regions.TH_KITCHEN_OPPOSITE_CORRIDOR, world, [
@@ -263,7 +275,8 @@ def set_region_rules(world: "SohWorld") -> None:
     # Thieves Hideout Break Room Lower Corridor  (upstream RR_TH_BREAK_ROOM_LOWER_CORRIDOR, SCENE_THIEVES_HIDEOUT)
     # Locations
     add_locations(Regions.TH_BREAK_ROOM_LOWER_CORRIDOR, world, [
-        # DEFERRED RC_TH_WONDER_BREAK_ROOM_BOTTOM_SKULL: logic->CanUse(RG_FAIRY_BOW)
+        (Locations.TH_WONDER_BREAK_ROOM_BOTTOM_SKULL,
+         lambda bundle: can_use(Items.FAIRY_BOW, bundle)),
     ])
     # Connections
     connect_regions(Regions.TH_BREAK_ROOM_LOWER_CORRIDOR, world, [
@@ -276,7 +289,8 @@ def set_region_rules(world: "SohWorld") -> None:
     # Thieves Hideout Break Room Upper Corridor  (upstream RR_TH_BREAK_ROOM_UPPER_CORRIDOR, SCENE_THIEVES_HIDEOUT)
     # Locations
     add_locations(Regions.TH_BREAK_ROOM_UPPER_CORRIDOR, world, [
-        # DEFERRED RC_TH_WONDER_BREAK_ROOM_TOP_SKULL: logic->CanUse(RG_FAIRY_BOW)
+        (Locations.TH_WONDER_BREAK_ROOM_TOP_SKULL,
+         lambda bundle: can_use(Items.FAIRY_BOW, bundle)),
     ])
     # Connections
     connect_regions(Regions.TH_BREAK_ROOM_UPPER_CORRIDOR, world, [
@@ -295,4 +309,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (14): ['RC_TH_WONDER_1_TORCH_1', 'RC_TH_WONDER_1_TORCH_2', 'RC_TH_WONDER_DOUBLE_JAIL_LOWER_EXIT', 'RC_TH_WONDER_DOUBLE_JAIL_UPPER_EXIT', 'RC_TH_WONDER_DEAD_END_SKULL_ENTRANCE', 'RC_TH_WONDER_DEAD_END_SKULL_NEAR_JAIL', 'RC_TH_WONDER_STEEP_SLOPE_LOWER_EXIT', 'RC_TH_WONDER_STEEP_SLOPE_UPPER_EXIT', 'RC_TH_WONDER_KITCHEN_SKULL', 'RC_TH_WONDER_KITCHEN_SOUP', 'RC_TH_WONDER_KITCHEN_SOUP', 'RC_TH_WONDER_KITCHEN_SOUP', 'RC_TH_WONDER_BREAK_ROOM_BOTTOM_SKULL', 'RC_TH_WONDER_BREAK_ROOM_TOP_SKULL']
+# deferred locations (0): []

@@ -71,10 +71,14 @@ def set_region_rules(world: "SohWorld") -> None:
         # DEFERRED RC_ZR_BOULDER_4: logic->IsChild && logic->BlastOrSmash()
         (Locations.ZR_TREE,
          lambda bundle: is_child(bundle) & can_bonk_trees(bundle)),
-        # DEFERRED RC_ZR_WONDER_LOWER_RIVER_1: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_LOWER_RIVER_2: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_LOWER_RIVER_3: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_LOWER_RIVER_4: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
+        (Locations.ZR_WONDER_LOWER_RIVER_1,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_LOWER_RIVER_2,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_LOWER_RIVER_3,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_LOWER_RIVER_4,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
     ])
     # Connections
     connect_regions(Regions.ZR_FRONT, world, [
@@ -163,33 +167,60 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: is_child(bundle) & can_use(Items.STICKS, bundle)),
         (Locations.ZR_SLEEPLESS_WATERFALL_PLAQUE,
          lambda bundle: can_read(bundle)),
-        # DEFERRED RC_ZR_WONDER_NEAR_DOMAIN_1: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_NEAR_DOMAIN_2: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_NEAR_DOMAIN_3: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_NEAR_DOMAIN_4: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_BEFORE_LADDER_1: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_BEFORE_LADDER_2: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_BEFORE_LADDER_3: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_BEFORE_LADDER_4: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_BEFORE_LADDER_5: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_BEFORE_LADDER_6: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_AFTER_LADDER_1: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_AFTER_LADDER_2: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_AFTER_LADDER_3: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_FROG_BRIDGE_1: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_FROG_BRIDGE_2: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_FROG_BRIDGE_3: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_PILLARS_1: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_PILLARS_2: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_PILLARS_3: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_PILLARS_4: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_LOWER_LAND_BRIDGE_1: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_LOWER_LAND_BRIDGE_2: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_LOWER_LAND_BRIDGE_3: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_LOWER_LAND_BRIDGE_4: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_NEAR_CUCCO_1: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_NEAR_CUCCO_2: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_WONDER_NEAR_CUCCO_3: logic->IsChild && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
+        (Locations.ZR_WONDER_NEAR_DOMAIN_1,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_NEAR_DOMAIN_2,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_NEAR_DOMAIN_3,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_NEAR_DOMAIN_4,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_BEFORE_LADDER_1,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_BEFORE_LADDER_2,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_BEFORE_LADDER_3,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_BEFORE_LADDER_4,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_BEFORE_LADDER_5,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_BEFORE_LADDER_6,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_AFTER_LADDER_1,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_AFTER_LADDER_2,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_AFTER_LADDER_3,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_FROG_BRIDGE_1,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_FROG_BRIDGE_2,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_FROG_BRIDGE_3,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_PILLARS_1,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_PILLARS_2,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_PILLARS_3,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_PILLARS_4,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_LOWER_LAND_BRIDGE_1,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_LOWER_LAND_BRIDGE_2,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_LOWER_LAND_BRIDGE_3,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_LOWER_LAND_BRIDGE_4,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_NEAR_CUCCO_1,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_NEAR_CUCCO_2,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_WONDER_NEAR_CUCCO_3,
+         lambda bundle: is_child(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
         # DEFERRED RC_ZR_NEAR_DOMAIN_GOSSIP_STONE: true
     ])
     # Connections
@@ -393,4 +424,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (60): ['RC_ZR_BOULDER_1', 'RC_ZR_BOULDER_2', 'RC_ZR_BOULDER_3', 'RC_ZR_BOULDER_4', 'RC_ZR_WONDER_LOWER_RIVER_1', 'RC_ZR_WONDER_LOWER_RIVER_2', 'RC_ZR_WONDER_LOWER_RIVER_3', 'RC_ZR_WONDER_LOWER_RIVER_4', 'RC_ZR_CIRCLE_ROCK_1', 'RC_ZR_CIRCLE_ROCK_2', 'RC_ZR_CIRCLE_ROCK_3', 'RC_ZR_CIRCLE_ROCK_4', 'RC_ZR_CIRCLE_ROCK_5', 'RC_ZR_CIRCLE_ROCK_6', 'RC_ZR_CIRCLE_ROCK_7', 'RC_ZR_CIRCLE_ROCK_8', 'RC_ZR_ROCK', 'RC_ZR_UNDERWATER_ROCK_1', 'RC_ZR_UNDERWATER_ROCK_2', 'RC_ZR_UNDERWATER_ROCK_3', 'RC_ZR_UNDERWATER_ROCK_4', 'RC_ZR_WONDER_NEAR_DOMAIN_1', 'RC_ZR_WONDER_NEAR_DOMAIN_2', 'RC_ZR_WONDER_NEAR_DOMAIN_3', 'RC_ZR_WONDER_NEAR_DOMAIN_4', 'RC_ZR_WONDER_BEFORE_LADDER_1', 'RC_ZR_WONDER_BEFORE_LADDER_2', 'RC_ZR_WONDER_BEFORE_LADDER_3', 'RC_ZR_WONDER_BEFORE_LADDER_4', 'RC_ZR_WONDER_BEFORE_LADDER_5', 'RC_ZR_WONDER_BEFORE_LADDER_6', 'RC_ZR_WONDER_AFTER_LADDER_1', 'RC_ZR_WONDER_AFTER_LADDER_2', 'RC_ZR_WONDER_AFTER_LADDER_3', 'RC_ZR_WONDER_FROG_BRIDGE_1', 'RC_ZR_WONDER_FROG_BRIDGE_2', 'RC_ZR_WONDER_FROG_BRIDGE_3', 'RC_ZR_WONDER_PILLARS_1', 'RC_ZR_WONDER_PILLARS_2', 'RC_ZR_WONDER_PILLARS_3']
+# deferred locations (29): ['RC_ZR_BOULDER_1', 'RC_ZR_BOULDER_2', 'RC_ZR_BOULDER_3', 'RC_ZR_BOULDER_4', 'RC_ZR_CIRCLE_ROCK_1', 'RC_ZR_CIRCLE_ROCK_2', 'RC_ZR_CIRCLE_ROCK_3', 'RC_ZR_CIRCLE_ROCK_4', 'RC_ZR_CIRCLE_ROCK_5', 'RC_ZR_CIRCLE_ROCK_6', 'RC_ZR_CIRCLE_ROCK_7', 'RC_ZR_CIRCLE_ROCK_8', 'RC_ZR_ROCK', 'RC_ZR_UNDERWATER_ROCK_1', 'RC_ZR_UNDERWATER_ROCK_2', 'RC_ZR_UNDERWATER_ROCK_3', 'RC_ZR_UNDERWATER_ROCK_4', 'RC_ZR_NEAR_DOMAIN_GOSSIP_STONE', 'RC_ZR_UPPER_CIRCLE_BOULDER', 'RC_ZR_UPPER_CIRCLE_ROCK_1', 'RC_ZR_UPPER_CIRCLE_ROCK_2', 'RC_ZR_UPPER_CIRCLE_ROCK_3', 'RC_ZR_UPPER_CIRCLE_ROCK_4', 'RC_ZR_UPPER_CIRCLE_ROCK_5', 'RC_ZR_UPPER_CIRCLE_ROCK_6', 'RC_ZR_UPPER_CIRCLE_ROCK_7', 'RC_ZR_UPPER_CIRCLE_ROCK_8', 'RC_ZR_NEAR_GROTTOS_GOSSIP_STONE', 'RC_ZR_OPEN_GROTTO_GOSSIP_STONE']

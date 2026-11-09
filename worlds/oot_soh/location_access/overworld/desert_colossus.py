@@ -71,11 +71,16 @@ def set_region_rules(world: "SohWorld") -> None:
         # DEFERRED RC_COLOSSUS_CIRCLE_2_ROCK_6: logic->CanBreakRocks()
         # DEFERRED RC_COLOSSUS_CIRCLE_2_ROCK_7: logic->CanBreakRocks()
         # DEFERRED RC_COLOSSUS_CIRCLE_2_ROCK_8: logic->CanBreakRocks()
-        # DEFERRED RC_COLOSSUS_WONDER_OASIS_TREE_1: (logic->IsAdult && logic->CanUse(RG_FAIRY_BOW)) || (logic->IsChild && logic->CanUse(RG_FAIRY_SLINGSHOT))
-        # DEFERRED RC_COLOSSUS_WONDER_OASIS_TREE_2: (logic->IsAdult && logic->CanUse(RG_FAIRY_BOW)) || (logic->IsChild && logic->CanUse(RG_FAIRY_SLINGSHOT))
-        # DEFERRED RC_COLOSSUS_WONDER_OASIS_CHILD_TREE: logic->IsChild && logic->CanUse(RG_FAIRY_SLINGSHOT)
-        # DEFERRED RC_COLOSSUS_WONDER_GF_TREE_1: (logic->IsAdult && logic->CanUse(RG_FAIRY_BOW)) || (logic->IsChild && logic->CanUse(RG_FAIRY_SLINGSHOT))
-        # DEFERRED RC_COLOSSUS_WONDER_GF_TREE_2: (logic->IsAdult && logic->CanUse(RG_FAIRY_BOW)) || (logic->IsChild && logic->CanUse(RG_FAIRY_SLINGSHOT))
+        (Locations.COLOSSUS_WONDER_OASIS_TREE_1,
+         lambda bundle: (is_adult(bundle) & can_use(Items.FAIRY_BOW, bundle)) | (is_child(bundle) & can_use(Items.FAIRY_SLINGSHOT, bundle))),
+        (Locations.COLOSSUS_WONDER_OASIS_TREE_2,
+         lambda bundle: (is_adult(bundle) & can_use(Items.FAIRY_BOW, bundle)) | (is_child(bundle) & can_use(Items.FAIRY_SLINGSHOT, bundle))),
+        (Locations.COLOSSUS_WONDER_OASIS_CHILD_TREE,
+         lambda bundle: is_child(bundle) & can_use(Items.FAIRY_SLINGSHOT, bundle)),
+        (Locations.COLOSSUS_WONDER_GF_TREE_1,
+         lambda bundle: (is_adult(bundle) & can_use(Items.FAIRY_BOW, bundle)) | (is_child(bundle) & can_use(Items.FAIRY_SLINGSHOT, bundle))),
+        (Locations.COLOSSUS_WONDER_GF_TREE_2,
+         lambda bundle: (is_adult(bundle) & can_use(Items.FAIRY_BOW, bundle)) | (is_child(bundle) & can_use(Items.FAIRY_SLINGSHOT, bundle))),
         # DEFERRED RC_COLOSSUS_GOSSIP_STONE: true
     ])
     # Connections
@@ -183,4 +188,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (24): ['RC_COLOSSUS_SILVER_BOULDER', 'RC_COLOSSUS_ROCK', 'RC_COLOSSUS_CIRCLE_1_ROCK_1', 'RC_COLOSSUS_CIRCLE_1_ROCK_2', 'RC_COLOSSUS_CIRCLE_1_ROCK_3', 'RC_COLOSSUS_CIRCLE_1_ROCK_4', 'RC_COLOSSUS_CIRCLE_1_ROCK_5', 'RC_COLOSSUS_CIRCLE_1_ROCK_6', 'RC_COLOSSUS_CIRCLE_1_ROCK_7', 'RC_COLOSSUS_CIRCLE_1_ROCK_8', 'RC_COLOSSUS_CIRCLE_2_ROCK_1', 'RC_COLOSSUS_CIRCLE_2_ROCK_2', 'RC_COLOSSUS_CIRCLE_2_ROCK_3', 'RC_COLOSSUS_CIRCLE_2_ROCK_4', 'RC_COLOSSUS_CIRCLE_2_ROCK_5', 'RC_COLOSSUS_CIRCLE_2_ROCK_6', 'RC_COLOSSUS_CIRCLE_2_ROCK_7', 'RC_COLOSSUS_CIRCLE_2_ROCK_8', 'RC_COLOSSUS_WONDER_OASIS_TREE_1', 'RC_COLOSSUS_WONDER_OASIS_TREE_2', 'RC_COLOSSUS_WONDER_OASIS_CHILD_TREE', 'RC_COLOSSUS_WONDER_GF_TREE_1', 'RC_COLOSSUS_WONDER_GF_TREE_2', 'RC_COLOSSUS_GOSSIP_STONE']
+# deferred locations (19): ['RC_COLOSSUS_SILVER_BOULDER', 'RC_COLOSSUS_ROCK', 'RC_COLOSSUS_CIRCLE_1_ROCK_1', 'RC_COLOSSUS_CIRCLE_1_ROCK_2', 'RC_COLOSSUS_CIRCLE_1_ROCK_3', 'RC_COLOSSUS_CIRCLE_1_ROCK_4', 'RC_COLOSSUS_CIRCLE_1_ROCK_5', 'RC_COLOSSUS_CIRCLE_1_ROCK_6', 'RC_COLOSSUS_CIRCLE_1_ROCK_7', 'RC_COLOSSUS_CIRCLE_1_ROCK_8', 'RC_COLOSSUS_CIRCLE_2_ROCK_1', 'RC_COLOSSUS_CIRCLE_2_ROCK_2', 'RC_COLOSSUS_CIRCLE_2_ROCK_3', 'RC_COLOSSUS_CIRCLE_2_ROCK_4', 'RC_COLOSSUS_CIRCLE_2_ROCK_5', 'RC_COLOSSUS_CIRCLE_2_ROCK_6', 'RC_COLOSSUS_CIRCLE_2_ROCK_7', 'RC_COLOSSUS_CIRCLE_2_ROCK_8', 'RC_COLOSSUS_GOSSIP_STONE']

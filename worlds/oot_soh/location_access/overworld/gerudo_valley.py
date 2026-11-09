@@ -111,8 +111,10 @@ def set_region_rules(world: "SohWorld") -> None:
         # DEFERRED RC_GV_GOSSIP_STONE: true
         (Locations.GV_NEAR_COW_CRATE,
          lambda bundle: is_child(bundle) & can_break_crates(bundle)),
-        # DEFERRED RC_GV_WONDER_LOWER_WATERFALL: logic->IsAdult && (logic->BeanPlanted(LOGIC_PLANT_GERUDO_VALLEY_BEAN) || logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_GV_WONDER_UPPER_WATERFALL: logic->IsAdult && logic->BeanPlanted(LOGIC_PLANT_GERUDO_VALLEY_BEAN)
+        (Locations.GV_WONDER_LOWER_WATERFALL,
+         lambda bundle: is_adult(bundle) & (bean_planted(bundle, Events.PLANT_GERUDO_VALLEY_BEAN) | has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.GV_WONDER_UPPER_WATERFALL,
+         lambda bundle: is_adult(bundle) & bean_planted(bundle, Events.PLANT_GERUDO_VALLEY_BEAN)),
     ])
     # Connections
     connect_regions(Regions.GV_UPPER_STREAM, world, [
@@ -166,7 +168,8 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.GV_WATERFALL_ALCOVE, world, [
         (Locations.GV_WATERFALL_FREESTANDING_POH,
          lambda bundle: True_()),
-        # DEFERRED RC_GV_WONDER_UPPER_WATERFALL: logic->IsAdult && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
+        (Locations.GV_WONDER_UPPER_WATERFALL,
+         lambda bundle: is_adult(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
     ])
     # Connections
     connect_regions(Regions.GV_WATERFALL_ALCOVE, world, [
@@ -337,4 +340,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (26): ['RC_GV_ROCK_1', 'RC_GV_ROCK_2', 'RC_GV_ROCK_3', 'RC_GV_UNDERWATER_ROCK_1', 'RC_GV_UNDERWATER_ROCK_2', 'RC_GV_UNDERWATER_ROCK_3', 'RC_GV_BOULDER_1', 'RC_GV_BOULDER_2', 'RC_GV_BRONZE_BOULDER_1', 'RC_GV_BRONZE_BOULDER_2', 'RC_GV_GOSSIP_STONE', 'RC_GV_WONDER_LOWER_WATERFALL', 'RC_GV_WONDER_UPPER_WATERFALL', 'RC_GV_WONDER_UPPER_WATERFALL', 'RC_GV_SILVER_BOULDER', 'RC_GV_ROCK_ACROSS_BRIDGE_1', 'RC_GV_ROCK_ACROSS_BRIDGE_2', 'RC_GV_ROCK_ACROSS_BRIDGE_3', 'RC_GV_ROCK_ACROSS_BRIDGE_4', 'RC_GV_BOULDER_ACROSS_BRIDGE', 'RC_GV_BRONZE_BOULDER_ACROSS_BRIDGE_1', 'RC_GV_BRONZE_BOULDER_ACROSS_BRIDGE_2', 'RC_GV_BRONZE_BOULDER_ACROSS_BRIDGE_3', 'RC_GV_BRONZE_BOULDER_ACROSS_BRIDGE_4', 'RC_GV_BRONZE_BOULDER_ACROSS_BRIDGE_5', 'RC_GV_BRONZE_BOULDER_ACROSS_BRIDGE_6']
+# deferred locations (23): ['RC_GV_ROCK_1', 'RC_GV_ROCK_2', 'RC_GV_ROCK_3', 'RC_GV_UNDERWATER_ROCK_1', 'RC_GV_UNDERWATER_ROCK_2', 'RC_GV_UNDERWATER_ROCK_3', 'RC_GV_BOULDER_1', 'RC_GV_BOULDER_2', 'RC_GV_BRONZE_BOULDER_1', 'RC_GV_BRONZE_BOULDER_2', 'RC_GV_GOSSIP_STONE', 'RC_GV_SILVER_BOULDER', 'RC_GV_ROCK_ACROSS_BRIDGE_1', 'RC_GV_ROCK_ACROSS_BRIDGE_2', 'RC_GV_ROCK_ACROSS_BRIDGE_3', 'RC_GV_ROCK_ACROSS_BRIDGE_4', 'RC_GV_BOULDER_ACROSS_BRIDGE', 'RC_GV_BRONZE_BOULDER_ACROSS_BRIDGE_1', 'RC_GV_BRONZE_BOULDER_ACROSS_BRIDGE_2', 'RC_GV_BRONZE_BOULDER_ACROSS_BRIDGE_3', 'RC_GV_BRONZE_BOULDER_ACROSS_BRIDGE_4', 'RC_GV_BRONZE_BOULDER_ACROSS_BRIDGE_5', 'RC_GV_BRONZE_BOULDER_ACROSS_BRIDGE_6']

@@ -52,8 +52,10 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: is_child(bundle) & can_break_crates(bundle)),
         (Locations.LLR_TREE,
          lambda bundle: is_child(bundle) & can_bonk_trees(bundle)),
-        # DEFERRED RC_LLR_WONDER_BIG_FENCE: logic->IsAdult && logic->CanUse(RG_EPONAS_SONG) && (logic->HasItem(RG_CHILD_WALLET) || logic->Get(LOGIC_FREED_EPONA))
-        # DEFERRED RC_LLR_WONDER_SMALL_FENCE: logic->IsAdult && logic->CanUse(RG_EPONAS_SONG) && (logic->HasItem(RG_CHILD_WALLET) || logic->Get(LOGIC_FREED_EPONA))
+        (Locations.LLR_WONDER_BIG_FENCE,
+         lambda bundle: is_adult(bundle) & can_use(Items.EPONAS_SONG, bundle) & (has_item(Items.CHILD_WALLET, bundle) | has_item(Events.FREED_EPONA, bundle))),
+        (Locations.LLR_WONDER_SMALL_FENCE,
+         lambda bundle: is_adult(bundle) & can_use(Items.EPONAS_SONG, bundle) & (has_item(Items.CHILD_WALLET, bundle) | has_item(Events.FREED_EPONA, bundle))),
     ])
     # Connections
     connect_regions(Regions.LON_LON_RANCH, world, [
@@ -144,4 +146,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (2): ['RC_LLR_WONDER_BIG_FENCE', 'RC_LLR_WONDER_SMALL_FENCE']
+# deferred locations (0): []

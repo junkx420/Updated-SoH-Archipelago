@@ -214,18 +214,30 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_cut_shrubs(bundle)),
         (Locations.HC_GROTTO_TREE,
          lambda bundle: can_bonk_trees(bundle)),
-        # DEFERRED RC_HC_WONDER_LEFT_TORCH: logic->CanUse(RG_FAIRY_SLINGSHOT) && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_BOOMERANG) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_HC_WONDER_RIGHT_TORCH: logic->CanUse(RG_FAIRY_SLINGSHOT) && (logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_BOOMERANG) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_HC_WONDER_MOAT_1: logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid())
-        # DEFERRED RC_HC_WONDER_MOAT_2: logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid())
-        # DEFERRED RC_HC_WONDER_MOAT_3: logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid())
-        # DEFERRED RC_HC_WONDER_MOAT_4: logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid())
-        # DEFERRED RC_HC_WONDER_MOAT_5: logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid())
-        # DEFERRED RC_HC_WONDER_MOAT_6: logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid())
-        # DEFERRED RC_HC_WONDER_MOAT_7: logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid())
-        # DEFERRED RC_HC_WONDER_MOAT_8: logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid())
-        # DEFERRED RC_HC_WONDER_MOAT_9: logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid())
-        # DEFERRED RC_HC_WONDER_MOAT_10: logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid())
+        (Locations.HC_WONDER_LEFT_TORCH,
+         lambda bundle: can_use(Items.FAIRY_SLINGSHOT, bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.BOOMERANG, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.HC_WONDER_RIGHT_TORCH,
+         lambda bundle: can_use(Items.FAIRY_SLINGSHOT, bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.BOOMERANG, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.HC_WONDER_MOAT_1,
+         lambda bundle: has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle))),
+        (Locations.HC_WONDER_MOAT_2,
+         lambda bundle: has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle))),
+        (Locations.HC_WONDER_MOAT_3,
+         lambda bundle: has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle))),
+        (Locations.HC_WONDER_MOAT_4,
+         lambda bundle: has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle))),
+        (Locations.HC_WONDER_MOAT_5,
+         lambda bundle: has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle))),
+        (Locations.HC_WONDER_MOAT_6,
+         lambda bundle: has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle))),
+        (Locations.HC_WONDER_MOAT_7,
+         lambda bundle: has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle))),
+        (Locations.HC_WONDER_MOAT_8,
+         lambda bundle: has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle))),
+        (Locations.HC_WONDER_MOAT_9,
+         lambda bundle: has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle))),
+        (Locations.HC_WONDER_MOAT_10,
+         lambda bundle: has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle))),
     ])
     # Connections
     connect_regions(Regions.HC_MOAT, world, [
@@ -265,8 +277,10 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: has_item(Events.MET_ZELDA, bundle)),
         (Locations.SONG_FROM_IMPA,
          lambda bundle: has_item(Events.MET_ZELDA, bundle)),
-        # DEFERRED RC_HC_WONDER_COURTYARD_RIGHT_WINDOW: logic->CanUse(RG_FAIRY_SLINGSHOT)
-        # DEFERRED RC_HC_WONDER_COURTYARD_LEFT_WINDOW: logic->CanUse(RG_FAIRY_SLINGSHOT)
+        (Locations.HC_WONDER_COURTYARD_RIGHT_WINDOW,
+         lambda bundle: can_use(Items.FAIRY_SLINGSHOT, bundle)),
+        (Locations.HC_WONDER_COURTYARD_LEFT_WINDOW,
+         lambda bundle: can_use(Items.FAIRY_SLINGSHOT, bundle)),
     ])
     # Connections
     connect_regions(Regions.HC_GARDEN, world, [
@@ -418,4 +432,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (36): ['RC_HC_ROCK_1', 'RC_HC_ROCK_2', 'RC_HC_ROCK_3', 'RC_HC_MALON_GOSSIP_STONE', 'RC_HC_BOULDER', 'RC_HC_ROCK_WALL_GOSSIP_STONE', 'RC_HC_WONDER_LEFT_TORCH', 'RC_HC_WONDER_RIGHT_TORCH', 'RC_HC_WONDER_MOAT_1', 'RC_HC_WONDER_MOAT_2', 'RC_HC_WONDER_MOAT_3', 'RC_HC_WONDER_MOAT_4', 'RC_HC_WONDER_MOAT_5', 'RC_HC_WONDER_MOAT_6', 'RC_HC_WONDER_MOAT_7', 'RC_HC_WONDER_MOAT_8', 'RC_HC_WONDER_MOAT_9', 'RC_HC_WONDER_MOAT_10', 'RC_HC_WONDER_COURTYARD_RIGHT_WINDOW', 'RC_HC_WONDER_COURTYARD_LEFT_WINDOW', 'RC_HC_STORMS_GROTTO_GOSSIP_STONE', 'RC_HC_STORMS_GROTTO_ROCK_1', 'RC_HC_STORMS_GROTTO_ROCK_2', 'RC_HC_STORMS_GROTTO_ROCK_3', 'RC_HC_STORMS_GROTTO_ROCK_4', 'RC_HC_STORMS_GROTTO_ROCK_5', 'RC_HC_STORMS_GROTTO_ROCK_6', 'RC_HC_STORMS_GROTTO_ROCK_7', 'RC_HC_STORMS_GROTTO_ROCK_8', 'RC_OGC_BRONZE_BOULDER_1', 'RC_OGC_BRONZE_BOULDER_2', 'RC_OGC_BRONZE_BOULDER_3', 'RC_OGC_SILVER_BOULDER_1', 'RC_OGC_SILVER_BOULDER_2', 'RC_OGC_SILVER_BOULDER_3', 'RC_OGC_SILVER_BOULDER_4']
+# deferred locations (22): ['RC_HC_ROCK_1', 'RC_HC_ROCK_2', 'RC_HC_ROCK_3', 'RC_HC_MALON_GOSSIP_STONE', 'RC_HC_BOULDER', 'RC_HC_ROCK_WALL_GOSSIP_STONE', 'RC_HC_STORMS_GROTTO_GOSSIP_STONE', 'RC_HC_STORMS_GROTTO_ROCK_1', 'RC_HC_STORMS_GROTTO_ROCK_2', 'RC_HC_STORMS_GROTTO_ROCK_3', 'RC_HC_STORMS_GROTTO_ROCK_4', 'RC_HC_STORMS_GROTTO_ROCK_5', 'RC_HC_STORMS_GROTTO_ROCK_6', 'RC_HC_STORMS_GROTTO_ROCK_7', 'RC_HC_STORMS_GROTTO_ROCK_8', 'RC_OGC_BRONZE_BOULDER_1', 'RC_OGC_BRONZE_BOULDER_2', 'RC_OGC_BRONZE_BOULDER_3', 'RC_OGC_SILVER_BOULDER_1', 'RC_OGC_SILVER_BOULDER_2', 'RC_OGC_SILVER_BOULDER_3', 'RC_OGC_SILVER_BOULDER_4']

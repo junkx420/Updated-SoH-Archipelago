@@ -130,7 +130,8 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_read(bundle)),
         (Locations.KAK_FRONT_GATE_ARROW_SIGN,
          lambda bundle: can_read(bundle)),
-        # DEFERRED RC_KAK_WONDER_UNDER_CONSTRUCTION: logic->IsChild
+        (Locations.KAK_WONDER_UNDER_CONSTRUCTION,
+         lambda bundle: is_child(bundle)),
         (Locations.KAK_BEGGAR_BUGS,
          lambda bundle: is_adult(bundle) & can_use(Items.BOTTLE_WITH_BUGS, bundle)),
         (Locations.KAK_BEGGAR_FISH,
@@ -303,7 +304,8 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.KAK_IMPAS_HOUSE, world, [
         (Locations.KAK_IMPAS_HOUSE_COW,
          lambda bundle: can_use(Items.EPONAS_SONG, bundle)),
-        # DEFERRED RC_KAK_WONDER_ABOVE_COW: true
+        (Locations.KAK_WONDER_ABOVE_COW,
+         lambda bundle: True_()),
     ])
     # Connections
     connect_regions(Regions.KAK_IMPAS_HOUSE, world, [
@@ -512,4 +514,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (6): ['RC_KAK_SILVER_BOULDER', 'RC_KAK_ROCK_1', 'RC_KAK_ROCK_2', 'RC_KAK_WONDER_UNDER_CONSTRUCTION', 'RC_KAK_WONDER_ABOVE_COW', 'RC_KAK_OPEN_GROTTO_GOSSIP_STONE']
+# deferred locations (4): ['RC_KAK_SILVER_BOULDER', 'RC_KAK_ROCK_1', 'RC_KAK_ROCK_2', 'RC_KAK_OPEN_GROTTO_GOSSIP_STONE']

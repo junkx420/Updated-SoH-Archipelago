@@ -24,7 +24,8 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Locations
     add_locations(Regions.SFM_ENTRYWAY, world, [
-        # DEFERRED RC_SFM_WONDER_ENTRANCE: true
+        (Locations.SFM_WONDER_ENTRANCE,
+         lambda bundle: True_()),
     ])
     # Connections
     connect_regions(Regions.SFM_ENTRYWAY, world, [
@@ -84,11 +85,16 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.SFM_SARIA_GOSSIP_STONE_BIG_FAIRY,
          lambda bundle: can_use(Items.SONG_OF_STORMS, bundle)),
         # DEFERRED RC_SFM_SARIA_GOSSIP_STONE: true
-        # DEFERRED RC_SFM_WONDER_MAZE_1: true
-        # DEFERRED RC_SFM_WONDER_MAZE_2: true
-        # DEFERRED RC_SFM_WONDER_MAZE_3: true
-        # DEFERRED RC_SFM_WONDER_MAZE_4: true
-        # DEFERRED RC_SFM_WONDER_MAZE_5: true
+        (Locations.SFM_WONDER_MAZE_1,
+         lambda bundle: True_()),
+        (Locations.SFM_WONDER_MAZE_2,
+         lambda bundle: True_()),
+        (Locations.SFM_WONDER_MAZE_3,
+         lambda bundle: True_()),
+        (Locations.SFM_WONDER_MAZE_4,
+         lambda bundle: True_()),
+        (Locations.SFM_WONDER_MAZE_5,
+         lambda bundle: True_()),
     ])
     # Connections
     connect_regions(Regions.SACRED_FOREST_MEADOW, world, [
@@ -179,4 +185,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (9): ['RC_SFM_WONDER_ENTRANCE', 'RC_SFM_MAZE_LOWER_GOSSIP_STONE', 'RC_SFM_MAZE_UPPER_GOSSIP_STONE', 'RC_SFM_SARIA_GOSSIP_STONE', 'RC_SFM_WONDER_MAZE_1', 'RC_SFM_WONDER_MAZE_2', 'RC_SFM_WONDER_MAZE_3', 'RC_SFM_WONDER_MAZE_4', 'RC_SFM_WONDER_MAZE_5']
+# deferred locations (3): ['RC_SFM_MAZE_LOWER_GOSSIP_STONE', 'RC_SFM_MAZE_UPPER_GOSSIP_STONE', 'RC_SFM_SARIA_GOSSIP_STONE']

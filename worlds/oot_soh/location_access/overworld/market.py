@@ -55,13 +55,20 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: is_child(bundle) & can_break_crates(bundle)),
         (Locations.MARKET_TREE,
          lambda bundle: is_child(bundle) & can_bonk_trees(bundle)),
-        # DEFERRED RC_MKT_WONDER_DAY_1: logic->IsChild && logic->AtDay
-        # DEFERRED RC_MKT_WONDER_DAY_2: logic->IsChild && logic->AtDay
-        # DEFERRED RC_MKT_WONDER_DAY_3: logic->IsChild && logic->AtDay
-        # DEFERRED RC_MKT_WONDER_DAY_4: logic->IsChild && logic->AtDay
-        # DEFERRED RC_MKT_WONDER_DAY_5: logic->IsChild && logic->AtDay
-        # DEFERRED RC_MKT_WONDER_NIGHT_1: logic->IsChild && logic->AtNight
-        # DEFERRED RC_MKT_WONDER_NIGHT_2: logic->IsChild && logic->AtNight
+        (Locations.MKT_WONDER_DAY_1,
+         lambda bundle: is_child(bundle) & at_day(bundle)),
+        (Locations.MKT_WONDER_DAY_2,
+         lambda bundle: is_child(bundle) & at_day(bundle)),
+        (Locations.MKT_WONDER_DAY_3,
+         lambda bundle: is_child(bundle) & at_day(bundle)),
+        (Locations.MKT_WONDER_DAY_4,
+         lambda bundle: is_child(bundle) & at_day(bundle)),
+        (Locations.MKT_WONDER_DAY_5,
+         lambda bundle: is_child(bundle) & at_day(bundle)),
+        (Locations.MKT_WONDER_NIGHT_1,
+         lambda bundle: is_child(bundle) & at_night(bundle)),
+        (Locations.MKT_WONDER_NIGHT_2,
+         lambda bundle: is_child(bundle) & at_night(bundle)),
         (Locations.MARKET_BEGGAR_BUGS,
          lambda bundle: is_child(bundle) & at_day(bundle) & can_use(Items.BOTTLE_WITH_BUGS, bundle)),
         (Locations.MARKET_BEGGAR_FISH,
@@ -449,4 +456,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (8): ['RC_MKT_WONDER_DAY_1', 'RC_MKT_WONDER_DAY_2', 'RC_MKT_WONDER_DAY_3', 'RC_MKT_WONDER_DAY_4', 'RC_MKT_WONDER_DAY_5', 'RC_MKT_WONDER_NIGHT_1', 'RC_MKT_WONDER_NIGHT_2', 'RC_MARKET_TREASURE_CHEST_GAME_SHOPKEEPER']
+# deferred locations (1): ['RC_MARKET_TREASURE_CHEST_GAME_SHOPKEEPER']

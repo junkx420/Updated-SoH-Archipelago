@@ -25,7 +25,8 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: (is_child(bundle) | can_pass_enemy(bundle, Enemies.GERUDO_GUARD)) & can_break_crates(bundle)),
         (Locations.GF_EAST_EXIT_ARROW_SIGN,
          lambda bundle: can_read(bundle)),
-        # DEFERRED RC_GF_WONDER_ENTRANCE_SIGN: logic->CanUse(RG_HOOKSHOT)
+        (Locations.GF_WONDER_ENTRANCE_SIGN,
+         lambda bundle: can_use(Items.HOOKSHOT, bundle)),
     ])
     # Connections
     connect_regions(Regions.GF_OUTSKIRTS, world, [
@@ -389,7 +390,8 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_break_crates(bundle)),
         (Locations.GF_HBA_RECTANGLE_SIGN,
          lambda bundle: is_adult(bundle) & can_read(bundle)),
-        # DEFERRED RC_GF_WONDER_ARCHERY_SIGN: logic->CanUse(RG_HOOKSHOT)
+        (Locations.GF_WONDER_ARCHERY_SIGN,
+         lambda bundle: can_use(Items.HOOKSHOT, bundle)),
     ])
     # Connections
     connect_regions(Regions.GF_HBA_RANGE, world, [
@@ -458,4 +460,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (4): ['RC_GF_WONDER_ENTRANCE_SIGN', 'RC_GF_WONDER_ARCHERY_SIGN', 'RC_GF_FAR_AWAY_CRATE_CHILD', 'RC_GF_FAR_AWAY_CRATE_ADULT']
+# deferred locations (2): ['RC_GF_FAR_AWAY_CRATE_CHILD', 'RC_GF_FAR_AWAY_CRATE_ADULT']

@@ -574,6 +574,23 @@ class ShuffleSigns(Choice):
     default = 0
 
 
+class ShuffleWonderItems(Choice):
+    """
+    Invisible "wonder items" (rupees, hearts etc. that appear when Link touches or shoots a spot) give a randomized item
+    the first time (Ship of Harkinian 9.3.1: "Shuffle Wonder Items").
+    Off - Wonder items are not shuffled.
+    Dungeons - Only wonder items within dungeons (4).
+    Overworld - Only wonder items outside of dungeons (115).
+    All Items - All wonder items (119).
+    """
+    display_name = "Shuffle Wonder Items"
+    option_off = 0
+    option_dungeon = 1
+    option_overworld = 2
+    option_all = 3
+    default = 0
+
+
 class ShuffleCrates(Choice):
     """
     Large and small crates will drop a randomized item the first time they're broken and collected.
@@ -2385,6 +2402,7 @@ class SohOptions(PerGameCommonOptions):
     shuffle_cows: ShuffleCows
     shuffle_pots: ShufflePots
     shuffle_signs: ShuffleSigns
+    shuffle_wonder_items: ShuffleWonderItems
     shuffle_crates: ShuffleCrates
     shuffle_trees: ShuffleTrees
     shuffle_merchants: ShuffleMerchants
@@ -2903,6 +2921,7 @@ soh_option_groups = [
         ShuffleCows,
         ShufflePots,
         ShuffleSigns,
+        ShuffleWonderItems,
         ShuffleCrates,
         ShuffleTrees,
         ShuffleMerchants,

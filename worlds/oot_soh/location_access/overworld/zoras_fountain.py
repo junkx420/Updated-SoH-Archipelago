@@ -60,7 +60,8 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: is_child(bundle) & can_read(bundle)),
         (Locations.ZF_ENTRANCE_ARROW_SIGN,
          lambda bundle: can_read(bundle)),
-        # DEFERRED RC_ZF_WONDER_ROCK: logic->IsAdult && logic->ReachScarecrow()
+        (Locations.ZF_WONDER_ROCK,
+         lambda bundle: is_adult(bundle) & reach_scarecrow(bundle)),
     ])
     # Connections
     connect_regions(Regions.ZORAS_FOUNTAIN, world, [
@@ -215,4 +216,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (12): ['RC_ZF_FAIRY_GOSSIP_STONE', 'RC_ZF_JABU_GOSSIP_STONE', 'RC_ZF_BOULDER', 'RC_ZF_SILVER_BOULDER', 'RC_ZF_UNDERGROUND_BOULDER', 'RC_ZF_BUSH_1', 'RC_ZF_BUSH_2', 'RC_ZF_BUSH_3', 'RC_ZF_BUSH_4', 'RC_ZF_BUSH_5', 'RC_ZF_BUSH_6', 'RC_ZF_WONDER_ROCK']
+# deferred locations (11): ['RC_ZF_FAIRY_GOSSIP_STONE', 'RC_ZF_JABU_GOSSIP_STONE', 'RC_ZF_BOULDER', 'RC_ZF_SILVER_BOULDER', 'RC_ZF_UNDERGROUND_BOULDER', 'RC_ZF_BUSH_1', 'RC_ZF_BUSH_2', 'RC_ZF_BUSH_3', 'RC_ZF_BUSH_4', 'RC_ZF_BUSH_5', 'RC_ZF_BUSH_6']

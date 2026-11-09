@@ -193,7 +193,8 @@ def set_region_rules(world: "SohWorld") -> None:
     # Gerudo Training Ground Eye Statue Upper  (upstream RR_GERUDO_TRAINING_GROUND_EYE_STATUE_UPPER, SCENE_GERUDO_TRAINING_GROUND)
     # Locations
     add_locations(Regions.GERUDO_TRAINING_GROUND_EYE_STATUE_UPPER, world, [
-        # DEFERRED RC_GERUDO_TRAINING_GROUND_WONDER_EYE_STATUE_ROOM: logic->CanUse(RG_HOVER_BOOTS) || logic->BunnyHood() || (logic->IsAdult && ctx->GetTrickOption(RT_GTG_STATUE_JUMP))
+        (Locations.GERUDO_TRAINING_GROUND_WONDER_EYE_STATUE_ROOM,
+         lambda bundle: can_use(Items.HOVER_BOOTS, bundle) | bunny_hood(bundle) | (is_adult(bundle) & can_do_trick(Tricks.GTG_STATUE_JUMP, bundle))),
     ])
     # Connections
     connect_regions(Regions.GERUDO_TRAINING_GROUND_EYE_STATUE_UPPER, world, [
@@ -241,7 +242,8 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_attack(bundle) & has_open_chest(bundle)),
         (Locations.GERUDO_TRAINING_GROUND_HAMMER_ROOM_SWITCH_CHEST,
          lambda bundle: (can_use(Items.MEGATON_HAMMER, bundle) | (take_damage(bundle) & can_do_trick(Tricks.FIRE_RINGS, bundle))) & has_open_chest(bundle)),
-        # DEFERRED RC_GERUDO_TRAINING_GROUND_WONDER_TORCH_SLUGS_ROOM: logic->CanUse(RG_FAIRY_BOW)
+        (Locations.GERUDO_TRAINING_GROUND_WONDER_TORCH_SLUGS_ROOM,
+         lambda bundle: can_use(Items.FAIRY_BOW, bundle)),
     ])
     # Connections
     connect_regions(Regions.GERUDO_TRAINING_GROUND_HAMMER_ROOM, world, [
@@ -321,7 +323,8 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: True_()),
         (Locations.GERUDO_TRAINING_GROUND_BEAMOS_EAST_HEART,
          lambda bundle: True_()),
-        # DEFERRED RC_GERUDO_TRAINING_GROUND_WONDER_BEAMOS_ROOM: logic->CanUse(RG_FAIRY_BOW)
+        (Locations.GERUDO_TRAINING_GROUND_WONDER_BEAMOS_ROOM,
+         lambda bundle: can_use(Items.FAIRY_BOW, bundle)),
     ])
     # Connections
     connect_regions(Regions.GERUDO_TRAINING_GROUND_DINALFOS, world, [
@@ -340,4 +343,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (20): ['RC_GTG_FIRE_WALL_SLOPE_SILVER', 'RC_GTG_LOWER_BOULDER_SLOPE_SILVER', 'RC_GTG_TARGET_SLOPE_SILVER', 'RC_GTG_JUMPDOWN_SLOPE_SILVER', 'RC_GTG_UPPER_BOULDER_SLOPE_SILVER', 'RC_GTG_UNDER_LEDGE_LAVA_SILVER', 'RC_GERUDO_TRAINING_GROUND_WONDER_EYE_STATUE_ROOM', 'RC_GERUDO_TRAINING_GROUND_WONDER_TORCH_SLUGS_ROOM', 'RC_GTG_NEAR_SWITCH_LAVA_SILVER', 'RC_GTG_NEAR_BARRED_DOOR_LAVA_SILVER', 'RC_GTG_FIRE_RING_LAVA_SILVER', 'RC_GTG_UNDER_LEDGE_LAVA_SILVER', 'RC_GTG_UPPER_LAVA_SILVER', 'RC_GTG_UNDER_LEDGE_LAVA_SILVER', 'RC_GTG_MIDDLE_WATER_SILVER', 'RC_GTG_ABOVE_TARGET_WATER_SILVER', 'RC_GTG_LEFT_WATER_SILVER', 'RC_GTG_UNDER_TARGET_WATER_SILVER', 'RC_GTG_RIGHT_WATER_SILVER', 'RC_GERUDO_TRAINING_GROUND_WONDER_BEAMOS_ROOM']
+# deferred locations (17): ['RC_GTG_FIRE_WALL_SLOPE_SILVER', 'RC_GTG_LOWER_BOULDER_SLOPE_SILVER', 'RC_GTG_TARGET_SLOPE_SILVER', 'RC_GTG_JUMPDOWN_SLOPE_SILVER', 'RC_GTG_UPPER_BOULDER_SLOPE_SILVER', 'RC_GTG_UNDER_LEDGE_LAVA_SILVER', 'RC_GTG_NEAR_SWITCH_LAVA_SILVER', 'RC_GTG_NEAR_BARRED_DOOR_LAVA_SILVER', 'RC_GTG_FIRE_RING_LAVA_SILVER', 'RC_GTG_UNDER_LEDGE_LAVA_SILVER', 'RC_GTG_UPPER_LAVA_SILVER', 'RC_GTG_UNDER_LEDGE_LAVA_SILVER', 'RC_GTG_MIDDLE_WATER_SILVER', 'RC_GTG_ABOVE_TARGET_WATER_SILVER', 'RC_GTG_LEFT_WATER_SILVER', 'RC_GTG_UNDER_TARGET_WATER_SILVER', 'RC_GTG_RIGHT_WATER_SILVER']

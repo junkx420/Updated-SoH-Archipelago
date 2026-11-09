@@ -212,21 +212,36 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: True_()),
         (Locations.GRAVEYARD_DAMPES_GRAVE_RUPEE8,
          lambda bundle: True_()),
-        # DEFERRED RC_GY_WONDER_DAMPE_RACE_1: true
-        # DEFERRED RC_GY_WONDER_DAMPE_RACE_2: true
-        # DEFERRED RC_GY_WONDER_DAMPE_RACE_3: true
-        # DEFERRED RC_GY_WONDER_DAMPE_RACE_4: true
-        # DEFERRED RC_GY_WONDER_DAMPE_RACE_5: true
-        # DEFERRED RC_GY_WONDER_DAMPE_RACE_6: true
-        # DEFERRED RC_GY_WONDER_DAMPE_RACE_7: true
-        # DEFERRED RC_GY_WONDER_DAMPE_RACE_8: true
-        # DEFERRED RC_GY_WONDER_DAMPE_RACE_9: true
-        # DEFERRED RC_GY_WONDER_DAMPE_RACE_10: true
-        # DEFERRED RC_GY_WONDER_DAMPE_RACE_11: true
-        # DEFERRED RC_GY_WONDER_DAMPE_RACE_12: true
-        # DEFERRED RC_GY_WONDER_DAMPE_RACE_13: true
-        # DEFERRED RC_GY_WONDER_DAMPE_RACE_14: true
-        # DEFERRED RC_GY_WONDER_DAMPE_RACE_15: true
+        (Locations.GY_WONDER_DAMPE_RACE_1,
+         lambda bundle: True_()),
+        (Locations.GY_WONDER_DAMPE_RACE_2,
+         lambda bundle: True_()),
+        (Locations.GY_WONDER_DAMPE_RACE_3,
+         lambda bundle: True_()),
+        (Locations.GY_WONDER_DAMPE_RACE_4,
+         lambda bundle: True_()),
+        (Locations.GY_WONDER_DAMPE_RACE_5,
+         lambda bundle: True_()),
+        (Locations.GY_WONDER_DAMPE_RACE_6,
+         lambda bundle: True_()),
+        (Locations.GY_WONDER_DAMPE_RACE_7,
+         lambda bundle: True_()),
+        (Locations.GY_WONDER_DAMPE_RACE_8,
+         lambda bundle: True_()),
+        (Locations.GY_WONDER_DAMPE_RACE_9,
+         lambda bundle: True_()),
+        (Locations.GY_WONDER_DAMPE_RACE_10,
+         lambda bundle: True_()),
+        (Locations.GY_WONDER_DAMPE_RACE_11,
+         lambda bundle: True_()),
+        (Locations.GY_WONDER_DAMPE_RACE_12,
+         lambda bundle: True_()),
+        (Locations.GY_WONDER_DAMPE_RACE_13,
+         lambda bundle: True_()),
+        (Locations.GY_WONDER_DAMPE_RACE_14,
+         lambda bundle: True_()),
+        (Locations.GY_WONDER_DAMPE_RACE_15,
+         lambda bundle: True_()),
     ])
     # Connections
     connect_regions(Regions.GRAVEYARD_DAMPES_GRAVE, world, [
@@ -279,4 +294,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (17): ['RC_GY_ROCK', 'RC_GY_WONDER_DAMPE_RACE_1', 'RC_GY_WONDER_DAMPE_RACE_2', 'RC_GY_WONDER_DAMPE_RACE_3', 'RC_GY_WONDER_DAMPE_RACE_4', 'RC_GY_WONDER_DAMPE_RACE_5', 'RC_GY_WONDER_DAMPE_RACE_6', 'RC_GY_WONDER_DAMPE_RACE_7', 'RC_GY_WONDER_DAMPE_RACE_8', 'RC_GY_WONDER_DAMPE_RACE_9', 'RC_GY_WONDER_DAMPE_RACE_10', 'RC_GY_WONDER_DAMPE_RACE_11', 'RC_GY_WONDER_DAMPE_RACE_12', 'RC_GY_WONDER_DAMPE_RACE_13', 'RC_GY_WONDER_DAMPE_RACE_14', 'RC_GY_WONDER_DAMPE_RACE_15', 'RC_GRAVEYARD_GOSSIP_STONE']
+# deferred locations (2): ['RC_GY_ROCK', 'RC_GRAVEYARD_GOSSIP_STONE']

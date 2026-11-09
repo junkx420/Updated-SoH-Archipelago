@@ -83,9 +83,12 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.LW_NEAR_SHORTCUTS_GRASS3,
          lambda bundle: can_cut_shrubs(bundle)),
         # DEFERRED RC_LW_BOULDER_BY_GORON_CITY: logic->BlastOrSmash()
-        # DEFERRED RC_LW_WONDER_BACK_SKULL_KIDS_GRASS_1: logic->IsChild
-        # DEFERRED RC_LW_WONDER_BACK_SKULL_KIDS_GRASS_2: logic->IsChild
-        # DEFERRED RC_LW_WONDER_FRONT_SKULL_KIDS_GRASS: logic->IsChild
+        (Locations.LW_WONDER_BACK_SKULL_KIDS_GRASS_1,
+         lambda bundle: is_child(bundle)),
+        (Locations.LW_WONDER_BACK_SKULL_KIDS_GRASS_2,
+         lambda bundle: is_child(bundle)),
+        (Locations.LW_WONDER_FRONT_SKULL_KIDS_GRASS,
+         lambda bundle: is_child(bundle)),
     ])
     # Connections
     connect_regions(Regions.THE_LOST_WOODS, world, [
@@ -285,4 +288,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (8): ['RC_LW_BOULDER_BY_GORON_CITY', 'RC_LW_WONDER_BACK_SKULL_KIDS_GRASS_1', 'RC_LW_WONDER_BACK_SKULL_KIDS_GRASS_2', 'RC_LW_WONDER_FRONT_SKULL_KIDS_GRASS', 'RC_LW_GOSSIP_STONE', 'RC_LW_BOULDER_BY_SACRED_FOREST_MEADOW', 'RC_LW_RUPEE_BOULDER', 'RC_LW_NEAR_SHORTCUTS_GROTTO_GOSSIP_STONE']
+# deferred locations (5): ['RC_LW_BOULDER_BY_GORON_CITY', 'RC_LW_GOSSIP_STONE', 'RC_LW_BOULDER_BY_SACRED_FOREST_MEADOW', 'RC_LW_RUPEE_BOULDER', 'RC_LW_NEAR_SHORTCUTS_GROTTO_GOSSIP_STONE']
