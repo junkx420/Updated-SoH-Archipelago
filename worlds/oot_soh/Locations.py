@@ -92,6 +92,7 @@ class LocTag(IntFlag):
     Pond_Fish = auto()
     Bee_Hive = auto()
     Carpenter_Reward = auto()
+    Beggar = auto()
     # no_logic = auto()
 
 class SohLocData(NamedTuple):
@@ -2564,6 +2565,16 @@ tree_location_table: dict[str, SohLocData] = {
     Locations.LLR_TREE:                     SohLocData(2456, LocTag.Lon_Lon_Ranch | LocTag.Tree),
 }
 
+# SoH 9.3.1 Shuffle Beggar (ShuffleBeggar.cpp RegisterBeggarLocations); new IDs after the highest one in use (2456)
+beggar_location_table: dict[str, SohLocData] = {
+    Locations.MARKET_BEGGAR_BUGS:           SohLocData(2457, LocTag.Hyrule_Market | LocTag.Beggar),
+    Locations.MARKET_BEGGAR_FISH:           SohLocData(2458, LocTag.Hyrule_Market | LocTag.Beggar),
+    Locations.MARKET_BEGGAR_BLUE_FIRE:      SohLocData(2459, LocTag.Hyrule_Market | LocTag.Beggar),
+    Locations.KAK_BEGGAR_BUGS:              SohLocData(2460, LocTag.Kakariko_Village | LocTag.Beggar),
+    Locations.KAK_BEGGAR_FISH:              SohLocData(2461, LocTag.Kakariko_Village | LocTag.Beggar),
+    Locations.KAK_BEGGAR_BLUE_FIRE:         SohLocData(2462, LocTag.Kakariko_Village | LocTag.Beggar),
+}
+
 fish_pond_location_table: dict[str, SohLocData] = {
     Locations.LH_CHILD_POND_FISH1:         SohLocData(2345, LocTag.Lake_Hylia | LocTag.Pond_Fish),
     Locations.LH_CHILD_POND_FISH2:         SohLocData(2346, LocTag.Lake_Hylia | LocTag.Pond_Fish),
@@ -2676,6 +2687,7 @@ location_data_table: dict[str, SohLocData] = {
     **grass_overworld_location_table,
     **grass_dungeon_location_table,
     **tree_location_table,
+    **beggar_location_table,
     **fish_pond_location_table,
     **fish_overworld_location_table,
     **links_pocket_location_table,

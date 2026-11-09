@@ -627,6 +627,14 @@ class ShuffleFrogSongRupees(Toggle):
     display_name = "Shuffle Frog Song Rupees"
 
 
+class ShuffleBeggar(Toggle):
+    """
+    The beggars in Hyrule Market (as child, by day) and Kakariko Village (as adult) give a randomized item for
+    Bugs, a Fish and Blue Fire instead of rupees (Ship of Harkinian 9.3.1: "Shuffle Beggar"). 6 new locations.
+    """
+    display_name = "Shuffle Beggar"
+
+
 class ShuffleAdultTradeItems(Toggle):
     """
     Adds all adult trade quest items to the pool. If this is turned off, only the Claim Check is in the pool.
@@ -2357,6 +2365,7 @@ class SohOptions(PerGameCommonOptions):
     shuffle_merchants_minimum_price: ShuffleMerchantsMinimumPrice
     shuffle_merchants_maximum_price: ShuffleMerchantsMaximumPrice
     shuffle_frog_song_rupees: ShuffleFrogSongRupees
+    shuffle_beggar: ShuffleBeggar
     shuffle_adult_trade_items: ShuffleAdultTradeItems
     shuffle_boss_souls: ShuffleBossSouls
     ganons_soul: GanonsSoul
@@ -2873,6 +2882,7 @@ soh_option_groups = [
         ShuffleMerchantsMaximumPrice,
         MerchantAffordablePrices,
         ShuffleFrogSongRupees,
+        ShuffleBeggar,
         ShuffleAdultTradeItems,
         Shuffle100GSReward,
         ShuffleBossSouls,

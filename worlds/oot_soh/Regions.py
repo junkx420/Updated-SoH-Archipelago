@@ -19,7 +19,7 @@ from .Locations import SohLocation, base_location_table, \
     pots_dungeon_location_table, \
     crates_overworld_location_table, \
     crates_dungeon_location_table, \
-    tree_location_table, \
+    tree_location_table,     beggar_location_table, \
     freestanding_overworld_location_table, \
     freestanding_dungeon_location_table, \
     fairies_fountain_location_table, \
@@ -191,6 +191,10 @@ def create_regions_and_locations(world: "SohWorld") -> None:
     # Trees
     if world.options.shuffle_trees:
         world.included_locations.update(tree_location_table)
+
+    # Beggar (SoH 9.3.1 RSK_SHUFFLE_BEGGAR)
+    if world.options.shuffle_beggar:
+        world.included_locations.update(beggar_location_table)
 
     # Freestanding (Overworld)
     if world.options.shuffle_freestanding_items == "overworld" or world.options.shuffle_freestanding_items == "all":

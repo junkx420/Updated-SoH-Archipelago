@@ -127,9 +127,12 @@ def set_region_rules(world: "SohWorld") -> None:
         # DEFERRED RC_KAK_SOUTHEAST_EXIT_ARROW_SIGN: logic->CanRead()
         # DEFERRED RC_KAK_FRONT_GATE_ARROW_SIGN: logic->CanRead()
         # DEFERRED RC_KAK_WONDER_UNDER_CONSTRUCTION: logic->IsChild
-        # DEFERRED RC_KAK_BEGGAR_BUGS: logic->IsAdult && logic->CanUse(RG_BOTTLE_WITH_BUGS)
-        # DEFERRED RC_KAK_BEGGAR_FISH: logic->IsAdult && logic->CanUse(RG_BOTTLE_WITH_FISH)
-        # DEFERRED RC_KAK_BEGGAR_BLUE_FIRE: logic->IsAdult && logic->CanUse(RG_BOTTLE_WITH_BLUE_FIRE)
+        (Locations.KAK_BEGGAR_BUGS,
+         lambda bundle: is_adult(bundle) & can_use(Items.BOTTLE_WITH_BUGS, bundle)),
+        (Locations.KAK_BEGGAR_FISH,
+         lambda bundle: is_adult(bundle) & can_use(Items.BOTTLE_WITH_FISH, bundle)),
+        (Locations.KAK_BEGGAR_BLUE_FIRE,
+         lambda bundle: is_adult(bundle) & can_use(Items.BOTTLE_WITH_BLUE_FIRE, bundle)),
     ])
     # Connections
     connect_regions(Regions.KAKARIKO_VILLAGE, world, [
@@ -502,4 +505,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (16): ['RC_KAK_SILVER_BOULDER', 'RC_KAK_ROCK_1', 'RC_KAK_ROCK_2', 'RC_KAK_GUARD_GATE_RECTANGLE_SIGN', 'RC_KAK_WELL_RECTANGLE_SIGN', 'RC_KAK_SOUTHEAST_EXIT_ARROW_SIGN', 'RC_KAK_FRONT_GATE_ARROW_SIGN', 'RC_KAK_WONDER_UNDER_CONSTRUCTION', 'RC_KAK_BEGGAR_BUGS', 'RC_KAK_BEGGAR_FISH', 'RC_KAK_BEGGAR_BLUE_FIRE', 'RC_KAK_WATCHTOWER_BUTTERFLY_FAIRY', 'RC_KAK_WONDER_ABOVE_COW', 'RC_KAK_SHOOTING_GALLERY_RECTANGLE_SIGN', 'RC_KAK_OPEN_GROTTO_GOSSIP_STONE', 'RC_KAK_OPEN_GROTTO_BUTTERFLY_FAIRY']
+# deferred locations (13): ['RC_KAK_SILVER_BOULDER', 'RC_KAK_ROCK_1', 'RC_KAK_ROCK_2', 'RC_KAK_GUARD_GATE_RECTANGLE_SIGN', 'RC_KAK_WELL_RECTANGLE_SIGN', 'RC_KAK_SOUTHEAST_EXIT_ARROW_SIGN', 'RC_KAK_FRONT_GATE_ARROW_SIGN', 'RC_KAK_WONDER_UNDER_CONSTRUCTION', 'RC_KAK_WATCHTOWER_BUTTERFLY_FAIRY', 'RC_KAK_WONDER_ABOVE_COW', 'RC_KAK_SHOOTING_GALLERY_RECTANGLE_SIGN', 'RC_KAK_OPEN_GROTTO_GOSSIP_STONE', 'RC_KAK_OPEN_GROTTO_BUTTERFLY_FAIRY']

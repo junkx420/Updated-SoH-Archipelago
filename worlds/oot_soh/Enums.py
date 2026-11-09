@@ -3677,6 +3677,13 @@ class Locations(StrEnum):
     ZR_TREE = "ZR Tree in Zoras River"
     KAK_TREE = "Kak Tree"
     LLR_TREE = "LLR Tree"
+    # Beggar (SoH 9.3.1 ShuffleBeggar.cpp)
+    MARKET_BEGGAR_BUGS = "Market Beggar Bugs"
+    MARKET_BEGGAR_FISH = "Market Beggar Fish"
+    MARKET_BEGGAR_BLUE_FIRE = "Market Beggar Blue Fire"
+    KAK_BEGGAR_BUGS = "Kak Beggar Bugs"
+    KAK_BEGGAR_FISH = "Kak Beggar Fish"
+    KAK_BEGGAR_BLUE_FIRE = "Kak Beggar Blue Fire"
 
 
 class Enemies(StrEnum):

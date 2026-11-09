@@ -62,9 +62,12 @@ def set_region_rules(world: "SohWorld") -> None:
         # DEFERRED RC_MKT_WONDER_DAY_5: logic->IsChild && logic->AtDay
         # DEFERRED RC_MKT_WONDER_NIGHT_1: logic->IsChild && logic->AtNight
         # DEFERRED RC_MKT_WONDER_NIGHT_2: logic->IsChild && logic->AtNight
-        # DEFERRED RC_MK_BEGGAR_BUGS: logic->IsChild && logic->AtDay && logic->CanUse(RG_BOTTLE_WITH_BUGS)
-        # DEFERRED RC_MK_BEGGAR_FISH: logic->IsChild && logic->AtDay && logic->CanUse(RG_BOTTLE_WITH_FISH)
-        # DEFERRED RC_MK_BEGGAR_BLUE_FIRE: logic->IsChild && logic->AtDay && logic->CanUse(RG_BOTTLE_WITH_BLUE_FIRE)
+        (Locations.MARKET_BEGGAR_BUGS,
+         lambda bundle: is_child(bundle) & at_day(bundle) & can_use(Items.BOTTLE_WITH_BUGS, bundle)),
+        (Locations.MARKET_BEGGAR_FISH,
+         lambda bundle: is_child(bundle) & at_day(bundle) & can_use(Items.BOTTLE_WITH_FISH, bundle)),
+        (Locations.MARKET_BEGGAR_BLUE_FIRE,
+         lambda bundle: is_child(bundle) & at_day(bundle) & can_use(Items.BOTTLE_WITH_BLUE_FIRE, bundle)),
     ])
     # Connections
     connect_regions(Regions.THE_MARKET, world, [
@@ -444,4 +447,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (13): ['RC_MKT_WONDER_DAY_1', 'RC_MKT_WONDER_DAY_2', 'RC_MKT_WONDER_DAY_3', 'RC_MKT_WONDER_DAY_4', 'RC_MKT_WONDER_DAY_5', 'RC_MKT_WONDER_NIGHT_1', 'RC_MKT_WONDER_NIGHT_2', 'RC_MK_BEGGAR_BUGS', 'RC_MK_BEGGAR_FISH', 'RC_MK_BEGGAR_BLUE_FIRE', 'RC_MK_MASK_SHOP_SIGN', 'RC_MK_SHOOTING_GALLERY_RECTANGLE_SIGN', 'RC_MARKET_TREASURE_CHEST_GAME_SHOPKEEPER']
+# deferred locations (10): ['RC_MKT_WONDER_DAY_1', 'RC_MKT_WONDER_DAY_2', 'RC_MKT_WONDER_DAY_3', 'RC_MKT_WONDER_DAY_4', 'RC_MKT_WONDER_DAY_5', 'RC_MKT_WONDER_NIGHT_1', 'RC_MKT_WONDER_NIGHT_2', 'RC_MK_MASK_SHOP_SIGN', 'RC_MK_SHOOTING_GALLERY_RECTANGLE_SIGN', 'RC_MARKET_TREASURE_CHEST_GAME_SHOPKEEPER']
