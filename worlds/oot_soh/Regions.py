@@ -485,10 +485,8 @@ def place_locked_items(world: "SohWorld") -> None:
             place_locked_item(Locations.LINKS_POCKET, reward_item, world)
             break
 
-    # Place Ganons Boss Key
-    if not world.options.ganons_castle_boss_key == GanonsCastleBossKey.option_vanilla and not world.options.ganons_castle_boss_key == "anywhere":
-        place_from_pool(Locations.MARKET_TOT_LIGHT_ARROW_CUTSCENE, Items.GANONS_CASTLE_BOSS_KEY, world)
-
+    # Place Ganons Boss Key. Since SoH 9.3.1 the Light Arrow Cutscene is a normal location again; the lacs_* options are
+    # triggers that grant the key (location_access/archipelago.py).
     if world.options.ganons_castle_boss_key == GanonsCastleBossKey.option_vanilla and not world.options.triforce_hunt:
         place_from_pool(Locations.GANONS_CASTLE_TOWER_BOSS_KEY_CHEST, Items.GANONS_CASTLE_BOSS_KEY, world)
 

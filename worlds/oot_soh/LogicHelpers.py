@@ -1390,9 +1390,18 @@ def can_build_rainbow_bridge(bundle: tuple[Regions, "SohWorld"]) -> Rule:
          | (OptionFilter(RainbowBridge, RainbowBridge.option_greg) & Has(Items.GREG_THE_GREEN_RUPEE))
 
 
-def can_trigger_lacs(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+GBK_TRIGGER_OPTIONS = [GanonsCastleBossKey.option_lacs_vanilla, GanonsCastleBossKey.option_lacs_stones,
+                       GanonsCastleBossKey.option_lacs_medallions, GanonsCastleBossKey.option_lacs_dungeon_rewards,
+                       GanonsCastleBossKey.option_lacs_dungeons, GanonsCastleBossKey.option_lacs_skull_tokens]
+
+
+def can_trigger_gbk(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    """9.3.1 Logic::CanTriggerGBK: Ganon's Boss Key is granted as soon as the condition is met (upstream pseudo-location
+    RC_GANONS_BOSS_KEY in Root), no longer at the Light Arrow Cutscene. The apworld's lacs_* options are the trigger
+    conditions; lacs_vanilla is upstream's own migration of LACS-Vanilla (ConfigVersion7Updater): any 2 medallions.
+    Greg counts in logic only with the "reward" modifier (RO_CHECK_TRIGGER_GREG_REWARD)."""
     greg = FromOption(GanonsCastleBossKeyGregModifier)
-    return (OptionFilter(GanonsCastleBossKey, [GanonsCastleBossKey.option_vanilla, GanonsCastleBossKey.option_anywhere, GanonsCastleBossKey.option_lacs_vanilla], operator="in") & has_item(Items.SHADOW_MEDALLION, bundle) & has_item(Items.SPIRIT_MEDALLION, bundle)) \
+    return (OptionFilter(GanonsCastleBossKey, GanonsCastleBossKey.option_lacs_vanilla) & ItemsPlusGregEnough(target=2, item_tag=GroupTag.Medallion, greg=greg)) \
          | (OptionFilter(GanonsCastleBossKey, GanonsCastleBossKey.option_lacs_stones) & ItemsPlusGregEnough(target=FromOption(GanonsCastleBossKeyStonesRequired), item_tag=GroupTag.Spiritual_Stone, greg=greg))\
          | (OptionFilter(GanonsCastleBossKey, GanonsCastleBossKey.option_lacs_medallions) & ItemsPlusGregEnough(target=FromOption(GanonsCastleBossKeyMedallionsRequired), item_tag=GroupTag.Medallion, greg=greg)) \
          | (OptionFilter(GanonsCastleBossKey, GanonsCastleBossKey.option_lacs_dungeon_rewards) & ItemsPlusGregEnough(target=FromOption(GanonsCastleBossKeyDungeonRewardsRequired), item_tag=GroupTag.Spiritual_Stone | GroupTag.Medallion, greg=greg)) \

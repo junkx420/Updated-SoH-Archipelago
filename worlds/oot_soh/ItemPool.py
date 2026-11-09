@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from .Enums import *
 from .Items import item_data_table, filler_items, no_rules_bottles, SohItem
 from .Regions import dungeon_reward_item_mapping, small_key_vanilla_mapping, dungeon_boss_key_vanilla_mapping
-from .LogicHelpers import key_to_ring
+from .LogicHelpers import key_to_ring, GBK_TRIGGER_OPTIONS
 from .KeyShuffle import small_key_option_matching
 from BaseClasses import ItemClassification
 from .SongShuffle import song_vanilla_locations, get_shuffled_songs
@@ -128,8 +128,8 @@ def create_item_pool(world: "SohWorld") -> None:
         items_to_create[Items.BOTTOM_OF_THE_WELL_COMPASS] = 1
         items_to_create[Items.ICE_CAVERN_COMPASS] = 1
 
-    # Ganon's Castle Boss Key
-    if not world.options.triforce_hunt:
+    # Ganon's Castle Boss Key; with a trigger option (lacs_*) the client grants it, see location_access/archipelago.py
+    if not world.options.triforce_hunt and world.options.ganons_castle_boss_key.value not in GBK_TRIGGER_OPTIONS:
         items_to_create[Items.GANONS_CASTLE_BOSS_KEY] = 1
 
     # Keys

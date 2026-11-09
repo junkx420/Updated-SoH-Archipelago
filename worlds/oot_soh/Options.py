@@ -703,8 +703,10 @@ class GanonsCastleBossKey(Choice):
     """
     Vanilla - Ganon's Boss Key will appear in the vanilla location.
     Anywhere - Ganon's Boss Key can appear anywhere.
-    LACS - These settings put the boss key on the Light Arrow Cutscene location, from Zelda in Temple of Time as adult, with differing requirements:
-    - Vanilla: Obtain the Shadow Medallion and Spirit Medallion.
+    LACS - Since Ship of Harkinian 9.3.1 these are triggers: you receive the boss key wherever you are as soon as the
+    requirement is met. The Light Arrow Cutscene (Zelda in the Temple of Time as adult, after the Shadow and Spirit
+    Medallions) is a normal location again. Requirements:
+    - Vanilla: Obtain any 2 medallions (SoH 9.3.1 migrates the old "LACS Vanilla" setting to this).
     - Stones: Obtain the specified amount of Spiritual Stones.
     - Medallions: Obtain the specified amount of medallions.
     - Dungeon rewards: Obtain the specified total sum of Spiritual Stones or medallions.
@@ -740,7 +742,7 @@ class GanonsCastleBossKeyGregModifier(Choice):
 class GanonsCastleBossKeyStonesRequired(Range):
     """
     If Ganon's Castle Boss Key is set to Stones, this is how many Spiritual Stones are required to open it.
-    Once the required amount is reached, the boss key will be granted through the Light Arrow cutscene in the Temple of Time.
+    Once the required amount is reached, the boss key is granted right away (SoH 9.3.1 trigger).
     If the Greg Modifier is not set to Reward, the max will be 3.
     """
     display_name = "Ganon's Castle Boss Key Stones Required"
@@ -752,7 +754,7 @@ class GanonsCastleBossKeyStonesRequired(Range):
 class GanonsCastleBossKeyMedallionsRequired(Range):
     """
     If Ganon's Castle Boss Key is set to Medallions, this is how many medallions are required to open it.
-    Once the required amount is reached, the boss key will be granted through the Light Arrow cutscene in the Temple of Time.
+    Once the required amount is reached, the boss key is granted right away (SoH 9.3.1 trigger).
     If the Greg Modifier is not set to Reward, the max will be 6.
     """
     display_name = "Ganon's Castle Boss Key Medallions Required"
@@ -764,7 +766,7 @@ class GanonsCastleBossKeyMedallionsRequired(Range):
 class GanonsCastleBossKeyDungeonRewardsRequired(Range):
     """
     If Ganon's Castle Boss Key is set to Dungeon Rewards, this is how many dungeon rewards are required to open it.
-    Once the required amount is reached, the boss key will be granted through the Light Arrow cutscene in the Temple of Time.
+    Once the required amount is reached, the boss key is granted right away (SoH 9.3.1 trigger).
     If the Greg Modifier is not set to Reward, the max will be 9.
     """
     display_name = "Ganon's Castle Boss Key Dungeon Rewards Required"
@@ -776,7 +778,7 @@ class GanonsCastleBossKeyDungeonRewardsRequired(Range):
 class GanonsCastleBossKeyDungeonsRequired(Range):
     """
     If Ganon's Castle Boss Key is set to Dungeons, this is how many dungeon completions are required to open it.
-    Once the required amount is reached, the boss key will be granted through the Light Arrow cutscene in the Temple of Time.
+    Once the required amount is reached, the boss key is granted right away (SoH 9.3.1 trigger).
     If the Greg Modifier is not set to Reward, the max will be 8.
     """
     display_name = "Ganon's Castle Boss Key Dungeons Required"
@@ -788,7 +790,7 @@ class GanonsCastleBossKeyDungeonsRequired(Range):
 class GanonsCastleBossKeySkullTokensRequired(Range):
     """
     If Ganon's Castle Boss Key is set to Tokens, this is how many Gold Skulltula Tokens are required to open it.
-    Once the required amount is reached, the boss key will be granted through the Light Arrow cutscene in the Temple of Time.
+    Once the required amount is reached, the boss key is granted right away (SoH 9.3.1 trigger).
     """
     display_name = "Ganon's Castle Boss Key Skull Tokens Required"
     range_start = 1

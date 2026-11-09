@@ -15,6 +15,7 @@ class EventLocations(StrEnum):
     GANON_DEFEATED = "Ganon Defeated"
     TRIFORCE_HUNT_COMPLETION = "Triforce Hunt Completion"
     MAGIC_BEAN_SALESMAN_SHOP = "Magic Bean Salesman Shop"
+    GANONS_BOSS_KEY_TRIGGER = "Ganon's Boss Key Trigger"
 
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -33,6 +34,14 @@ def set_region_rules(world: "SohWorld") -> None:
     if bool(world.options.triforce_hunt):
         override_connection(world, Regions.GANONS_TOWER_BEFORE_GANONDORF_LAIR, Regions.GANONS_TOWER_GANONDORF_LAIR,
                             lambda bundle: True_())
+
+    # Ganon's Boss Key trigger (9.3.1 root.cpp LOCATION(RC_GANONS_BOSS_KEY, logic->CanTriggerGBK())). The client grants
+    # the key itself when the condition is met (SeedContext.cpp PlaceArchipelagoTriggerItems), so the multiworld only
+    # needs it as an event: the key is not in the item pool with these options.
+    if world.options.ganons_castle_boss_key.value in GBK_TRIGGER_OPTIONS and not bool(world.options.triforce_hunt):
+        add_events(Regions.ROOT, world, [
+            (EventLocations.GANONS_BOSS_KEY_TRIGGER, Items.GANONS_CASTLE_BOSS_KEY, lambda bundle: can_trigger_gbk(bundle)),
+        ])
 
     # Win condition (the apworld's goal; upstream 9.3.1 uses the RC_GANON / RC_WINCON trigger locations, see
     # docs/ap-update/feature-plan.md 1.6 / 2.1)

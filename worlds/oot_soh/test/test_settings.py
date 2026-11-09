@@ -3,7 +3,7 @@ from ..Options import *
 from ..Items import Items, SohItem
 from ..Enums import Events
 from .bases import SohTestBase
-from ..LogicHelpers import can_trigger_lacs, can_build_rainbow_bridge, scarecrows_song, bombchu_refill, trade_quest_step, is_fire_loop_unlocked
+from ..LogicHelpers import can_trigger_gbk, can_build_rainbow_bridge, scarecrows_song, bombchu_refill, trade_quest_step, is_fire_loop_unlocked
 from itertools import combinations
 
 # Fire Loop 
@@ -42,15 +42,15 @@ class LACSBase(SohTestBase):
         # and report as Success if any subtest succeeds
         # (https://github.com/microsoft/vscode-python/issues/25824)
         self.sweep()
-        self.assertFalse(can_trigger_lacs(self.get_bundle())._instantiate(self.world)._evaluate(self.multiworld.state), f"Could trigger LACS but shouldn't have been able to.")
+        self.assertFalse(can_trigger_gbk(self.get_bundle())._instantiate(self.world)._evaluate(self.multiworld.state), f"Could trigger LACS but shouldn't have been able to.")
         required_items = list(map(lambda i: self.create_item(i), items))
         for size in range(1, len(required_items)):
             for invalid_combo in combinations(required_items, size):
                 self.collect(invalid_combo)
-                self.assertFalse(can_trigger_lacs(self.get_bundle())._instantiate(self.world)._evaluate(self.multiworld.state), f"Should not be able to trigger LACS with only {invalid_combo}")
+                self.assertFalse(can_trigger_gbk(self.get_bundle())._instantiate(self.world)._evaluate(self.multiworld.state), f"Should not be able to trigger LACS with only {invalid_combo}")
                 self.remove(invalid_combo)
         self.collect(required_items)
-        self.assertTrue(can_trigger_lacs(self.get_bundle())._instantiate(self.world)._evaluate(self.multiworld.state), f"Wasn't able to trigger LACS, but should have been able to.")
+        self.assertTrue(can_trigger_gbk(self.get_bundle())._instantiate(self.world)._evaluate(self.multiworld.state), f"Wasn't able to trigger LACS, but should have been able to.")
         
         
     def require_some_lacs(self, items: list[Items | Events], required_amount: int) -> None:
@@ -58,24 +58,24 @@ class LACSBase(SohTestBase):
         # and report as Success if any subtest succeeds
         # (https://github.com/microsoft/vscode-python/issues/25824)
         self.sweep()
-        self.assertFalse(can_trigger_lacs(self.get_bundle())._instantiate(self.world)._evaluate(self.multiworld.state), f"Could trigger LACS but shouldn't have been able to.")
+        self.assertFalse(can_trigger_gbk(self.get_bundle())._instantiate(self.world)._evaluate(self.multiworld.state), f"Could trigger LACS but shouldn't have been able to.")
         required_items = list(map(lambda i: self.create_item(i), items))
         for size in range(1, len(required_items)):
             for invalid_combo in combinations(required_items, size):
                 self.collect(invalid_combo)
                 if required_amount <= len(invalid_combo) and not (Items.GREG_THE_GREEN_RUPEE in invalid_combo and self.options["ganons_castle_boss_key_greg_modifier"] != GanonsCastleBossKeyGregModifier.option_reward):
-                    self.assertTrue(can_trigger_lacs(self.get_bundle())._instantiate(self.world)._evaluate(self.multiworld.state), f"Wasn't able to trigger LACS, but should have been able to with count {required_amount}, {invalid_combo}")
+                    self.assertTrue(can_trigger_gbk(self.get_bundle())._instantiate(self.world)._evaluate(self.multiworld.state), f"Wasn't able to trigger LACS, but should have been able to with count {required_amount}, {invalid_combo}")
                 else:
-                    self.assertFalse(can_trigger_lacs(self.get_bundle())._instantiate(self.world)._evaluate(self.multiworld.state), f"Should not be able to trigger LACS with only {invalid_combo}. Required amount:{required_amount}")
+                    self.assertFalse(can_trigger_gbk(self.get_bundle())._instantiate(self.world)._evaluate(self.multiworld.state), f"Should not be able to trigger LACS with only {invalid_combo}. Required amount:{required_amount}")
 
                 self.remove(invalid_combo)
         self.collect(required_items)
-        self.assertTrue(can_trigger_lacs(self.get_bundle())._instantiate(self.world)._evaluate(self.multiworld.state), f"Wasn't able to trigger LACS, but should have been able to.")
+        self.assertTrue(can_trigger_gbk(self.get_bundle())._instantiate(self.world)._evaluate(self.multiworld.state), f"Wasn't able to trigger LACS, but should have been able to.")
 
 # Greg Specific
 class TestCanTriggerLacsTestGregSoloReward(LACSBase):
     """
-    Test can_trigger_lacs greg solo reward
+    Test can_trigger_gbk greg solo reward
     """
     options = {"ganons_castle_boss_key": GanonsCastleBossKey.option_lacs_stones, 
                "ganons_castle_boss_key_stones_required": 1,
@@ -86,22 +86,22 @@ class TestCanTriggerLacsTestGregSoloReward(LACSBase):
 
 class TestCanTriggerLacsGregSoloNonReward(LACSBase):
     """
-    Test can_trigger_lacs stones greg solo non reward
+    Test can_trigger_gbk stones greg solo non reward
     """
     options = {"ganons_castle_boss_key": GanonsCastleBossKey.option_lacs_stones, 
                "ganons_castle_boss_key_stones_required": 1,
                "ganons_castle_boss_key_greg_modifier": GanonsCastleBossKeyGregModifier.option_off}
 
     def test_stones_greg_solo_nonreward(self):
-        self.assertFalse(can_trigger_lacs(self.get_bundle())._instantiate(self.world)._evaluate(self.multiworld.state), f"Could trigger LACS but shouldn't have been able to.")
+        self.assertFalse(can_trigger_gbk(self.get_bundle())._instantiate(self.world)._evaluate(self.multiworld.state), f"Could trigger LACS but shouldn't have been able to.")
         self.collect(self.create_item(Items.GREG_THE_GREEN_RUPEE))
-        self.assertFalse(can_trigger_lacs(self.get_bundle())._instantiate(self.world)._evaluate(self.multiworld.state), f"Could trigger LACS but shouldn't have been able to.")
+        self.assertFalse(can_trigger_gbk(self.get_bundle())._instantiate(self.world)._evaluate(self.multiworld.state), f"Could trigger LACS but shouldn't have been able to.")
 
 
 # Vanilla
 class TestCanTriggerLacsVanilla(LACSBase):
     """
-    Test can_trigger_lacs vanilla
+    Test can_trigger_gbk vanilla
     """
     options = {"ganons_castle_boss_key": GanonsCastleBossKey.option_vanilla,
                "door_of_time": DoorOfTime.option_closed, 
@@ -109,11 +109,13 @@ class TestCanTriggerLacsVanilla(LACSBase):
                "shuffle_dungeon_rewards": ShuffleDungeonRewards.option_anywhere,}
 
     def test_vanilla_setting(self):
-        self.require_all_lacs([Items.SHADOW_MEDALLION, Items.SPIRIT_MEDALLION])
+        # no trigger: the key is in its vanilla chest (SoH 9.3.1)
+        self.collect_by_name([Items.SHADOW_MEDALLION, Items.SPIRIT_MEDALLION, Items.FOREST_MEDALLION])
+        self.assertFalse(can_trigger_gbk(self.get_bundle())._instantiate(self.world)._evaluate(self.multiworld.state))
 
 class TestCanTriggerLacsAnywhere(LACSBase):
     """
-    Test can_trigger_lacs anywhere
+    Test can_trigger_gbk anywhere
     """
     options = {"ganons_castle_boss_key": GanonsCastleBossKey.option_anywhere,
                "door_of_time": DoorOfTime.option_closed, 
@@ -121,11 +123,13 @@ class TestCanTriggerLacsAnywhere(LACSBase):
                "shuffle_dungeon_rewards": ShuffleDungeonRewards.option_anywhere,}
 
     def test_anywhere_setting(self):
-        self.require_all_lacs([Items.SHADOW_MEDALLION, Items.SPIRIT_MEDALLION])
+        # no trigger: the key is in the item pool (SoH 9.3.1)
+        self.collect_by_name([Items.SHADOW_MEDALLION, Items.SPIRIT_MEDALLION, Items.FOREST_MEDALLION])
+        self.assertFalse(can_trigger_gbk(self.get_bundle())._instantiate(self.world)._evaluate(self.multiworld.state))
 
 class TestCanTriggerLacsLACSVanilla(LACSBase):
     """
-    Test can_trigger_lacs anywhere
+    Test can_trigger_gbk anywhere
     """
     options = {"ganons_castle_boss_key": GanonsCastleBossKey.option_lacs_vanilla,
                "door_of_time": DoorOfTime.option_closed, 
@@ -133,12 +137,14 @@ class TestCanTriggerLacsLACSVanilla(LACSBase):
                "shuffle_dungeon_rewards": ShuffleDungeonRewards.option_anywhere,}
 
     def test_lacs_vanilla_setting(self):
-        self.require_all_lacs([Items.SHADOW_MEDALLION, Items.SPIRIT_MEDALLION])
+        # SoH 9.3.1 migrates LACS-Vanilla to the medallion trigger with 2 medallions (any two)
+        self.require_some_lacs([Items.FOREST_MEDALLION, Items.FIRE_MEDALLION, Items.WATER_MEDALLION,
+                                Items.SPIRIT_MEDALLION, Items.SHADOW_MEDALLION, Items.LIGHT_MEDALLION], 2)
 
 # Stones
 class TestCanTriggerLacsStonesAll(LACSBase):
     """
-    Test can_trigger_lacs all stones
+    Test can_trigger_gbk all stones
     """
     options = {"ganons_castle_boss_key": GanonsCastleBossKey.option_lacs_stones, 
                "door_of_time": DoorOfTime.option_closed, 
@@ -151,7 +157,7 @@ class TestCanTriggerLacsStonesAll(LACSBase):
 
 class TestCanTriggerLacsStonesFew(LACSBase):
     """
-    Test can_trigger_lacs a few stones
+    Test can_trigger_gbk a few stones
     """
     options = {"ganons_castle_boss_key": GanonsCastleBossKey.option_lacs_stones, 
                "door_of_time": DoorOfTime.option_closed, 
@@ -165,7 +171,7 @@ class TestCanTriggerLacsStonesFew(LACSBase):
 
 class TestCanTriggerLacsStonesGregReward(LACSBase):
     """
-    Test can_trigger_lacs stones greg reward
+    Test can_trigger_gbk stones greg reward
     """
     options = {"ganons_castle_boss_key": GanonsCastleBossKey.option_lacs_stones, 
                 "door_of_time": DoorOfTime.option_closed, 
@@ -183,7 +189,7 @@ class TestCanTriggerLacsStonesGregReward(LACSBase):
 # Medallions
 class TestCanTriggerLacsMedallionsAll(LACSBase):
     """
-    Test can_trigger_lacs all medallions
+    Test can_trigger_gbk all medallions
     """
     options = {"ganons_castle_boss_key": GanonsCastleBossKey.option_lacs_medallions, 
                "ganons_castle_boss_key_medallions_required": 6, 
@@ -197,7 +203,7 @@ class TestCanTriggerLacsMedallionsAll(LACSBase):
 
 class TestCanTriggerLacsMedallionsFew(LACSBase):
     """
-    Test can_trigger_lacs a few medallions
+    Test can_trigger_gbk a few medallions
     """
     options = {"ganons_castle_boss_key": GanonsCastleBossKey.option_lacs_medallions, 
                "ganons_castle_boss_key_medallions_required": 5,
@@ -211,7 +217,7 @@ class TestCanTriggerLacsMedallionsFew(LACSBase):
 
 class TestCanTriggerLacsMedallionsGregReward(LACSBase):
     """
-    Test can_trigger_lacs medallions greg reward
+    Test can_trigger_gbk medallions greg reward
     """
     options = {"ganons_castle_boss_key": GanonsCastleBossKey.option_lacs_medallions, 
                # Needs to be updated when Greg Reward fixes get merged
@@ -230,7 +236,7 @@ class TestCanTriggerLacsMedallionsGregReward(LACSBase):
 # Dungeon Rewards
 class TestCanTriggerLacsDungeonRewardsAll(LACSBase):
     """
-    Test can_trigger_lacs all dungeonrewards
+    Test can_trigger_gbk all dungeonrewards
     """
     options = {"ganons_castle_boss_key": GanonsCastleBossKey.option_lacs_dungeon_rewards, 
                "door_of_time": DoorOfTime.option_closed, 
@@ -245,7 +251,7 @@ class TestCanTriggerLacsDungeonRewardsAll(LACSBase):
 
 class TestCanTriggerLacsDungeonRewardsFew(LACSBase):
     """
-    Test can_trigger_lacs a few dungeonrewards
+    Test can_trigger_gbk a few dungeonrewards
     """
     options = {"ganons_castle_boss_key": GanonsCastleBossKey.option_lacs_dungeon_rewards, 
                "door_of_time": DoorOfTime.option_closed, 
@@ -261,7 +267,7 @@ class TestCanTriggerLacsDungeonRewardsFew(LACSBase):
 
 class TestCanTriggerLacsDungeonRewardsGregReward(LACSBase):
     """
-    Test can_trigger_lacs dungeonrewards greg reward
+    Test can_trigger_gbk dungeonrewards greg reward
     """
     options = {"ganons_castle_boss_key": GanonsCastleBossKey.option_lacs_dungeon_rewards, 
                 "door_of_time": DoorOfTime.option_closed, 
@@ -281,7 +287,7 @@ class TestCanTriggerLacsDungeonRewardsGregReward(LACSBase):
 # Dungeons
 class TestCanTriggerLacsDungeonsAll(LACSBase):
     """
-    Test can_trigger_lacs all dungeons
+    Test can_trigger_gbk all dungeons
     """
     options = {"ganons_castle_boss_key": GanonsCastleBossKey.option_lacs_dungeons, 
                "door_of_time": DoorOfTime.option_closed, 
@@ -296,7 +302,7 @@ class TestCanTriggerLacsDungeonsAll(LACSBase):
 
 class TestCanTriggerLacsDungeonsFew(LACSBase):
     """
-    Test can_trigger_lacs a few dungeons
+    Test can_trigger_gbk a few dungeons
     """
     options = {"ganons_castle_boss_key": GanonsCastleBossKey.option_lacs_dungeons, 
                "door_of_time": DoorOfTime.option_closed, 
@@ -312,7 +318,7 @@ class TestCanTriggerLacsDungeonsFew(LACSBase):
 
 class TestCanTriggerLacsDungeonsGregReward(LACSBase):
     """
-    Test can_trigger_lacs dungeons greg reward
+    Test can_trigger_gbk dungeons greg reward
     """
     options = {"ganons_castle_boss_key": GanonsCastleBossKey.option_lacs_dungeons, 
                 "door_of_time": DoorOfTime.option_closed, 
@@ -332,18 +338,18 @@ class TestCanTriggerLacsDungeonsGregReward(LACSBase):
 # Tokens
 class TestCanTriggerLacsTokensAll(LACSBase):
     """
-    Test can_trigger_lacs all tokens
+    Test can_trigger_gbk all tokens
     """
     options = {"ganons_castle_boss_key": GanonsCastleBossKey.option_lacs_skull_tokens,
                "shuffle_skull_tokens": ShuffleTokens.option_all, 
                "ganons_castle_boss_key_skull_tokens_required": 100}
 
     def test_tokens_all(self):
-        self.assertFalse(can_trigger_lacs(self.get_bundle())._instantiate(self.world)._evaluate(self.multiworld.state), f"Could trigger LACS but shouldn't have been able to.")
+        self.assertFalse(can_trigger_gbk(self.get_bundle())._instantiate(self.world)._evaluate(self.multiworld.state), f"Could trigger LACS but shouldn't have been able to.")
         self.collect(self.create_item(Items.GOLD_SKULLTULA_TOKEN) for _ in range(99))
-        self.assertFalse(can_trigger_lacs(self.get_bundle())._instantiate(self.world)._evaluate(self.multiworld.state), f"Could trigger LACS but shouldn't have been able to.")
+        self.assertFalse(can_trigger_gbk(self.get_bundle())._instantiate(self.world)._evaluate(self.multiworld.state), f"Could trigger LACS but shouldn't have been able to.")
         self.collect(self.create_item(Items.GOLD_SKULLTULA_TOKEN))
-        self.assertTrue(can_trigger_lacs(self.get_bundle())._instantiate(self.world)._evaluate(self.multiworld.state), f"Couldn't trigger LACS but should have been able to.")
+        self.assertTrue(can_trigger_gbk(self.get_bundle())._instantiate(self.world)._evaluate(self.multiworld.state), f"Couldn't trigger LACS but should have been able to.")
 
 # Rainbow Bridge
 class RainbowBase(SohTestBase):
