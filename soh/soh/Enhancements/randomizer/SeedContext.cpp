@@ -881,6 +881,8 @@ void Context::ParseArchipelagoOptions() {
     }
     // 9.3.1 gameplay switches (apworld 1.5+). They used to be left at whatever the local randomizer menu had;
     // now they always come from the slot data, off when an older apworld doesn't send them.
+    // Ice trap disguise names (apworld 1.5+, same order as RandoIceTrapNames; upstream default Similar)
+    mOptions[RSK_ICE_TRAP_NAMES].Set(slotData.value("ice_trap_names", static_cast<int>(RO_ICE_TRAP_NAMES_SIMILAR)));
     mOptions[RSK_BUNNY_HOOD].Set(slotData.value("bunny_hood_effect", 0));
     mOptions[RSK_PROGRESSIVE_GORON_SWORD].Set(slotData.value("progressive_goron_sword", 0));
     mOptions[RSK_MASKS_AS_ADULT].Set(slotData.value("masks_as_adult", 0));
