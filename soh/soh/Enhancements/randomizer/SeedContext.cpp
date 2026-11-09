@@ -699,7 +699,8 @@ void Context::ParseArchipelagoOptions() {
     // Weird Egg = "Skip Waking Talon". Same mapping as upstream ConfigVersion7Updater.
     // Kakariko Gate "Open" is mapped to starting with Zelda's Letter (decided for the AP update): upstream opens
     // the gate only through the letter. Note that an unshuffled starting letter also counts as having met Zelda.
-    mOptions[RSK_SHUFFLE_ZELDAS_LETTER].Set(RO_GENERIC_OFF);
+    // Shuffle Zelda's Letter (apworld 1.5+); the apworld turns Skip Child Zelda off then
+    mOptions[RSK_SHUFFLE_ZELDAS_LETTER].Set(slotData.value("shuffle_zeldas_letter", static_cast<int>(RO_GENERIC_OFF)));
     if (slotData["skip_child_zelda"] != 0) {
         mOptions[RSK_STARTING_ZELDAS_LETTER].Set(RO_GENERIC_ON);
         mOptions[RSK_SHUFFLE_WEIRD_EGG].Set(RO_WEIRD_EGG_SKIP_TALON);
