@@ -607,6 +607,31 @@ class ShuffleRedIce(Toggle):
     display_name = "Shuffle Red Ice"
 
 
+class ShuffleRocks(Toggle):
+    """
+    Small rocks give a randomized item the first time they are picked up or destroyed
+    (Ship of Harkinian 9.3.1: "Shuffle Rocks"). 121 new locations, all outside of dungeons.
+    """
+    display_name = "Shuffle Rocks"
+
+
+class ShuffleBoulders(Choice):
+    """
+    Boulders (brown, silver and bronze boulders, rock circles etc.) give a randomized item the first time they are
+    destroyed (Ship of Harkinian 9.3.1: "Shuffle Boulders").
+    Off - Boulders are not shuffled.
+    Dungeons - Only boulders within dungeons (6).
+    Overworld - Only boulders outside of dungeons (113).
+    All Boulders - All boulders (119).
+    """
+    display_name = "Shuffle Boulders"
+    option_off = 0
+    option_dungeon = 1
+    option_overworld = 2
+    option_all = 3
+    default = 0
+
+
 class ShuffleCrates(Choice):
     """
     Large and small crates will drop a randomized item the first time they're broken and collected.
@@ -2421,6 +2446,8 @@ class SohOptions(PerGameCommonOptions):
     shuffle_wonder_items: ShuffleWonderItems
     shuffle_icicles: ShuffleIcicles
     shuffle_red_ice: ShuffleRedIce
+    shuffle_rocks: ShuffleRocks
+    shuffle_boulders: ShuffleBoulders
     shuffle_crates: ShuffleCrates
     shuffle_trees: ShuffleTrees
     shuffle_merchants: ShuffleMerchants
@@ -2942,6 +2969,8 @@ soh_option_groups = [
         ShuffleWonderItems,
         ShuffleIcicles,
         ShuffleRedIce,
+        ShuffleRocks,
+        ShuffleBoulders,
         ShuffleCrates,
         ShuffleTrees,
         ShuffleMerchants,

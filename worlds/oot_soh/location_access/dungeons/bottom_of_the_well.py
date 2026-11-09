@@ -314,12 +314,18 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_cut_shrubs(bundle)),
         (Locations.BOTTOM_OF_THE_WELL_BASEMENT_GRASS3,
          lambda bundle: can_cut_shrubs(bundle)),
-        # DEFERRED RC_BOTW_BOULDER_1: logic->BlastOrSmash()
-        # DEFERRED RC_BOTW_BOULDER_2: logic->BlastOrSmash()
-        # DEFERRED RC_BOTW_BOULDER_3: logic->BlastOrSmash() || logic->CanUse(RG_DINS_FIRE) || (logic->CanUse(RG_STICKS) && ctx->GetTrickOption(RT_BOTW_BASEMENT)) || (ctx->GetTrickOption(RT_BOULDER_COLLISION) && logic->CanUse(RG_FAIRY_BOW))
-        # DEFERRED RC_BOTW_BOULDER_4: logic->BlastOrSmash()
-        # DEFERRED RC_BOTW_BOULDER_5: logic->BlastOrSmash()
-        # DEFERRED RC_BOTW_BOULDER_6: logic->BlastOrSmash()
+        (Locations.BOTW_BOULDER_1,
+         lambda bundle: blast_or_smash(bundle)),
+        (Locations.BOTW_BOULDER_2,
+         lambda bundle: blast_or_smash(bundle)),
+        (Locations.BOTW_BOULDER_3,
+         lambda bundle: blast_or_smash(bundle) | can_use(Items.DINS_FIRE, bundle) | (can_use(Items.STICKS, bundle) & can_do_trick(Tricks.BOTW_BASEMENT, bundle)) | (can_do_trick(Tricks.BOULDER_COLLISION, bundle) & can_use(Items.FAIRY_BOW, bundle))),
+        (Locations.BOTW_BOULDER_4,
+         lambda bundle: blast_or_smash(bundle)),
+        (Locations.BOTW_BOULDER_5,
+         lambda bundle: blast_or_smash(bundle)),
+        (Locations.BOTW_BOULDER_6,
+         lambda bundle: blast_or_smash(bundle)),
         # DEFERRED RC_BOTW_B2_LADDER_SILVER: logic->CanClimbLadder()
         # DEFERRED RC_BOTW_B3_LADDER_SILVER: true
         # DEFERRED RC_BOTW_NW_OOZE_SILVER: true
@@ -359,12 +365,18 @@ def set_region_rules(world: "SohWorld") -> None:
     # Bottom of the Well B3 Bomb Flowers  (upstream RR_BOTW_B3_BOMB_FLOWERS, SCENE_BOTTOM_OF_THE_WELL)
     # Locations
     add_locations(Regions.BOTW_B3_BOMB_FLOWERS, world, [
-        # DEFERRED RC_BOTW_BOULDER_1: logic->HasItem(RG_GORONS_BRACELET)
-        # DEFERRED RC_BOTW_BOULDER_2: logic->HasItem(RG_GORONS_BRACELET)
-        # DEFERRED RC_BOTW_BOULDER_3: logic->CanDetonateUprightBombFlower()
-        # DEFERRED RC_BOTW_BOULDER_4: logic->HasItem(RG_GORONS_BRACELET)
-        # DEFERRED RC_BOTW_BOULDER_5: logic->HasItem(RG_GORONS_BRACELET)
-        # DEFERRED RC_BOTW_BOULDER_6: logic->HasItem(RG_GORONS_BRACELET)
+        (Locations.BOTW_BOULDER_1,
+         lambda bundle: has_item(Items.GORONS_BRACELET, bundle)),
+        (Locations.BOTW_BOULDER_2,
+         lambda bundle: has_item(Items.GORONS_BRACELET, bundle)),
+        (Locations.BOTW_BOULDER_3,
+         lambda bundle: can_detonate_upright_bomb_flower(bundle)),
+        (Locations.BOTW_BOULDER_4,
+         lambda bundle: has_item(Items.GORONS_BRACELET, bundle)),
+        (Locations.BOTW_BOULDER_5,
+         lambda bundle: has_item(Items.GORONS_BRACELET, bundle)),
+        (Locations.BOTW_BOULDER_6,
+         lambda bundle: has_item(Items.GORONS_BRACELET, bundle)),
     ])
     # Connections
     connect_regions(Regions.BOTW_B3_BOMB_FLOWERS, world, [
@@ -445,4 +457,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (18): ['RC_BOTW_BOULDER_1', 'RC_BOTW_BOULDER_2', 'RC_BOTW_BOULDER_3', 'RC_BOTW_BOULDER_4', 'RC_BOTW_BOULDER_5', 'RC_BOTW_BOULDER_6', 'RC_BOTW_B2_LADDER_SILVER', 'RC_BOTW_B3_LADDER_SILVER', 'RC_BOTW_NW_OOZE_SILVER', 'RC_BOTW_SE_OOZE_SILVER', 'RC_BOTW_B1_LADDER_SILVER', 'RC_BOTW_B2_LADDER_SILVER', 'RC_BOTW_BOULDER_1', 'RC_BOTW_BOULDER_2', 'RC_BOTW_BOULDER_3', 'RC_BOTW_BOULDER_4', 'RC_BOTW_BOULDER_5', 'RC_BOTW_BOULDER_6']
+# deferred locations (6): ['RC_BOTW_B2_LADDER_SILVER', 'RC_BOTW_B3_LADDER_SILVER', 'RC_BOTW_NW_OOZE_SILVER', 'RC_BOTW_SE_OOZE_SILVER', 'RC_BOTW_B1_LADDER_SILVER', 'RC_BOTW_B2_LADDER_SILVER']

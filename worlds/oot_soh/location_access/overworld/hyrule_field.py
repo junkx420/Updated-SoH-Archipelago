@@ -137,22 +137,38 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_cut_shrubs(bundle) | summon_epona(bundle)),
         (Locations.HF_NEAR_KFGRASS12,
          lambda bundle: can_cut_shrubs(bundle) | summon_epona(bundle)),
-        # DEFERRED RC_HF_SILVER_BOULDER: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_HF_ROCK_1: logic->CanBreakRocks()
-        # DEFERRED RC_HF_ROCK_2: logic->CanBreakRocks()
-        # DEFERRED RC_HF_ROCK_3: logic->CanBreakRocks()
-        # DEFERRED RC_HF_ROCK_4: logic->CanBreakRocks()
-        # DEFERRED RC_HF_ROCK_5: logic->CanBreakRocks()
-        # DEFERRED RC_HF_ROCK_6: logic->CanBreakRocks()
-        # DEFERRED RC_HF_ROCK_7: logic->CanBreakRocks()
-        # DEFERRED RC_HF_ROCK_8: logic->CanBreakRocks()
-        # DEFERRED RC_HF_BOULDER_NORTH: logic->BlastOrSmash()
-        # DEFERRED RC_HF_BOULDER_BY_MARKET: logic->BlastOrSmash()
-        # DEFERRED RC_HF_BOULDER_SOUTH: logic->BlastOrSmash()
-        # DEFERRED RC_HF_BRONZE_BOULDER_1: logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_HF_BRONZE_BOULDER_2: logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_HF_BRONZE_BOULDER_3: logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_HF_BRONZE_BOULDER_4: logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)
+        (Locations.HF_SILVER_BOULDER,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.HF_ROCK_1,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.HF_ROCK_2,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.HF_ROCK_3,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.HF_ROCK_4,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.HF_ROCK_5,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.HF_ROCK_6,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.HF_ROCK_7,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.HF_ROCK_8,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.HF_BOULDER_NORTH,
+         lambda bundle: blast_or_smash(bundle)),
+        (Locations.HF_BOULDER_BY_MARKET,
+         lambda bundle: blast_or_smash(bundle)),
+        (Locations.HF_BOULDER_SOUTH,
+         lambda bundle: blast_or_smash(bundle)),
+        (Locations.HF_BRONZE_BOULDER_1,
+         lambda bundle: is_adult(bundle) & can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.HF_BRONZE_BOULDER_2,
+         lambda bundle: is_adult(bundle) & can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.HF_BRONZE_BOULDER_3,
+         lambda bundle: is_adult(bundle) & can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.HF_BRONZE_BOULDER_4,
+         lambda bundle: is_adult(bundle) & can_use(Items.MEGATON_HAMMER, bundle)),
         (Locations.HF_NEAR_LLR_TREE,
          lambda bundle: can_bonk_trees(bundle)),
         (Locations.HF_NEAR_LH_TREE,
@@ -600,4 +616,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (78): ['RC_HF_SILVER_BOULDER', 'RC_HF_ROCK_1', 'RC_HF_ROCK_2', 'RC_HF_ROCK_3', 'RC_HF_ROCK_4', 'RC_HF_ROCK_5', 'RC_HF_ROCK_6', 'RC_HF_ROCK_7', 'RC_HF_ROCK_8', 'RC_HF_BOULDER_NORTH', 'RC_HF_BOULDER_BY_MARKET', 'RC_HF_BOULDER_SOUTH', 'RC_HF_BRONZE_BOULDER_1', 'RC_HF_BRONZE_BOULDER_2', 'RC_HF_BRONZE_BOULDER_3', 'RC_HF_BRONZE_BOULDER_4', 'RC_HF_BUSH_NEAR_LAKE_1', 'RC_HF_BUSH_NEAR_LAKE_2', 'RC_HF_BUSH_NEAR_LAKE_3', 'RC_HF_BUSH_NEAR_LAKE_4', 'RC_HF_BUSH_NEAR_LAKE_5', 'RC_HF_BUSH_NEAR_LAKE_6', 'RC_HF_BUSH_NEAR_LAKE_7', 'RC_HF_BUSH_NEAR_LAKE_8', 'RC_HF_BUSH_NEAR_LAKE_9', 'RC_HF_BUSH_NEAR_LAKE_10', 'RC_HF_BUSH_NEAR_LAKE_11', 'RC_HF_NORTHERN_BUSH_1', 'RC_HF_NORTHERN_BUSH_2', 'RC_HF_NORTHERN_BUSH_3', 'RC_HF_NORTHERN_BUSH_4', 'RC_HF_NORTHERN_BUSH_5', 'RC_HF_NORTHERN_BUSH_6', 'RC_HF_CHILD_NORTHERN_BUSH_1', 'RC_HF_CHILD_NORTHERN_BUSH_2', 'RC_HF_CHILD_NORTHERN_BUSH_3', 'RC_HF_CHILD_NORTHERN_BUSH_4', 'RC_HF_CHILD_NORTHERN_BUSH_5', 'RC_HF_CHILD_NORTHERN_BUSH_6', 'RC_HF_CHILD_NORTHERN_BUSH_7']
+# deferred locations (62): ['RC_HF_BUSH_NEAR_LAKE_1', 'RC_HF_BUSH_NEAR_LAKE_2', 'RC_HF_BUSH_NEAR_LAKE_3', 'RC_HF_BUSH_NEAR_LAKE_4', 'RC_HF_BUSH_NEAR_LAKE_5', 'RC_HF_BUSH_NEAR_LAKE_6', 'RC_HF_BUSH_NEAR_LAKE_7', 'RC_HF_BUSH_NEAR_LAKE_8', 'RC_HF_BUSH_NEAR_LAKE_9', 'RC_HF_BUSH_NEAR_LAKE_10', 'RC_HF_BUSH_NEAR_LAKE_11', 'RC_HF_NORTHERN_BUSH_1', 'RC_HF_NORTHERN_BUSH_2', 'RC_HF_NORTHERN_BUSH_3', 'RC_HF_NORTHERN_BUSH_4', 'RC_HF_NORTHERN_BUSH_5', 'RC_HF_NORTHERN_BUSH_6', 'RC_HF_CHILD_NORTHERN_BUSH_1', 'RC_HF_CHILD_NORTHERN_BUSH_2', 'RC_HF_CHILD_NORTHERN_BUSH_3', 'RC_HF_CHILD_NORTHERN_BUSH_4', 'RC_HF_CHILD_NORTHERN_BUSH_5', 'RC_HF_CHILD_NORTHERN_BUSH_6', 'RC_HF_CHILD_NORTHERN_BUSH_7', 'RC_HF_CHILD_NORTHERN_BUSH_8', 'RC_HF_CHILD_NORTHERN_BUSH_9', 'RC_HF_CHILD_NORTHERN_BUSH_10', 'RC_HF_CHILD_NORTHERN_BUSH_11', 'RC_HF_BUSH_BY_ROCKY_PATH_1', 'RC_HF_BUSH_BY_ROCKY_PATH_2', 'RC_HF_BUSH_BY_ROCKY_PATH_3', 'RC_HF_BUSH_BY_ROCKY_PATH_4', 'RC_HF_BUSH_BY_ROCKY_PATH_5', 'RC_HF_BUSH_BY_ROCKY_PATH_6', 'RC_HF_SOUTHERN_BUSH_1', 'RC_HF_SOUTHERN_BUSH_2', 'RC_HF_SOUTHERN_BUSH_3', 'RC_HF_SOUTHERN_BUSH_4', 'RC_HF_SOUTHERN_BUSH_5', 'RC_HF_SOUTHERN_BUSH_6']

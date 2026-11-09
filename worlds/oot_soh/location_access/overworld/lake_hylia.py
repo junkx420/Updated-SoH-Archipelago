@@ -228,7 +228,8 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Locations
     add_locations(Regions.LH_FISHING_ISLAND, world, [
-        # DEFERRED RC_LH_ROCK: logic->CanBreakRocks()
+        (Locations.LH_ROCK,
+         lambda bundle: can_break_rocks(bundle)),
         (Locations.LH_FISHING_SIGN,
          lambda bundle: can_read(bundle)),
         (Locations.LH_FISHING_ISLAND_WATER_SWITCH_SIGN,
@@ -413,4 +414,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (5): ['RC_LH_SCARECROWS_SONG', 'RC_LH_LAB_GOSSIP_STONE', 'RC_LH_SOUTHEAST_GOSSIP_STONE', 'RC_LH_SOUTHWEST_GOSSIP_STONE', 'RC_LH_ROCK']
+# deferred locations (4): ['RC_LH_SCARECROWS_SONG', 'RC_LH_LAB_GOSSIP_STONE', 'RC_LH_SOUTHEAST_GOSSIP_STONE', 'RC_LH_SOUTHWEST_GOSSIP_STONE']

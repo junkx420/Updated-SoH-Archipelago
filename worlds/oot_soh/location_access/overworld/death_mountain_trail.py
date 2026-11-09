@@ -60,30 +60,54 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: is_child(bundle) & bean_planted(bundle, Events.PLANT_DEATH_MOUNTAIN_TRAIL_BEAN) & can_use(Items.SONG_OF_STORMS, bundle) & (has_explosives(bundle) | has_item(Items.GORONS_BRACELET, bundle))),
         (Locations.DMT_FLAG_SUNS_SONG_FAIRY,
          lambda bundle: can_use(Items.SUNS_SONG, bundle)),
-        # DEFERRED RC_DMT_ROCK_1: logic->CanBreakRocks()
-        # DEFERRED RC_DMT_ROCK_2: logic->CanBreakRocks()
-        # DEFERRED RC_DMT_ROCK_3: logic->CanBreakRocks()
-        # DEFERRED RC_DMT_ROCK_4: logic->CanBreakRocks()
-        # DEFERRED RC_DMT_ROCK_5: logic->CanBreakRocks()
-        # DEFERRED RC_DMT_CIRCLE_ROCK_1: logic->CanBreakRocks()
-        # DEFERRED RC_DMT_CIRCLE_ROCK_2: logic->CanBreakRocks()
-        # DEFERRED RC_DMT_CIRCLE_ROCK_3: logic->CanBreakRocks()
-        # DEFERRED RC_DMT_CIRCLE_ROCK_4: logic->CanBreakRocks()
-        # DEFERRED RC_DMT_CIRCLE_ROCK_5: logic->CanBreakRocks()
-        # DEFERRED RC_DMT_CIRCLE_ROCK_6: logic->CanBreakRocks()
-        # DEFERRED RC_DMT_CIRCLE_ROCK_7: logic->CanBreakRocks()
-        # DEFERRED RC_DMT_CIRCLE_ROCK_8: logic->CanBreakRocks()
-        # DEFERRED RC_DMT_CHILD_BOULDER: logic->IsChild && logic->BlastOrSmash()
-        # DEFERRED RC_DMT_BOULDER_1: logic->BlastOrSmash()
-        # DEFERRED RC_DMT_BOULDER_2: logic->BlastOrSmash()
-        # DEFERRED RC_DMT_BRONZE_BOULDER_1: logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_DMT_BRONZE_BOULDER_2: logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_DMT_BRONZE_BOULDER_3: logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_DMT_BRONZE_BOULDER_4: logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_DMT_BRONZE_BOULDER_5: logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_DMT_BRONZE_BOULDER_6: logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_DMT_BRONZE_BOULDER_7: logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_DMT_BRONZE_BOULDER_11: logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)
+        (Locations.DMT_ROCK_1,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.DMT_ROCK_2,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.DMT_ROCK_3,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.DMT_ROCK_4,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.DMT_ROCK_5,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.DMT_CIRCLE_ROCK_1,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.DMT_CIRCLE_ROCK_2,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.DMT_CIRCLE_ROCK_3,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.DMT_CIRCLE_ROCK_4,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.DMT_CIRCLE_ROCK_5,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.DMT_CIRCLE_ROCK_6,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.DMT_CIRCLE_ROCK_7,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.DMT_CIRCLE_ROCK_8,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.DMT_CHILD_BOULDER,
+         lambda bundle: is_child(bundle) & blast_or_smash(bundle)),
+        (Locations.DMT_BOULDER_1,
+         lambda bundle: blast_or_smash(bundle)),
+        (Locations.DMT_BOULDER_2,
+         lambda bundle: blast_or_smash(bundle)),
+        (Locations.DMT_BRONZE_BOULDER_1,
+         lambda bundle: is_adult(bundle) & can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.DMT_BRONZE_BOULDER_2,
+         lambda bundle: is_adult(bundle) & can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.DMT_BRONZE_BOULDER_3,
+         lambda bundle: is_adult(bundle) & can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.DMT_BRONZE_BOULDER_4,
+         lambda bundle: is_adult(bundle) & can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.DMT_BRONZE_BOULDER_5,
+         lambda bundle: is_adult(bundle) & can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.DMT_BRONZE_BOULDER_6,
+         lambda bundle: is_adult(bundle) & can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.DMT_BRONZE_BOULDER_7,
+         lambda bundle: is_adult(bundle) & can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.DMT_BRONZE_BOULDER_11,
+         lambda bundle: is_adult(bundle) & can_use(Items.MEGATON_HAMMER, bundle)),
         (Locations.DMT_ABOVE_DODONGO_RECTANGLE_SIGN,
          lambda bundle: is_child(bundle) & can_read(bundle)),
         (Locations.DMT_ADULT_CENTER_EXIT_ARROW_SIGN,
@@ -127,10 +151,14 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.DEATH_MOUNTAIN_ROCKFALL, world, [
         (Locations.DMT_GS_FALLING_ROCKS_PATH,
          lambda bundle: is_adult(bundle) & can_get_nighttime_gs(bundle) & (can_use(Items.MEGATON_HAMMER, bundle) | (can_do_trick(Tricks.BOULDER_COLLISION, bundle) & can_use(Items.LONGSHOT, bundle)) | (can_do_trick(Tricks.ITEM_EXTENSION, bundle) & can_use(Items.HOOKSHOT, bundle)) | (can_do_trick(Tricks.DMT_UPPER_GS, bundle) & (can_jump_slash(bundle) | can_use(Items.DINS_FIRE, bundle) | has_explosives(bundle) | (can_do_trick(Tricks.ITEM_EXTENSION, bundle) & can_use(Items.FAIRY_SLINGSHOT, bundle)) | (can_do_trick(Tricks.BOULDER_COLLISION, bundle) & can_kill_enemy(bundle, Enemies.GOLD_SKULLTULA, EnemyDistance.LONGSHOT)))))),
-        # DEFERRED RC_DMT_BRONZE_BOULDER_8: logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_DMT_BRONZE_BOULDER_9: logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_DMT_BRONZE_BOULDER_10: logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_DMT_COW_BOULDER: logic->BlastOrSmash()
+        (Locations.DMT_BRONZE_BOULDER_8,
+         lambda bundle: is_adult(bundle) & can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.DMT_BRONZE_BOULDER_9,
+         lambda bundle: is_adult(bundle) & can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.DMT_BRONZE_BOULDER_10,
+         lambda bundle: is_adult(bundle) & can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.DMT_COW_BOULDER,
+         lambda bundle: blast_or_smash(bundle)),
     ])
     # Connections
     connect_regions(Regions.DEATH_MOUNTAIN_ROCKFALL, world, [
@@ -166,7 +194,8 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: call_gossip_fairy(bundle)),
         (Locations.DMT_GOSSIP_STONE_BIG_FAIRY,
          lambda bundle: can_use(Items.SONG_OF_STORMS, bundle)),
-        # DEFERRED RC_DMT_SUMMIT_ROCK: logic->IsChild && logic->CanBreakRocks()
+        (Locations.DMT_SUMMIT_ROCK,
+         lambda bundle: is_child(bundle) & can_break_rocks(bundle)),
         # DEFERRED RC_DMT_GOSSIP_STONE: true
         # DEFERRED RC_BIGGORON_HINT: logic->IsAdult && logic->HasItem(RG_SPEAK_GORON)
         (Locations.DMT_UPPER_EXIT_ARROW_SIGN,
@@ -294,4 +323,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (32): ['RC_DMT_ROCK_1', 'RC_DMT_ROCK_2', 'RC_DMT_ROCK_3', 'RC_DMT_ROCK_4', 'RC_DMT_ROCK_5', 'RC_DMT_CIRCLE_ROCK_1', 'RC_DMT_CIRCLE_ROCK_2', 'RC_DMT_CIRCLE_ROCK_3', 'RC_DMT_CIRCLE_ROCK_4', 'RC_DMT_CIRCLE_ROCK_5', 'RC_DMT_CIRCLE_ROCK_6', 'RC_DMT_CIRCLE_ROCK_7', 'RC_DMT_CIRCLE_ROCK_8', 'RC_DMT_CHILD_BOULDER', 'RC_DMT_BOULDER_1', 'RC_DMT_BOULDER_2', 'RC_DMT_BRONZE_BOULDER_1', 'RC_DMT_BRONZE_BOULDER_2', 'RC_DMT_BRONZE_BOULDER_3', 'RC_DMT_BRONZE_BOULDER_4', 'RC_DMT_BRONZE_BOULDER_5', 'RC_DMT_BRONZE_BOULDER_6', 'RC_DMT_BRONZE_BOULDER_7', 'RC_DMT_BRONZE_BOULDER_11', 'RC_DMT_BRONZE_BOULDER_8', 'RC_DMT_BRONZE_BOULDER_9', 'RC_DMT_BRONZE_BOULDER_10', 'RC_DMT_COW_BOULDER', 'RC_DMT_SUMMIT_ROCK', 'RC_DMT_GOSSIP_STONE', 'RC_BIGGORON_HINT', 'RC_DMT_STORMS_GROTTO_GOSSIP_STONE']
+# deferred locations (3): ['RC_DMT_GOSSIP_STONE', 'RC_BIGGORON_HINT', 'RC_DMT_STORMS_GROTTO_GOSSIP_STONE']

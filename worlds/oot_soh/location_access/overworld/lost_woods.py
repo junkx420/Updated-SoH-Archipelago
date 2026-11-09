@@ -82,7 +82,8 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_cut_shrubs(bundle)),
         (Locations.LW_NEAR_SHORTCUTS_GRASS3,
          lambda bundle: can_cut_shrubs(bundle)),
-        # DEFERRED RC_LW_BOULDER_BY_GORON_CITY: logic->BlastOrSmash()
+        (Locations.LW_BOULDER_BY_GORON_CITY,
+         lambda bundle: blast_or_smash(bundle)),
         (Locations.LW_WONDER_BACK_SKULL_KIDS_GRASS_1,
          lambda bundle: is_child(bundle)),
         (Locations.LW_WONDER_BACK_SKULL_KIDS_GRASS_2,
@@ -170,8 +171,10 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_cut_shrubs(bundle)),
         (Locations.LW_NEAR_SFM_GRASS3,
          lambda bundle: can_cut_shrubs(bundle)),
-        # DEFERRED RC_LW_BOULDER_BY_SACRED_FOREST_MEADOW: logic->BlastOrSmash()
-        # DEFERRED RC_LW_RUPEE_BOULDER: logic->BlastOrSmash()
+        (Locations.LW_BOULDER_BY_SACRED_FOREST_MEADOW,
+         lambda bundle: blast_or_smash(bundle)),
+        (Locations.LW_RUPEE_BOULDER,
+         lambda bundle: blast_or_smash(bundle)),
         (Locations.LW_MEADOW_BUTTERFLY_FAIRY,
          lambda bundle: is_child(bundle) & can_use(Items.STICKS, bundle)),
     ])
@@ -288,4 +291,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (5): ['RC_LW_BOULDER_BY_GORON_CITY', 'RC_LW_GOSSIP_STONE', 'RC_LW_BOULDER_BY_SACRED_FOREST_MEADOW', 'RC_LW_RUPEE_BOULDER', 'RC_LW_NEAR_SHORTCUTS_GROTTO_GOSSIP_STONE']
+# deferred locations (2): ['RC_LW_GOSSIP_STONE', 'RC_LW_NEAR_SHORTCUTS_GROTTO_GOSSIP_STONE']

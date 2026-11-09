@@ -527,6 +527,8 @@ class SohWorld(CachedRuleBuilderWorld):
             "shuffle_wonder_items": self.options.shuffle_wonder_items.value,
             "shuffle_icicles": self.options.shuffle_icicles.value,
             "shuffle_red_ice": self.options.shuffle_red_ice.value,
+            "shuffle_rocks": self.options.shuffle_rocks.value,
+            "shuffle_boulders": self.options.shuffle_boulders.value,
             "shuffle_crates": self.options.shuffle_crates.value,
             "shuffle_trees": self.options.shuffle_trees.value,
             "shuffle_merchants": self.options.shuffle_merchants.value,

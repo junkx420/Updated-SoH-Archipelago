@@ -53,24 +53,42 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: call_gossip_fairy(bundle)),
         (Locations.COLOSSUS_GOSSIP_STONE_BIG_FAIRY,
          lambda bundle: can_use(Items.SONG_OF_STORMS, bundle)),
-        # DEFERRED RC_COLOSSUS_SILVER_BOULDER: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_COLOSSUS_ROCK: logic->CanBreakRocks()
-        # DEFERRED RC_COLOSSUS_CIRCLE_1_ROCK_1: logic->CanBreakRocks()
-        # DEFERRED RC_COLOSSUS_CIRCLE_1_ROCK_2: logic->CanBreakRocks()
-        # DEFERRED RC_COLOSSUS_CIRCLE_1_ROCK_3: logic->CanBreakRocks()
-        # DEFERRED RC_COLOSSUS_CIRCLE_1_ROCK_4: logic->CanBreakRocks()
-        # DEFERRED RC_COLOSSUS_CIRCLE_1_ROCK_5: logic->CanBreakRocks()
-        # DEFERRED RC_COLOSSUS_CIRCLE_1_ROCK_6: logic->CanBreakRocks()
-        # DEFERRED RC_COLOSSUS_CIRCLE_1_ROCK_7: logic->CanBreakRocks()
-        # DEFERRED RC_COLOSSUS_CIRCLE_1_ROCK_8: logic->CanBreakRocks()
-        # DEFERRED RC_COLOSSUS_CIRCLE_2_ROCK_1: logic->CanBreakRocks()
-        # DEFERRED RC_COLOSSUS_CIRCLE_2_ROCK_2: logic->CanBreakRocks()
-        # DEFERRED RC_COLOSSUS_CIRCLE_2_ROCK_3: logic->CanBreakRocks()
-        # DEFERRED RC_COLOSSUS_CIRCLE_2_ROCK_4: logic->CanBreakRocks()
-        # DEFERRED RC_COLOSSUS_CIRCLE_2_ROCK_5: logic->CanBreakRocks()
-        # DEFERRED RC_COLOSSUS_CIRCLE_2_ROCK_6: logic->CanBreakRocks()
-        # DEFERRED RC_COLOSSUS_CIRCLE_2_ROCK_7: logic->CanBreakRocks()
-        # DEFERRED RC_COLOSSUS_CIRCLE_2_ROCK_8: logic->CanBreakRocks()
+        (Locations.COLOSSUS_SILVER_BOULDER,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.COLOSSUS_ROCK,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.COLOSSUS_CIRCLE_1_ROCK_1,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.COLOSSUS_CIRCLE_1_ROCK_2,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.COLOSSUS_CIRCLE_1_ROCK_3,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.COLOSSUS_CIRCLE_1_ROCK_4,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.COLOSSUS_CIRCLE_1_ROCK_5,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.COLOSSUS_CIRCLE_1_ROCK_6,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.COLOSSUS_CIRCLE_1_ROCK_7,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.COLOSSUS_CIRCLE_1_ROCK_8,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.COLOSSUS_CIRCLE_2_ROCK_1,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.COLOSSUS_CIRCLE_2_ROCK_2,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.COLOSSUS_CIRCLE_2_ROCK_3,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.COLOSSUS_CIRCLE_2_ROCK_4,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.COLOSSUS_CIRCLE_2_ROCK_5,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.COLOSSUS_CIRCLE_2_ROCK_6,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.COLOSSUS_CIRCLE_2_ROCK_7,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.COLOSSUS_CIRCLE_2_ROCK_8,
+         lambda bundle: can_break_rocks(bundle)),
         (Locations.COLOSSUS_WONDER_OASIS_TREE_1,
          lambda bundle: (is_adult(bundle) & can_use(Items.FAIRY_BOW, bundle)) | (is_child(bundle) & can_use(Items.FAIRY_SLINGSHOT, bundle))),
         (Locations.COLOSSUS_WONDER_OASIS_TREE_2,
@@ -188,4 +206,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (19): ['RC_COLOSSUS_SILVER_BOULDER', 'RC_COLOSSUS_ROCK', 'RC_COLOSSUS_CIRCLE_1_ROCK_1', 'RC_COLOSSUS_CIRCLE_1_ROCK_2', 'RC_COLOSSUS_CIRCLE_1_ROCK_3', 'RC_COLOSSUS_CIRCLE_1_ROCK_4', 'RC_COLOSSUS_CIRCLE_1_ROCK_5', 'RC_COLOSSUS_CIRCLE_1_ROCK_6', 'RC_COLOSSUS_CIRCLE_1_ROCK_7', 'RC_COLOSSUS_CIRCLE_1_ROCK_8', 'RC_COLOSSUS_CIRCLE_2_ROCK_1', 'RC_COLOSSUS_CIRCLE_2_ROCK_2', 'RC_COLOSSUS_CIRCLE_2_ROCK_3', 'RC_COLOSSUS_CIRCLE_2_ROCK_4', 'RC_COLOSSUS_CIRCLE_2_ROCK_5', 'RC_COLOSSUS_CIRCLE_2_ROCK_6', 'RC_COLOSSUS_CIRCLE_2_ROCK_7', 'RC_COLOSSUS_CIRCLE_2_ROCK_8', 'RC_COLOSSUS_GOSSIP_STONE']
+# deferred locations (1): ['RC_COLOSSUS_GOSSIP_STONE']

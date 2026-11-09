@@ -65,10 +65,14 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_cut_shrubs(bundle)),
         (Locations.ZR_NEAR_TREE_GRASS12,
          lambda bundle: can_cut_shrubs(bundle)),
-        # DEFERRED RC_ZR_BOULDER_1: logic->IsChild && logic->BlastOrSmash()
-        # DEFERRED RC_ZR_BOULDER_2: logic->IsChild && logic->BlastOrSmash()
-        # DEFERRED RC_ZR_BOULDER_3: logic->IsChild && logic->BlastOrSmash()
-        # DEFERRED RC_ZR_BOULDER_4: logic->IsChild && logic->BlastOrSmash()
+        (Locations.ZR_BOULDER_1,
+         lambda bundle: is_child(bundle) & blast_or_smash(bundle)),
+        (Locations.ZR_BOULDER_2,
+         lambda bundle: is_child(bundle) & blast_or_smash(bundle)),
+        (Locations.ZR_BOULDER_3,
+         lambda bundle: is_child(bundle) & blast_or_smash(bundle)),
+        (Locations.ZR_BOULDER_4,
+         lambda bundle: is_child(bundle) & blast_or_smash(bundle)),
         (Locations.ZR_TREE,
          lambda bundle: is_child(bundle) & can_bonk_trees(bundle)),
         (Locations.ZR_WONDER_LOWER_RIVER_1,
@@ -146,19 +150,32 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: is_adult(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | can_use(Items.BOOMERANG, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
         (Locations.ZR_BENEATH_DOMAIN_RED_RIGHT_RUPEE,
          lambda bundle: is_adult(bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | can_use(Items.BOOMERANG, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
-        # DEFERRED RC_ZR_CIRCLE_ROCK_1: logic->CanBreakRocks()
-        # DEFERRED RC_ZR_CIRCLE_ROCK_2: logic->CanBreakRocks()
-        # DEFERRED RC_ZR_CIRCLE_ROCK_3: logic->CanBreakRocks()
-        # DEFERRED RC_ZR_CIRCLE_ROCK_4: logic->CanBreakRocks()
-        # DEFERRED RC_ZR_CIRCLE_ROCK_5: logic->CanBreakRocks()
-        # DEFERRED RC_ZR_CIRCLE_ROCK_6: logic->CanBreakRocks()
-        # DEFERRED RC_ZR_CIRCLE_ROCK_7: logic->CanBreakRocks()
-        # DEFERRED RC_ZR_CIRCLE_ROCK_8: logic->CanBreakRocks()
-        # DEFERRED RC_ZR_ROCK: logic->CanBreakRocks()
-        # DEFERRED RC_ZR_UNDERWATER_ROCK_1: (logic->CanUse(RG_BOMBCHU_5) || (logic->CanUse(RG_BOMB_BAG) && ctx->GetTrickOption(RT_BOMB_DETONATION)) || (logic->IsAdult && logic->HasItem(RG_POWER_BRACELET))) && (logic->IsAdult || logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_BOOMERANG) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_UNDERWATER_ROCK_2: (logic->CanUse(RG_BOMBCHU_5) || (logic->CanUse(RG_BOMB_BAG) && ctx->GetTrickOption(RT_BOMB_DETONATION)) || (logic->IsAdult && logic->HasItem(RG_POWER_BRACELET))) && (logic->IsAdult || logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_BOOMERANG) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_UNDERWATER_ROCK_3: (logic->CanUse(RG_BOMBCHU_5) || (logic->CanUse(RG_BOMB_BAG) && ctx->GetTrickOption(RT_BOMB_DETONATION)) || (logic->IsAdult && logic->HasItem(RG_POWER_BRACELET))) && (logic->IsAdult || logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_BOOMERANG) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
-        # DEFERRED RC_ZR_UNDERWATER_ROCK_4: (logic->CanUse(RG_BOMBCHU_5) || (logic->CanUse(RG_BOMB_BAG) && ctx->GetTrickOption(RT_BOMB_DETONATION)) || (logic->IsAdult && logic->HasItem(RG_POWER_BRACELET))) && (logic->IsAdult || logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_BOOMERANG) || (ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()))
+        (Locations.ZR_CIRCLE_ROCK_1,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.ZR_CIRCLE_ROCK_2,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.ZR_CIRCLE_ROCK_3,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.ZR_CIRCLE_ROCK_4,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.ZR_CIRCLE_ROCK_5,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.ZR_CIRCLE_ROCK_6,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.ZR_CIRCLE_ROCK_7,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.ZR_CIRCLE_ROCK_8,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.ZR_ROCK,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.ZR_UNDERWATER_ROCK_1,
+         lambda bundle: (can_use(Items.BOMBCHUS_5, bundle) | (can_use(Items.BOMB_BAG, bundle) & can_do_trick(Tricks.BOMB_DETONATION, bundle)) | (is_adult(bundle) & has_grab(bundle))) & (is_adult(bundle) | has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.BOOMERANG, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_UNDERWATER_ROCK_2,
+         lambda bundle: (can_use(Items.BOMBCHUS_5, bundle) | (can_use(Items.BOMB_BAG, bundle) & can_do_trick(Tricks.BOMB_DETONATION, bundle)) | (is_adult(bundle) & has_grab(bundle))) & (is_adult(bundle) | has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.BOOMERANG, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_UNDERWATER_ROCK_3,
+         lambda bundle: (can_use(Items.BOMBCHUS_5, bundle) | (can_use(Items.BOMB_BAG, bundle) & can_do_trick(Tricks.BOMB_DETONATION, bundle)) | (is_adult(bundle) & has_grab(bundle))) & (is_adult(bundle) | has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.BOOMERANG, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
+        (Locations.ZR_UNDERWATER_ROCK_4,
+         lambda bundle: (can_use(Items.BOMBCHUS_5, bundle) | (can_use(Items.BOMB_BAG, bundle) & can_do_trick(Tricks.BOMB_DETONATION, bundle)) | (is_adult(bundle) & has_grab(bundle))) & (is_adult(bundle) | has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.BOOMERANG, bundle) | (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
         (Locations.ZR_NEAR_FREESTANDING_POH_GRASS,
          lambda bundle: can_use(Items.BOOMERANG, bundle)),
         (Locations.ZR_NEAR_ROCK_CIRCLE_BUTTERFLY_FAIRY,
@@ -257,15 +274,24 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: call_gossip_fairy(bundle)),
         (Locations.ZR_NEAR_GROTTOS_GOSSIP_STONE_BIG_FAIRY,
          lambda bundle: can_use(Items.SONG_OF_STORMS, bundle)),
-        # DEFERRED RC_ZR_UPPER_CIRCLE_BOULDER: logic->BlastOrSmash()
-        # DEFERRED RC_ZR_UPPER_CIRCLE_ROCK_1: logic->CanBreakRocks()
-        # DEFERRED RC_ZR_UPPER_CIRCLE_ROCK_2: logic->CanBreakRocks()
-        # DEFERRED RC_ZR_UPPER_CIRCLE_ROCK_3: logic->CanBreakRocks()
-        # DEFERRED RC_ZR_UPPER_CIRCLE_ROCK_4: logic->CanBreakRocks()
-        # DEFERRED RC_ZR_UPPER_CIRCLE_ROCK_5: logic->CanBreakRocks()
-        # DEFERRED RC_ZR_UPPER_CIRCLE_ROCK_6: logic->CanBreakRocks()
-        # DEFERRED RC_ZR_UPPER_CIRCLE_ROCK_7: logic->CanBreakRocks()
-        # DEFERRED RC_ZR_UPPER_CIRCLE_ROCK_8: logic->CanBreakRocks()
+        (Locations.ZR_UPPER_CIRCLE_BOULDER,
+         lambda bundle: blast_or_smash(bundle)),
+        (Locations.ZR_UPPER_CIRCLE_ROCK_1,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.ZR_UPPER_CIRCLE_ROCK_2,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.ZR_UPPER_CIRCLE_ROCK_3,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.ZR_UPPER_CIRCLE_ROCK_4,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.ZR_UPPER_CIRCLE_ROCK_5,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.ZR_UPPER_CIRCLE_ROCK_6,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.ZR_UPPER_CIRCLE_ROCK_7,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.ZR_UPPER_CIRCLE_ROCK_8,
+         lambda bundle: can_break_rocks(bundle)),
         # DEFERRED RC_ZR_NEAR_GROTTOS_GOSSIP_STONE: true
     ])
     # Connections
@@ -424,4 +450,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (29): ['RC_ZR_BOULDER_1', 'RC_ZR_BOULDER_2', 'RC_ZR_BOULDER_3', 'RC_ZR_BOULDER_4', 'RC_ZR_CIRCLE_ROCK_1', 'RC_ZR_CIRCLE_ROCK_2', 'RC_ZR_CIRCLE_ROCK_3', 'RC_ZR_CIRCLE_ROCK_4', 'RC_ZR_CIRCLE_ROCK_5', 'RC_ZR_CIRCLE_ROCK_6', 'RC_ZR_CIRCLE_ROCK_7', 'RC_ZR_CIRCLE_ROCK_8', 'RC_ZR_ROCK', 'RC_ZR_UNDERWATER_ROCK_1', 'RC_ZR_UNDERWATER_ROCK_2', 'RC_ZR_UNDERWATER_ROCK_3', 'RC_ZR_UNDERWATER_ROCK_4', 'RC_ZR_NEAR_DOMAIN_GOSSIP_STONE', 'RC_ZR_UPPER_CIRCLE_BOULDER', 'RC_ZR_UPPER_CIRCLE_ROCK_1', 'RC_ZR_UPPER_CIRCLE_ROCK_2', 'RC_ZR_UPPER_CIRCLE_ROCK_3', 'RC_ZR_UPPER_CIRCLE_ROCK_4', 'RC_ZR_UPPER_CIRCLE_ROCK_5', 'RC_ZR_UPPER_CIRCLE_ROCK_6', 'RC_ZR_UPPER_CIRCLE_ROCK_7', 'RC_ZR_UPPER_CIRCLE_ROCK_8', 'RC_ZR_NEAR_GROTTOS_GOSSIP_STONE', 'RC_ZR_OPEN_GROTTO_GOSSIP_STONE']
+# deferred locations (3): ['RC_ZR_NEAR_DOMAIN_GOSSIP_STONE', 'RC_ZR_NEAR_GROTTOS_GOSSIP_STONE', 'RC_ZR_OPEN_GROTTO_GOSSIP_STONE']

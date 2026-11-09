@@ -117,9 +117,12 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: is_child(bundle) & can_break_crates(bundle)),
         (Locations.KAK_NEAR_BAZAAR_CHILD_CRATE,
          lambda bundle: is_child(bundle) & can_break_crates(bundle)),
-        # DEFERRED RC_KAK_SILVER_BOULDER: logic->IsAdult && logic->CanUse(RG_SILVER_GAUNTLETS) && (logic->HasItem(RG_CLIMB) || logic->CanUse(RG_HOVER_BOOTS) || (logic->HasItem(RG_LONGSHOT) && ((logic->AtDay && logic->HasItem(RG_POWER_BRACELET)) || (ctx->GetTrickOption(RT_UNINTUITIVE_JUMPS) && logic->CanJumpslash() && logic->TakeDamage()))))
-        # DEFERRED RC_KAK_ROCK_1: logic->CanBreakRocks()
-        # DEFERRED RC_KAK_ROCK_2: logic->CanBreakRocks()
+        (Locations.KAK_SILVER_BOULDER,
+         lambda bundle: is_adult(bundle) & can_use(Items.SILVER_GAUNTLETS, bundle) & (has_climb(bundle) | can_use(Items.HOVER_BOOTS, bundle) | (has_item(Items.LONGSHOT, bundle) & ((at_day(bundle) & has_grab(bundle)) | (can_do_trick(Tricks.UNINTUITIVE_JUMPS, bundle) & can_jump_slash(bundle) & take_damage(bundle)))))),
+        (Locations.KAK_ROCK_1,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.KAK_ROCK_2,
+         lambda bundle: can_break_rocks(bundle)),
         (Locations.KAK_TREE,
          lambda bundle: can_bonk_trees(bundle)),
         (Locations.KAK_GUARD_GATE_RECTANGLE_SIGN,
@@ -514,4 +517,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (4): ['RC_KAK_SILVER_BOULDER', 'RC_KAK_ROCK_1', 'RC_KAK_ROCK_2', 'RC_KAK_OPEN_GROTTO_GOSSIP_STONE']
+# deferred locations (1): ['RC_KAK_OPEN_GROTTO_GOSSIP_STONE']

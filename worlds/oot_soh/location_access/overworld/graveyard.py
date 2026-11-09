@@ -72,7 +72,8 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_cut_shrubs(bundle)),
         (Locations.GRAVEYARD_FREESTANDING_POH_CRATE,
          lambda bundle: ((is_adult(bundle) & bean_planted(bundle, Events.PLANT_GRAVEYARD_BEAN)) | can_use(Items.LONGSHOT, bundle)) & can_break_crates(bundle)),
-        # DEFERRED RC_GY_ROCK: logic->CanBreakRocks()
+        (Locations.GY_ROCK,
+         lambda bundle: can_break_rocks(bundle)),
         (Locations.GRAVEYARD_GRAVE_BUTTERFLY_FAIRY,
          lambda bundle: is_child(bundle) & at_day(bundle) & can_use(Items.STICKS, bundle)),
         (Locations.GY_ENTRANCE_RECTANGLE_SIGN,
@@ -294,4 +295,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (2): ['RC_GY_ROCK', 'RC_GRAVEYARD_GOSSIP_STONE']
+# deferred locations (1): ['RC_GRAVEYARD_GOSSIP_STONE']

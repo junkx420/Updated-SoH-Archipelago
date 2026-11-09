@@ -258,17 +258,28 @@ def set_region_rules(world: "SohWorld") -> None:
     # DMC Rock Grotto  (upstream RR_DMC_ROCK_GROTTO, SCENE_DEATH_MOUNTAIN_CRATER)
     # Locations
     add_locations(Regions.DMC_ROCK_GROTTO, world, [
-        # DEFERRED RC_DMC_CIRCLE_ROCK_1: logic->FireTimer() >= 8 && logic->CanBreakRocks()
-        # DEFERRED RC_DMC_CIRCLE_ROCK_2: logic->FireTimer() >= 8 && logic->CanBreakRocks()
-        # DEFERRED RC_DMC_CIRCLE_ROCK_3: logic->FireTimer() >= 8 && logic->CanBreakRocks()
-        # DEFERRED RC_DMC_CIRCLE_ROCK_4: logic->FireTimer() >= 8 && logic->CanBreakRocks()
-        # DEFERRED RC_DMC_CIRCLE_ROCK_5: logic->FireTimer() >= 8 && logic->CanBreakRocks()
-        # DEFERRED RC_DMC_CIRCLE_ROCK_6: logic->FireTimer() >= 8 && logic->CanBreakRocks()
-        # DEFERRED RC_DMC_CIRCLE_ROCK_7: logic->FireTimer() >= 8 && logic->CanBreakRocks()
-        # DEFERRED RC_DMC_CIRCLE_ROCK_8: logic->FireTimer() >= 8 && logic->CanBreakRocks()
-        # DEFERRED RC_DMC_BOULDER_1: logic->FireTimer() >= 8 && logic->BlastOrSmash()
-        # DEFERRED RC_DMC_BOULDER_2: logic->FireTimer() >= 8 && logic->BlastOrSmash()
-        # DEFERRED RC_DMC_BOULDER_3: logic->FireTimer() >= 8 && logic->BlastOrSmash()
+        (Locations.DMC_CIRCLE_ROCK_1,
+         lambda bundle: fire_timer_at_least(bundle, 8) & can_break_rocks(bundle)),
+        (Locations.DMC_CIRCLE_ROCK_2,
+         lambda bundle: fire_timer_at_least(bundle, 8) & can_break_rocks(bundle)),
+        (Locations.DMC_CIRCLE_ROCK_3,
+         lambda bundle: fire_timer_at_least(bundle, 8) & can_break_rocks(bundle)),
+        (Locations.DMC_CIRCLE_ROCK_4,
+         lambda bundle: fire_timer_at_least(bundle, 8) & can_break_rocks(bundle)),
+        (Locations.DMC_CIRCLE_ROCK_5,
+         lambda bundle: fire_timer_at_least(bundle, 8) & can_break_rocks(bundle)),
+        (Locations.DMC_CIRCLE_ROCK_6,
+         lambda bundle: fire_timer_at_least(bundle, 8) & can_break_rocks(bundle)),
+        (Locations.DMC_CIRCLE_ROCK_7,
+         lambda bundle: fire_timer_at_least(bundle, 8) & can_break_rocks(bundle)),
+        (Locations.DMC_CIRCLE_ROCK_8,
+         lambda bundle: fire_timer_at_least(bundle, 8) & can_break_rocks(bundle)),
+        (Locations.DMC_BOULDER_1,
+         lambda bundle: fire_timer_at_least(bundle, 8) & blast_or_smash(bundle)),
+        (Locations.DMC_BOULDER_2,
+         lambda bundle: fire_timer_at_least(bundle, 8) & blast_or_smash(bundle)),
+        (Locations.DMC_BOULDER_3,
+         lambda bundle: fire_timer_at_least(bundle, 8) & blast_or_smash(bundle)),
     ])
     # Connections
     connect_regions(Regions.DMC_ROCK_GROTTO, world, [
@@ -288,8 +299,10 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: call_gossip_fairy_except_suns(bundle) & has_explosives(bundle)),
         (Locations.DMC_GOSSIP_STONE_BIG_FAIRY,
          lambda bundle: can_use(Items.SONG_OF_STORMS, bundle) & has_explosives(bundle)),
-        # DEFERRED RC_DMC_GOSSIP_ROCK_1: logic->IsChild
-        # DEFERRED RC_DMC_GOSSIP_ROCK_2: logic->IsChild
+        (Locations.DMC_GOSSIP_ROCK_1,
+         lambda bundle: is_child(bundle)),
+        (Locations.DMC_GOSSIP_ROCK_2,
+         lambda bundle: is_child(bundle)),
         # DEFERRED RC_DMC_GOSSIP_STONE: logic->HasExplosives()
     ])
 
@@ -328,10 +341,14 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_break_pots(bundle)),
         (Locations.DMC_NEAR_GCPOT4,
          lambda bundle: can_break_pots(bundle)),
-        # DEFERRED RC_DMC_BRONZE_BOULDER_1: logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_DMC_BRONZE_BOULDER_2: logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_DMC_BRONZE_BOULDER_3: logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_DMC_BRONZE_BOULDER_SHORTCUT: logic->CanUse(RG_MEGATON_HAMMER)
+        (Locations.DMC_BRONZE_BOULDER_1,
+         lambda bundle: can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.DMC_BRONZE_BOULDER_2,
+         lambda bundle: can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.DMC_BRONZE_BOULDER_3,
+         lambda bundle: can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.DMC_BRONZE_BOULDER_SHORTCUT,
+         lambda bundle: can_use(Items.MEGATON_HAMMER, bundle)),
         (Locations.DMC_BRIDGE_EXIT_ARROW_SIGN,
          lambda bundle: can_read(bundle)),
     ])
@@ -384,11 +401,16 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: is_child(bundle) & bean_planted(bundle, Events.PLANT_DEATH_MOUNTAIN_CRATER_BEAN) & can_use(Items.SONG_OF_STORMS, bundle)),
         (Locations.DMC_BEAN_SPROUT_FAIRY3,
          lambda bundle: is_child(bundle) & bean_planted(bundle, Events.PLANT_DEATH_MOUNTAIN_CRATER_BEAN) & can_use(Items.SONG_OF_STORMS, bundle)),
-        # DEFERRED RC_DMC_ROCK_BY_FIRE_TEMPLE_1: logic->IsAdult
-        # DEFERRED RC_DMC_ROCK_BY_FIRE_TEMPLE_2: logic->IsAdult
-        # DEFERRED RC_DMC_ROCK_BY_FIRE_TEMPLE_3: logic->IsAdult
-        # DEFERRED RC_DMC_ROCK_BY_FIRE_TEMPLE_4: logic->IsAdult
-        # DEFERRED RC_DMC_ROCK_BY_FIRE_TEMPLE_5: logic->IsAdult
+        (Locations.DMC_ROCK_BY_FIRE_TEMPLE_1,
+         lambda bundle: is_adult(bundle)),
+        (Locations.DMC_ROCK_BY_FIRE_TEMPLE_2,
+         lambda bundle: is_adult(bundle)),
+        (Locations.DMC_ROCK_BY_FIRE_TEMPLE_3,
+         lambda bundle: is_adult(bundle)),
+        (Locations.DMC_ROCK_BY_FIRE_TEMPLE_4,
+         lambda bundle: is_adult(bundle)),
+        (Locations.DMC_ROCK_BY_FIRE_TEMPLE_5,
+         lambda bundle: is_adult(bundle)),
         (Locations.DMC_WONDER_BENEATH_BRIDGE_PLATFORM,
          lambda bundle: is_adult(bundle) & (can_use(Items.LONGSHOT, bundle) | can_use(Items.HOVER_BOOTS, bundle))),
     ])
@@ -491,4 +513,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (24): ['RC_DMC_CIRCLE_ROCK_1', 'RC_DMC_CIRCLE_ROCK_2', 'RC_DMC_CIRCLE_ROCK_3', 'RC_DMC_CIRCLE_ROCK_4', 'RC_DMC_CIRCLE_ROCK_5', 'RC_DMC_CIRCLE_ROCK_6', 'RC_DMC_CIRCLE_ROCK_7', 'RC_DMC_CIRCLE_ROCK_8', 'RC_DMC_BOULDER_1', 'RC_DMC_BOULDER_2', 'RC_DMC_BOULDER_3', 'RC_DMC_GOSSIP_ROCK_1', 'RC_DMC_GOSSIP_ROCK_2', 'RC_DMC_GOSSIP_STONE', 'RC_DMC_BRONZE_BOULDER_1', 'RC_DMC_BRONZE_BOULDER_2', 'RC_DMC_BRONZE_BOULDER_3', 'RC_DMC_BRONZE_BOULDER_SHORTCUT', 'RC_DMC_ROCK_BY_FIRE_TEMPLE_1', 'RC_DMC_ROCK_BY_FIRE_TEMPLE_2', 'RC_DMC_ROCK_BY_FIRE_TEMPLE_3', 'RC_DMC_ROCK_BY_FIRE_TEMPLE_4', 'RC_DMC_ROCK_BY_FIRE_TEMPLE_5', 'RC_DMC_UPPER_GROTTO_GOSSIP_STONE']
+# deferred locations (2): ['RC_DMC_GOSSIP_STONE', 'RC_DMC_UPPER_GROTTO_GOSSIP_STONE']

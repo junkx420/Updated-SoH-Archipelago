@@ -43,9 +43,12 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: is_child(bundle) & can_break_pots(bundle)),
         (Locations.ZF_NEAR_JABU_POT4,
          lambda bundle: is_child(bundle) & can_break_pots(bundle)),
-        # DEFERRED RC_ZF_BOULDER: logic->BlastOrSmash()
-        # DEFERRED RC_ZF_SILVER_BOULDER: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_ZF_UNDERGROUND_BOULDER: logic->CanUse(RG_SILVER_GAUNTLETS) && logic->BlastOrSmash()
+        (Locations.ZF_BOULDER,
+         lambda bundle: blast_or_smash(bundle)),
+        (Locations.ZF_SILVER_BOULDER,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.ZF_UNDERGROUND_BOULDER,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle) & blast_or_smash(bundle)),
         (Locations.ZF_TREE,
          lambda bundle: is_child(bundle) & can_bonk_trees(bundle)),
         # DEFERRED RC_ZF_BUSH_1: logic->IsChild
@@ -216,4 +219,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (11): ['RC_ZF_FAIRY_GOSSIP_STONE', 'RC_ZF_JABU_GOSSIP_STONE', 'RC_ZF_BOULDER', 'RC_ZF_SILVER_BOULDER', 'RC_ZF_UNDERGROUND_BOULDER', 'RC_ZF_BUSH_1', 'RC_ZF_BUSH_2', 'RC_ZF_BUSH_3', 'RC_ZF_BUSH_4', 'RC_ZF_BUSH_5', 'RC_ZF_BUSH_6']
+# deferred locations (8): ['RC_ZF_FAIRY_GOSSIP_STONE', 'RC_ZF_JABU_GOSSIP_STONE', 'RC_ZF_BUSH_1', 'RC_ZF_BUSH_2', 'RC_ZF_BUSH_3', 'RC_ZF_BUSH_4', 'RC_ZF_BUSH_5', 'RC_ZF_BUSH_6']

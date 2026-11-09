@@ -74,9 +74,12 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.HC_GATE, world, [
         (Locations.HC_MALON_EGG,
          lambda bundle: has_speak(bundle, "HYLIAN")),
-        # DEFERRED RC_HC_ROCK_1: logic->CanBreakRocks()
-        # DEFERRED RC_HC_ROCK_2: logic->CanBreakRocks()
-        # DEFERRED RC_HC_ROCK_3: logic->CanBreakRocks()
+        (Locations.HC_ROCK_1,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.HC_ROCK_2,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.HC_ROCK_3,
+         lambda bundle: can_break_rocks(bundle)),
         (Locations.HC_GS_TREE,
          lambda bundle: can_bonk_trees(bundle) & can_kill_enemy(bundle, Enemies.GOLD_SKULLTULA, EnemyDistance.CLOSE)),
         (Locations.HC_SKULLTULA_TREE,
@@ -130,7 +133,8 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Locations
     add_locations(Regions.HC_PAST_GATE, world, [
-        # DEFERRED RC_HC_BOULDER: logic->BlastOrSmash()
+        (Locations.HC_BOULDER,
+         lambda bundle: blast_or_smash(bundle)),
         (Locations.HC_NEAR_GUARDS_TREE_1,
          lambda bundle: can_bonk_trees(bundle)),
         (Locations.HC_NEAR_GUARDS_TREE_2,
@@ -341,14 +345,22 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_break_pots(bundle)),
         (Locations.HC_STORMS_GROTTO_POT4,
          lambda bundle: can_break_pots(bundle)),
-        # DEFERRED RC_HC_STORMS_GROTTO_ROCK_1: logic->CanBreakRocks()
-        # DEFERRED RC_HC_STORMS_GROTTO_ROCK_2: logic->CanBreakRocks()
-        # DEFERRED RC_HC_STORMS_GROTTO_ROCK_3: logic->CanBreakRocks()
-        # DEFERRED RC_HC_STORMS_GROTTO_ROCK_4: logic->CanBreakRocks()
-        # DEFERRED RC_HC_STORMS_GROTTO_ROCK_5: logic->CanBreakRocks()
-        # DEFERRED RC_HC_STORMS_GROTTO_ROCK_6: logic->CanBreakRocks()
-        # DEFERRED RC_HC_STORMS_GROTTO_ROCK_7: logic->CanBreakRocks()
-        # DEFERRED RC_HC_STORMS_GROTTO_ROCK_8: logic->CanBreakRocks()
+        (Locations.HC_STORMS_GROTTO_ROCK_1,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.HC_STORMS_GROTTO_ROCK_2,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.HC_STORMS_GROTTO_ROCK_3,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.HC_STORMS_GROTTO_ROCK_4,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.HC_STORMS_GROTTO_ROCK_5,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.HC_STORMS_GROTTO_ROCK_6,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.HC_STORMS_GROTTO_ROCK_7,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.HC_STORMS_GROTTO_ROCK_8,
+         lambda bundle: can_break_rocks(bundle)),
     ])
     # Connections
     connect_regions(Regions.HC_STORMS_GROTTO_BEHIND_WALLS, world, [
@@ -375,13 +387,20 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.GANONS_CASTLE_GROUNDS, world, [
         (Locations.HC_OGC_GS,
          lambda bundle: hookshot_or_boomerang(bundle) | ((can_jump_slash_except_hammer(bundle) | can_use_projectile(bundle) | (can_shield(bundle) & can_use(Items.MEGATON_HAMMER, bundle)) | can_use(Items.DINS_FIRE, bundle)) & (can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)))),
-        # DEFERRED RC_OGC_BRONZE_BOULDER_1: logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_OGC_BRONZE_BOULDER_2: logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_OGC_BRONZE_BOULDER_3: logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_OGC_SILVER_BOULDER_1: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_OGC_SILVER_BOULDER_2: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_OGC_SILVER_BOULDER_3: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_OGC_SILVER_BOULDER_4: logic->CanUse(RG_SILVER_GAUNTLETS)
+        (Locations.OGC_BRONZE_BOULDER_1,
+         lambda bundle: can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.OGC_BRONZE_BOULDER_2,
+         lambda bundle: can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.OGC_BRONZE_BOULDER_3,
+         lambda bundle: can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.OGC_SILVER_BOULDER_1,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.OGC_SILVER_BOULDER_2,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.OGC_SILVER_BOULDER_3,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.OGC_SILVER_BOULDER_4,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
     ])
     # Connections
     connect_regions(Regions.GANONS_CASTLE_GROUNDS, world, [
@@ -432,4 +451,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (22): ['RC_HC_ROCK_1', 'RC_HC_ROCK_2', 'RC_HC_ROCK_3', 'RC_HC_MALON_GOSSIP_STONE', 'RC_HC_BOULDER', 'RC_HC_ROCK_WALL_GOSSIP_STONE', 'RC_HC_STORMS_GROTTO_GOSSIP_STONE', 'RC_HC_STORMS_GROTTO_ROCK_1', 'RC_HC_STORMS_GROTTO_ROCK_2', 'RC_HC_STORMS_GROTTO_ROCK_3', 'RC_HC_STORMS_GROTTO_ROCK_4', 'RC_HC_STORMS_GROTTO_ROCK_5', 'RC_HC_STORMS_GROTTO_ROCK_6', 'RC_HC_STORMS_GROTTO_ROCK_7', 'RC_HC_STORMS_GROTTO_ROCK_8', 'RC_OGC_BRONZE_BOULDER_1', 'RC_OGC_BRONZE_BOULDER_2', 'RC_OGC_BRONZE_BOULDER_3', 'RC_OGC_SILVER_BOULDER_1', 'RC_OGC_SILVER_BOULDER_2', 'RC_OGC_SILVER_BOULDER_3', 'RC_OGC_SILVER_BOULDER_4']
+# deferred locations (3): ['RC_HC_MALON_GOSSIP_STONE', 'RC_HC_ROCK_WALL_GOSSIP_STONE', 'RC_HC_STORMS_GROTTO_GOSSIP_STONE']

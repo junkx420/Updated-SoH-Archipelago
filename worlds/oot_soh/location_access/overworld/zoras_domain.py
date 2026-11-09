@@ -76,14 +76,22 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_break_pots(bundle)),
         (Locations.ZD_NEAR_SHOP_POT5,
          lambda bundle: can_break_pots(bundle)),
-        # DEFERRED RC_ZD_CIRCLE_ROCK_1: logic->CanBreakRocks()
-        # DEFERRED RC_ZD_CIRCLE_ROCK_2: logic->CanBreakRocks()
-        # DEFERRED RC_ZD_CIRCLE_ROCK_3: logic->CanBreakRocks()
-        # DEFERRED RC_ZD_CIRCLE_ROCK_4: logic->CanBreakRocks()
-        # DEFERRED RC_ZD_CIRCLE_ROCK_5: logic->CanBreakRocks()
-        # DEFERRED RC_ZD_CIRCLE_ROCK_6: logic->CanBreakRocks()
-        # DEFERRED RC_ZD_CIRCLE_ROCK_7: logic->CanBreakRocks()
-        # DEFERRED RC_ZD_CIRCLE_ROCK_8: logic->CanBreakRocks()
+        (Locations.ZD_CIRCLE_ROCK_1,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.ZD_CIRCLE_ROCK_2,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.ZD_CIRCLE_ROCK_3,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.ZD_CIRCLE_ROCK_4,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.ZD_CIRCLE_ROCK_5,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.ZD_CIRCLE_ROCK_6,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.ZD_CIRCLE_ROCK_7,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.ZD_CIRCLE_ROCK_8,
+         lambda bundle: can_break_rocks(bundle)),
         (Locations.ZD_SHOP_RECTANGLE_SIGN,
          lambda bundle: can_read(bundle)),
         (Locations.ZD_ENTRANCE_RECTANGLE_SIGN,
@@ -210,4 +218,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (9): ['RC_ZD_CIRCLE_ROCK_1', 'RC_ZD_CIRCLE_ROCK_2', 'RC_ZD_CIRCLE_ROCK_3', 'RC_ZD_CIRCLE_ROCK_4', 'RC_ZD_CIRCLE_ROCK_5', 'RC_ZD_CIRCLE_ROCK_6', 'RC_ZD_CIRCLE_ROCK_7', 'RC_ZD_CIRCLE_ROCK_8', 'RC_ZD_GOSSIP_STONE']
+# deferred locations (1): ['RC_ZD_GOSSIP_STONE']

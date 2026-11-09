@@ -745,6 +745,11 @@ def can_read(bundle: tuple[Regions, "SohWorld"]) -> Rule:
     return True_()
 
 
+def can_break_rocks(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    """logic.cpp Logic::CanBreakRocks: BlastOrSmash() || HasItem(RG_POWER_BRACELET) (= the grab ability)."""
+    return blast_or_smash(bundle) | has_grab(bundle)
+
+
 def can_bonk_trees(bundle: tuple[Regions, "SohWorld"]) -> Rule:
     """Check if Link can bonk trees."""
     return True_()

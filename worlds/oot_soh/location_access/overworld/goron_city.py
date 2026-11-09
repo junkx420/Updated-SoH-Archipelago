@@ -75,57 +75,108 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_break_pots(bundle)),
         (Locations.GC_MAZE_CRATE,
          lambda bundle: blast_or_smash(bundle) | (can_use(Items.SILVER_GAUNTLETS, bundle) & can_break_crates(bundle))),
-        # DEFERRED RC_GC_ENTRANCE_BOULDER_1: logic->BlastOrSmash()
-        # DEFERRED RC_GC_ENTRANCE_BOULDER_2: logic->BlastOrSmash()
-        # DEFERRED RC_GC_ENTRANCE_BOULDER_3: logic->BlastOrSmash()
-        # DEFERRED RC_GC_LW_BOULDER_1: logic->Get(LOGIC_GORON_CITY_WOODS_WARP_OPEN)
-        # DEFERRED RC_GC_LW_BOULDER_2: logic->Get(LOGIC_GORON_CITY_WOODS_WARP_OPEN)
-        # DEFERRED RC_GC_LW_BOULDER_3: logic->Get(LOGIC_GORON_CITY_WOODS_WARP_OPEN)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_1: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_2: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_3: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_4: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_5: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_6: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_7: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_8: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_9: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_10: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_11: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_12: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_13: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_14: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_15: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_16: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_17: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_18: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_19: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_20: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_21: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_22: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_23: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_24: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_25: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_26: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_27: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_28: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_SILVER_BOULDER_29: logic->CanUse(RG_SILVER_GAUNTLETS)
-        # DEFERRED RC_GC_MAZE_BOULDER_1: logic->BlastOrSmash()
-        # DEFERRED RC_GC_MAZE_BOULDER_2: logic->BlastOrSmash()
-        # DEFERRED RC_GC_MAZE_BOULDER_3: logic->BlastOrSmash()
-        # DEFERRED RC_GC_MAZE_BOULDER_4: logic->BlastOrSmash()
-        # DEFERRED RC_GC_MAZE_BOULDER_5: logic->BlastOrSmash()
-        # DEFERRED RC_GC_MAZE_BOULDER_6: logic->BlastOrSmash()
-        # DEFERRED RC_GC_MAZE_BOULDER_7: logic->BlastOrSmash()
-        # DEFERRED RC_GC_MAZE_BOULDER_8: logic->BlastOrSmash()
-        # DEFERRED RC_GC_MAZE_BOULDER_9: logic->BlastOrSmash()
-        # DEFERRED RC_GC_MAZE_BOULDER_10: logic->BlastOrSmash()
-        # DEFERRED RC_GC_MAZE_BRONZE_BOULDER_1: logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_GC_MAZE_BRONZE_BOULDER_2: logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_GC_MAZE_BRONZE_BOULDER_3: logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_GC_MAZE_BRONZE_BOULDER_4: logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_GC_MAZE_BRONZE_BOULDER_5: logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_GC_MAZE_ROCK: logic->BlastOrSmash() || logic->CanUse(RG_SILVER_GAUNTLETS)
+        (Locations.GC_ENTRANCE_BOULDER_1,
+         lambda bundle: blast_or_smash(bundle)),
+        (Locations.GC_ENTRANCE_BOULDER_2,
+         lambda bundle: blast_or_smash(bundle)),
+        (Locations.GC_ENTRANCE_BOULDER_3,
+         lambda bundle: blast_or_smash(bundle)),
+        (Locations.GC_LW_BOULDER_1,
+         lambda bundle: has_item(Events.GORON_CITY_WOODS_WARP_OPEN, bundle)),
+        (Locations.GC_LW_BOULDER_2,
+         lambda bundle: has_item(Events.GORON_CITY_WOODS_WARP_OPEN, bundle)),
+        (Locations.GC_LW_BOULDER_3,
+         lambda bundle: has_item(Events.GORON_CITY_WOODS_WARP_OPEN, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_1,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_2,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_3,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_4,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_5,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_6,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_7,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_8,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_9,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_10,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_11,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_12,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_13,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_14,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_15,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_16,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_17,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_18,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_19,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_20,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_21,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_22,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_23,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_24,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_25,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_26,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_27,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_28,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_SILVER_BOULDER_29,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
+        (Locations.GC_MAZE_BOULDER_1,
+         lambda bundle: blast_or_smash(bundle)),
+        (Locations.GC_MAZE_BOULDER_2,
+         lambda bundle: blast_or_smash(bundle)),
+        (Locations.GC_MAZE_BOULDER_3,
+         lambda bundle: blast_or_smash(bundle)),
+        (Locations.GC_MAZE_BOULDER_4,
+         lambda bundle: blast_or_smash(bundle)),
+        (Locations.GC_MAZE_BOULDER_5,
+         lambda bundle: blast_or_smash(bundle)),
+        (Locations.GC_MAZE_BOULDER_6,
+         lambda bundle: blast_or_smash(bundle)),
+        (Locations.GC_MAZE_BOULDER_7,
+         lambda bundle: blast_or_smash(bundle)),
+        (Locations.GC_MAZE_BOULDER_8,
+         lambda bundle: blast_or_smash(bundle)),
+        (Locations.GC_MAZE_BOULDER_9,
+         lambda bundle: blast_or_smash(bundle)),
+        (Locations.GC_MAZE_BOULDER_10,
+         lambda bundle: blast_or_smash(bundle)),
+        (Locations.GC_MAZE_BRONZE_BOULDER_1,
+         lambda bundle: can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.GC_MAZE_BRONZE_BOULDER_2,
+         lambda bundle: can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.GC_MAZE_BRONZE_BOULDER_3,
+         lambda bundle: can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.GC_MAZE_BRONZE_BOULDER_4,
+         lambda bundle: can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.GC_MAZE_BRONZE_BOULDER_5,
+         lambda bundle: can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.GC_MAZE_ROCK,
+         lambda bundle: blast_or_smash(bundle) | can_use(Items.SILVER_GAUNTLETS, bundle)),
         (Locations.GC_CHILD_ROLLING_GORON_RECTANGLE_SIGN,
          lambda bundle: is_child(bundle) & can_read(bundle)),
     ])
@@ -270,4 +321,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (53): ['RC_GC_MAZE_GOSSIP_STONE', 'RC_GC_ENTRANCE_BOULDER_1', 'RC_GC_ENTRANCE_BOULDER_2', 'RC_GC_ENTRANCE_BOULDER_3', 'RC_GC_LW_BOULDER_1', 'RC_GC_LW_BOULDER_2', 'RC_GC_LW_BOULDER_3', 'RC_GC_MAZE_SILVER_BOULDER_1', 'RC_GC_MAZE_SILVER_BOULDER_2', 'RC_GC_MAZE_SILVER_BOULDER_3', 'RC_GC_MAZE_SILVER_BOULDER_4', 'RC_GC_MAZE_SILVER_BOULDER_5', 'RC_GC_MAZE_SILVER_BOULDER_6', 'RC_GC_MAZE_SILVER_BOULDER_7', 'RC_GC_MAZE_SILVER_BOULDER_8', 'RC_GC_MAZE_SILVER_BOULDER_9', 'RC_GC_MAZE_SILVER_BOULDER_10', 'RC_GC_MAZE_SILVER_BOULDER_11', 'RC_GC_MAZE_SILVER_BOULDER_12', 'RC_GC_MAZE_SILVER_BOULDER_13', 'RC_GC_MAZE_SILVER_BOULDER_14', 'RC_GC_MAZE_SILVER_BOULDER_15', 'RC_GC_MAZE_SILVER_BOULDER_16', 'RC_GC_MAZE_SILVER_BOULDER_17', 'RC_GC_MAZE_SILVER_BOULDER_18', 'RC_GC_MAZE_SILVER_BOULDER_19', 'RC_GC_MAZE_SILVER_BOULDER_20', 'RC_GC_MAZE_SILVER_BOULDER_21', 'RC_GC_MAZE_SILVER_BOULDER_22', 'RC_GC_MAZE_SILVER_BOULDER_23', 'RC_GC_MAZE_SILVER_BOULDER_24', 'RC_GC_MAZE_SILVER_BOULDER_25', 'RC_GC_MAZE_SILVER_BOULDER_26', 'RC_GC_MAZE_SILVER_BOULDER_27', 'RC_GC_MAZE_SILVER_BOULDER_28', 'RC_GC_MAZE_SILVER_BOULDER_29', 'RC_GC_MAZE_BOULDER_1', 'RC_GC_MAZE_BOULDER_2', 'RC_GC_MAZE_BOULDER_3', 'RC_GC_MAZE_BOULDER_4']
+# deferred locations (2): ['RC_GC_MAZE_GOSSIP_STONE', 'RC_GC_MEDIGORON_GOSSIP_STONE']

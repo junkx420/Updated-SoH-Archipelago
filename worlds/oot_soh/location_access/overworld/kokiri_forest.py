@@ -132,18 +132,30 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: is_adult(bundle) & can_cut_shrubs(bundle)),
         (Locations.KF_ADULT_GRASS20,
          lambda bundle: is_adult(bundle) & can_cut_shrubs(bundle)),
-        # DEFERRED RC_KF_CIRCLE_ROCK_1: logic->CanBreakRocks()
-        # DEFERRED RC_KF_CIRCLE_ROCK_2: logic->CanBreakRocks()
-        # DEFERRED RC_KF_CIRCLE_ROCK_3: logic->CanBreakRocks()
-        # DEFERRED RC_KF_CIRCLE_ROCK_4: logic->CanBreakRocks()
-        # DEFERRED RC_KF_CIRCLE_ROCK_5: logic->CanBreakRocks()
-        # DEFERRED RC_KF_CIRCLE_ROCK_6: logic->CanBreakRocks()
-        # DEFERRED RC_KF_CIRCLE_ROCK_7: logic->CanBreakRocks()
-        # DEFERRED RC_KF_CIRCLE_ROCK_8: logic->CanBreakRocks()
-        # DEFERRED RC_KF_ROCK_BY_SARIAS_HOUSE: logic->IsChild && logic->CanBreakRocks()
-        # DEFERRED RC_KF_ROCK_BEHIND_SARIAS_HOUSE: logic->IsChild && logic->CanBreakRocks()
-        # DEFERRED RC_KF_ROCK_BY_MIDOS_HOUSE: logic->IsChild && logic->CanBreakRocks()
-        # DEFERRED RC_KF_ROCK_BY_KNOW_IT_ALLS_HOUSE: logic->IsChild && logic->CanBreakRocks()
+        (Locations.KF_CIRCLE_ROCK_1,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.KF_CIRCLE_ROCK_2,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.KF_CIRCLE_ROCK_3,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.KF_CIRCLE_ROCK_4,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.KF_CIRCLE_ROCK_5,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.KF_CIRCLE_ROCK_6,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.KF_CIRCLE_ROCK_7,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.KF_CIRCLE_ROCK_8,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.KF_ROCK_BY_SARIAS_HOUSE,
+         lambda bundle: is_child(bundle) & can_break_rocks(bundle)),
+        (Locations.KF_ROCK_BEHIND_SARIAS_HOUSE,
+         lambda bundle: is_child(bundle) & can_break_rocks(bundle)),
+        (Locations.KF_ROCK_BY_MIDOS_HOUSE,
+         lambda bundle: is_child(bundle) & can_break_rocks(bundle)),
+        (Locations.KF_ROCK_BY_KNOW_IT_ALLS_HOUSE,
+         lambda bundle: is_child(bundle) & can_break_rocks(bundle)),
         (Locations.KF_DEKU_TREE_RECTANGLE_SIGN,
          lambda bundle: can_read(bundle)),
         (Locations.KF_STEPPING_STONES_RECTANGLE_SIGN,
@@ -501,4 +513,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (18): ['RC_KF_CIRCLE_ROCK_1', 'RC_KF_CIRCLE_ROCK_2', 'RC_KF_CIRCLE_ROCK_3', 'RC_KF_CIRCLE_ROCK_4', 'RC_KF_CIRCLE_ROCK_5', 'RC_KF_CIRCLE_ROCK_6', 'RC_KF_CIRCLE_ROCK_7', 'RC_KF_CIRCLE_ROCK_8', 'RC_KF_ROCK_BY_SARIAS_HOUSE', 'RC_KF_ROCK_BEHIND_SARIAS_HOUSE', 'RC_KF_ROCK_BY_MIDOS_HOUSE', 'RC_KF_ROCK_BY_KNOW_IT_ALLS_HOUSE', 'RC_MIDO_HINT', 'RC_KF_GOSSIP_STONE', 'RC_KF_DEKU_TREE_LEFT_GOSSIP_STONE', 'RC_KF_DEKU_TREE_RIGHT_GOSSIP_STONE', 'RC_MIDO_HINT', 'RC_KF_STORMS_GROTTO_GOSSIP_STONE']
+# deferred locations (6): ['RC_MIDO_HINT', 'RC_KF_GOSSIP_STONE', 'RC_KF_DEKU_TREE_LEFT_GOSSIP_STONE', 'RC_KF_DEKU_TREE_RIGHT_GOSSIP_STONE', 'RC_MIDO_HINT', 'RC_KF_STORMS_GROTTO_GOSSIP_STONE']

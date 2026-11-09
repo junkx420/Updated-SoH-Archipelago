@@ -45,16 +45,26 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.GERUDO_VALLEY, world, [
         (Locations.GV_GS_SMALL_BRIDGE,
          lambda bundle: is_child(bundle) & hookshot_or_boomerang(bundle) & can_get_nighttime_gs(bundle)),
-        # DEFERRED RC_GV_ROCK_1: logic->CanBreakRocks()
-        # DEFERRED RC_GV_ROCK_2: logic->CanBreakRocks()
-        # DEFERRED RC_GV_ROCK_3: logic->CanBreakRocks()
-        # DEFERRED RC_GV_UNDERWATER_ROCK_1: (logic->CanUse(RG_BOMBCHU_5) || (logic->CanUse(RG_BOMB_BAG) && ctx->GetTrickOption(RT_BOMB_DETONATION)) || (logic->IsAdult && logic->HasItem(RG_POWER_BRACELET))) && (logic->IsAdult || logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_BOOMERANG) || ((ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()) && logic->HasItem(RG_POWER_BRACELET)))
-        # DEFERRED RC_GV_UNDERWATER_ROCK_2: (logic->CanUse(RG_BOMBCHU_5) || (logic->CanUse(RG_BOMB_BAG) && ctx->GetTrickOption(RT_BOMB_DETONATION)) || (logic->IsAdult && logic->HasItem(RG_POWER_BRACELET))) && (logic->IsAdult || logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_BOOMERANG) || ((ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()) && logic->HasItem(RG_POWER_BRACELET)))
-        # DEFERRED RC_GV_UNDERWATER_ROCK_3: (logic->CanUse(RG_BOMBCHU_5) || (logic->CanUse(RG_BOMB_BAG) && ctx->GetTrickOption(RT_BOMB_DETONATION)) || (logic->IsAdult && logic->HasItem(RG_POWER_BRACELET))) && (logic->IsAdult || logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_BOOMERANG) || ((ctx->GetTrickOption(RT_VOIDOUT_COLLECTION) && logic->CanVoid()) && logic->HasItem(RG_POWER_BRACELET)))
-        # DEFERRED RC_GV_BOULDER_1: logic->IsAdult && logic->BlastOrSmash()
-        # DEFERRED RC_GV_BOULDER_2: logic->IsAdult && logic->BlastOrSmash()
-        # DEFERRED RC_GV_BRONZE_BOULDER_1: logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_GV_BRONZE_BOULDER_2: logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)
+        (Locations.GV_ROCK_1,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.GV_ROCK_2,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.GV_ROCK_3,
+         lambda bundle: can_break_rocks(bundle)),
+        (Locations.GV_UNDERWATER_ROCK_1,
+         lambda bundle: (can_use(Items.BOMBCHUS_5, bundle) | (can_use(Items.BOMB_BAG, bundle) & can_do_trick(Tricks.BOMB_DETONATION, bundle)) | (is_adult(bundle) & has_grab(bundle))) & (is_adult(bundle) | has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.BOOMERANG, bundle) | ((can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)) & has_grab(bundle)))),
+        (Locations.GV_UNDERWATER_ROCK_2,
+         lambda bundle: (can_use(Items.BOMBCHUS_5, bundle) | (can_use(Items.BOMB_BAG, bundle) & can_do_trick(Tricks.BOMB_DETONATION, bundle)) | (is_adult(bundle) & has_grab(bundle))) & (is_adult(bundle) | has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.BOOMERANG, bundle) | ((can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)) & has_grab(bundle)))),
+        (Locations.GV_UNDERWATER_ROCK_3,
+         lambda bundle: (can_use(Items.BOMBCHUS_5, bundle) | (can_use(Items.BOMB_BAG, bundle) & can_do_trick(Tricks.BOMB_DETONATION, bundle)) | (is_adult(bundle) & has_grab(bundle))) & (is_adult(bundle) | has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.BOOMERANG, bundle) | ((can_do_trick(Tricks.VOIDOUT_COLLECTION, bundle) & can_void(bundle)) & has_grab(bundle)))),
+        (Locations.GV_BOULDER_1,
+         lambda bundle: is_adult(bundle) & blast_or_smash(bundle)),
+        (Locations.GV_BOULDER_2,
+         lambda bundle: is_adult(bundle) & blast_or_smash(bundle)),
+        (Locations.GV_BRONZE_BOULDER_1,
+         lambda bundle: is_adult(bundle) & can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.GV_BRONZE_BOULDER_2,
+         lambda bundle: is_adult(bundle) & can_use(Items.MEGATON_HAMMER, bundle)),
         (Locations.GV_BRIDGE_RECTANGLE_SIGN,
          lambda bundle: can_read(bundle)),
         (Locations.GV_EAST_EXIT_ARROW_SIGN,
@@ -189,7 +199,8 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Locations
     add_locations(Regions.GV_GROTTO_LEDGE, world, [
-        # DEFERRED RC_GV_SILVER_BOULDER: logic->CanUse(RG_SILVER_GAUNTLETS)
+        (Locations.GV_SILVER_BOULDER,
+         lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
     ])
     # Connections
     connect_regions(Regions.GV_GROTTO_LEDGE, world, [
@@ -252,17 +263,28 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: is_child(bundle) & can_break_crates(bundle)),
         (Locations.GV_NEAR_BRIDGE_CRATE4,
          lambda bundle: is_child(bundle) & can_break_crates(bundle)),
-        # DEFERRED RC_GV_ROCK_ACROSS_BRIDGE_1: logic->IsAdult && logic->CanBreakRocks()
-        # DEFERRED RC_GV_ROCK_ACROSS_BRIDGE_2: logic->IsAdult && logic->CanBreakRocks()
-        # DEFERRED RC_GV_ROCK_ACROSS_BRIDGE_3: logic->IsAdult && logic->CanBreakRocks()
-        # DEFERRED RC_GV_ROCK_ACROSS_BRIDGE_4: logic->IsAdult && logic->CanBreakRocks()
-        # DEFERRED RC_GV_BOULDER_ACROSS_BRIDGE: logic->IsAdult && logic->BlastOrSmash()
-        # DEFERRED RC_GV_BRONZE_BOULDER_ACROSS_BRIDGE_1: logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_GV_BRONZE_BOULDER_ACROSS_BRIDGE_2: logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_GV_BRONZE_BOULDER_ACROSS_BRIDGE_3: logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_GV_BRONZE_BOULDER_ACROSS_BRIDGE_4: logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_GV_BRONZE_BOULDER_ACROSS_BRIDGE_5: logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)
-        # DEFERRED RC_GV_BRONZE_BOULDER_ACROSS_BRIDGE_6: logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)
+        (Locations.GV_ROCK_ACROSS_BRIDGE_1,
+         lambda bundle: is_adult(bundle) & can_break_rocks(bundle)),
+        (Locations.GV_ROCK_ACROSS_BRIDGE_2,
+         lambda bundle: is_adult(bundle) & can_break_rocks(bundle)),
+        (Locations.GV_ROCK_ACROSS_BRIDGE_3,
+         lambda bundle: is_adult(bundle) & can_break_rocks(bundle)),
+        (Locations.GV_ROCK_ACROSS_BRIDGE_4,
+         lambda bundle: is_adult(bundle) & can_break_rocks(bundle)),
+        (Locations.GV_BOULDER_ACROSS_BRIDGE,
+         lambda bundle: is_adult(bundle) & blast_or_smash(bundle)),
+        (Locations.GV_BRONZE_BOULDER_ACROSS_BRIDGE_1,
+         lambda bundle: is_adult(bundle) & can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.GV_BRONZE_BOULDER_ACROSS_BRIDGE_2,
+         lambda bundle: is_adult(bundle) & can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.GV_BRONZE_BOULDER_ACROSS_BRIDGE_3,
+         lambda bundle: is_adult(bundle) & can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.GV_BRONZE_BOULDER_ACROSS_BRIDGE_4,
+         lambda bundle: is_adult(bundle) & can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.GV_BRONZE_BOULDER_ACROSS_BRIDGE_5,
+         lambda bundle: is_adult(bundle) & can_use(Items.MEGATON_HAMMER, bundle)),
+        (Locations.GV_BRONZE_BOULDER_ACROSS_BRIDGE_6,
+         lambda bundle: is_adult(bundle) & can_use(Items.MEGATON_HAMMER, bundle)),
     ])
     # Connections
     connect_regions(Regions.GV_FORTRESS_SIDE, world, [
@@ -340,4 +362,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (23): ['RC_GV_ROCK_1', 'RC_GV_ROCK_2', 'RC_GV_ROCK_3', 'RC_GV_UNDERWATER_ROCK_1', 'RC_GV_UNDERWATER_ROCK_2', 'RC_GV_UNDERWATER_ROCK_3', 'RC_GV_BOULDER_1', 'RC_GV_BOULDER_2', 'RC_GV_BRONZE_BOULDER_1', 'RC_GV_BRONZE_BOULDER_2', 'RC_GV_GOSSIP_STONE', 'RC_GV_SILVER_BOULDER', 'RC_GV_ROCK_ACROSS_BRIDGE_1', 'RC_GV_ROCK_ACROSS_BRIDGE_2', 'RC_GV_ROCK_ACROSS_BRIDGE_3', 'RC_GV_ROCK_ACROSS_BRIDGE_4', 'RC_GV_BOULDER_ACROSS_BRIDGE', 'RC_GV_BRONZE_BOULDER_ACROSS_BRIDGE_1', 'RC_GV_BRONZE_BOULDER_ACROSS_BRIDGE_2', 'RC_GV_BRONZE_BOULDER_ACROSS_BRIDGE_3', 'RC_GV_BRONZE_BOULDER_ACROSS_BRIDGE_4', 'RC_GV_BRONZE_BOULDER_ACROSS_BRIDGE_5', 'RC_GV_BRONZE_BOULDER_ACROSS_BRIDGE_6']
+# deferred locations (1): ['RC_GV_GOSSIP_STONE']
