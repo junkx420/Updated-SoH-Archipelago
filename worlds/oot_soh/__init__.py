@@ -10,7 +10,8 @@ from worlds.AutoWorld import WebWorld, World
 from Fill import fill_restrictive
 from .Items import SohItem, item_data_table, item_table, SohItemData, progressive_items
 from .Locations import location_table, token_amounts, SohLocData, location_data_table
-from .Options import SohOptions, soh_option_groups, wallet_capacities, LEGACY_TRICKS, GanonsSoul
+from .Options import (SohOptions, soh_option_groups, wallet_capacities, LEGACY_TRICKS, GanonsSoul,
+                      RainbowBridge, GanonsCastleBossKey)
 from .Regions import create_regions_and_locations, place_locked_items
 from .Enums import *
 from .ItemPool import create_item_pool, create_filler_item_pool, create_triforce_pieces, get_filler_item, give_starting_items
@@ -122,6 +123,8 @@ class SohWorld(CachedRuleBuilderWorld):
         self.shop_vanilla_items = dict[str, str]()
         self.triforce_pieces_required: int = 0
         self.ganons_soul_triforce_pieces_required: int = 0
+        self.rainbow_bridge_triforce_pieces_required: int = 0
+        self.gbk_triforce_pieces_required: int = 0
         self.randomized_progressive_skulltula_count: int = 0
         self.ganons_trials = list[GanonsTrials]()
         self.pre_fill_pool = list[SohItem]()
@@ -590,6 +593,19 @@ class SohWorld(CachedRuleBuilderWorld):
             "apworld_version": self.apworld_version,
             "enable_all_tricks": self.options.enable_all_tricks.value,
             "tricks_in_logic": self.slot_data_tricks(),
+            # Win Condition (9.3.1 RSK_WINCON); "default" is already resolved to defeat_ganon / trigger_triforce_pieces
+            "win_condition": self.options.win_condition.value,
+            "win_condition_greg_modifier": self.options.win_condition_greg_modifier.value,
+            "win_condition_stones_required": self.options.win_condition_stones_required.value,
+            "win_condition_medallions_required": self.options.win_condition_medallions_required.value,
+            "win_condition_dungeon_rewards_required": self.options.win_condition_dungeon_rewards_required.value,
+            "win_condition_dungeons_required": self.options.win_condition_dungeons_required.value,
+            "win_condition_skull_tokens_required": self.options.win_condition_skull_tokens_required.value,
+            "triforce_hunt_pieces_location": self.options.triforce_hunt_pieces_location.value,
+            "rainbow_bridge_triforce_pieces_required": self.rainbow_bridge_triforce_pieces_required
+            if self.options.rainbow_bridge == RainbowBridge.option_triforce_pieces else 0,
+            "ganons_castle_boss_key_triforce_pieces_required": self.gbk_triforce_pieces_required
+            if self.options.ganons_castle_boss_key == GanonsCastleBossKey.option_lacs_triforce_pieces else 0,
             # Ganon's Soul (9.3.1 RSK_GANONS_SOUL); values follow the upstream order Start With ... Trigger-Triforce
             "ganons_soul": self.options.ganons_soul.value,
             "ganons_soul_greg_modifier": self.options.ganons_soul_greg_modifier.value,

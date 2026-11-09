@@ -120,6 +120,7 @@ class RainbowBridge(Choice):
     Dungeons - Complete the specified amount of dungeons. Dungeons are considered complete after stepping in to the blue warp after the boss.
     Tokens - Obtain the specified amount of Gold Skulltula Tokens.
     Greg - Find Greg the Green Rupee.
+    Triforce Pieces - Obtain the specified amount of Triforce Pieces (needs Triforce Hunt).
     """
     display_name = "Rainbow Bridge"
     option_vanilla = 0
@@ -130,6 +131,7 @@ class RainbowBridge(Choice):
     option_dungeons = 5
     option_tokens = 6
     option_greg = 7
+    option_triforce_pieces = 8  # appended so existing values keep their numbers
     default = 7
 
 
@@ -224,10 +226,10 @@ class GanonsTrialsCount(Range):
 
 class TriforceHunt(Toggle):
     """
-    Pieces of the Triforce of Courage have been scattered across the world. Find them all to finish the game! 
-    If this option is enabled, Ganon's Boss Key will not be shuffled and the Light Arrow Cutscene (LACS) will revert to its vanilla behavior.
-    When the required amount of pieces has been found, the game will save and credits will roll.
-    Afterward, you can load back into the game to receive Ganon's Boss Key if you desire to beat Ganon.
+    Pieces of the Triforce of Courage have been scattered across the world.
+    With Win Condition "Default" (or "Trigger Triforce Pieces") finding the required share finishes the game: the game
+    will save and credits will roll, Ganon's Boss Key is not shuffled then. The pieces can also be used for the
+    Rainbow Bridge, Ganon's Boss Key or Ganon's Soul with another Win Condition.
     """
     display_name = "Triforce Hunt"
 
@@ -615,6 +617,114 @@ class ShuffleBossSouls(Choice):
     default = 0
 
 
+class WinCondition(Choice):
+    """
+    What finishes the game (Ship of Harkinian 9.3.1 "Win Condition").
+    Default - Defeat Ganon, or collect the required Triforce Pieces if Triforce Hunt is on (the behavior before this
+    option existed).
+    Defeat Ganon - Defeat Ganon.
+    Anywhere - The Triforce itself is hidden as an item somewhere in the multiworld; finding it wins the game.
+    Trigger - The game is won as soon as the requirement is met: Spiritual Stones, medallions, dungeon rewards,
+    completed dungeons, Gold Skulltula Tokens or Triforce Pieces (Triforce Pieces needs Triforce Hunt and uses its
+    required percentage).
+    """
+    display_name = "Win Condition"
+    option_default = 0
+    option_defeat_ganon = 1
+    option_anywhere = 2
+    option_trigger_stones = 3
+    option_trigger_medallions = 4
+    option_trigger_dungeon_rewards = 5
+    option_trigger_dungeons = 6
+    option_trigger_skull_tokens = 7
+    option_trigger_triforce_pieces = 8
+    default = 0
+
+
+class WinConditionGregModifier(Choice):
+    """
+    If the Win Condition is a trigger, Greg will count toward the requirement.
+    Off - Greg will not count. Reward - Greg will count and be considered in the logic.
+    Wildcard - Greg will count but not be considered in the logic.
+    """
+    display_name = "Win Condition Greg Wildcard"
+    option_off = 0
+    option_reward = 1
+    option_wildcard = 2
+    default = 0
+
+
+class WinConditionStonesRequired(Range):
+    """If the Win Condition is Trigger Stones, this is how many Spiritual Stones are required.
+    If the Greg Modifier is not set to Reward, the max will be 3."""
+    display_name = "Win Condition Stones Required"
+    range_start = 1
+    range_end = 4
+    default = 3
+
+
+class WinConditionMedallionsRequired(Range):
+    """If the Win Condition is Trigger Medallions, this is how many medallions are required.
+    If the Greg Modifier is not set to Reward, the max will be 6."""
+    display_name = "Win Condition Medallions Required"
+    range_start = 1
+    range_end = 7
+    default = 6
+
+
+class WinConditionDungeonRewardsRequired(Range):
+    """If the Win Condition is Trigger Dungeon Rewards, this is how many Spiritual Stones and medallions are required.
+    If the Greg Modifier is not set to Reward, the max will be 9."""
+    display_name = "Win Condition Dungeon Rewards Required"
+    range_start = 1
+    range_end = 10
+    default = 9
+
+
+class WinConditionDungeonsRequired(Range):
+    """If the Win Condition is Trigger Dungeons, this is how many dungeons must be completed.
+    If the Greg Modifier is not set to Reward, the max will be 8."""
+    display_name = "Win Condition Dungeons Required"
+    range_start = 1
+    range_end = 9
+    default = 8
+
+
+class WinConditionSkullTokensRequired(Range):
+    """If the Win Condition is Trigger Skull Tokens, this is how many Gold Skulltula Tokens are required."""
+    display_name = "Win Condition Skull Tokens Required"
+    range_start = 1
+    range_end = 100
+    default = 100
+
+
+class TriforceHuntPiecesLocation(Choice):
+    """Where the Triforce Pieces can be placed (Ship of Harkinian 9.3.1 "Triforce Pieces Location")."""
+    display_name = "Triforce Hunt Pieces Location"
+    option_any_dungeon = 0
+    option_overworld = 1
+    option_anywhere = 2
+    default = 2
+
+
+class RainbowBridgeTriforcePiecesRequired(Range):
+    """If Rainbow Bridge is set to Triforce Pieces, this is how many Triforce Pieces are required to open it (at most
+    the number of pieces in the item pool). Needs Triforce Hunt."""
+    display_name = "Rainbow Bridge Triforce Pieces Required"
+    range_start = 1
+    range_end = 100
+    default = 100
+
+
+class GanonsCastleBossKeyTriforcePiecesRequired(Range):
+    """If Ganon's Castle Boss Key is set to Triforce Pieces, this is how many Triforce Pieces are required (at most the
+    number of pieces in the item pool). Needs Triforce Hunt."""
+    display_name = "Ganon's Castle Boss Key Triforce Pieces Required"
+    range_start = 1
+    range_end = 100
+    default = 100
+
+
 class GanonsSoul(Choice):
     """
     Ganon's Soul hides Ganon and Ganondorf until it is found (Ship of Harkinian 9.3.1 setting, independent of
@@ -815,6 +925,7 @@ class GanonsCastleBossKey(Choice):
     option_lacs_dungeon_rewards = 5
     option_lacs_dungeons = 6
     option_lacs_skull_tokens = 7
+    option_lacs_triforce_pieces = 8  # 9.3.1 "Trigger-Triforce Pieces", needs Triforce Hunt
     default = 5
 
 
@@ -1710,6 +1821,16 @@ class SohOptions(PerGameCommonOptions):
     triforce_hunt: TriforceHunt
     triforce_hunt_pieces_total: TriforceHuntPiecesTotal
     triforce_hunt_pieces_required_percentage: TriforceHuntPiecesRequiredPercentage
+    triforce_hunt_pieces_location: TriforceHuntPiecesLocation
+    win_condition: WinCondition
+    win_condition_greg_modifier: WinConditionGregModifier
+    win_condition_stones_required: WinConditionStonesRequired
+    win_condition_medallions_required: WinConditionMedallionsRequired
+    win_condition_dungeon_rewards_required: WinConditionDungeonRewardsRequired
+    win_condition_dungeons_required: WinConditionDungeonsRequired
+    win_condition_skull_tokens_required: WinConditionSkullTokensRequired
+    rainbow_bridge_triforce_pieces_required: RainbowBridgeTriforcePiecesRequired
+    ganons_castle_boss_key_triforce_pieces_required: GanonsCastleBossKeyTriforcePiecesRequired
     shuffle_songs: ShuffleSongs
     shuffle_skull_tokens: ShuffleTokens
     skulls_sun_song: SkullsSunSong
@@ -1861,6 +1982,7 @@ class SohOptions(PerGameCommonOptions):
     mask_shop_hint: MaskShopHint
 
     def apply_any_required_option_adjustments(self):
+        self.adjust_win_condition()
         self.adjust_ganons_soul()
         self.adjust_for_forced_child_starts()
         self.adjust_prices()
@@ -1979,9 +2101,12 @@ class SohOptions(PerGameCommonOptions):
         ganons_soul_tokens = 0
         if self.ganons_soul == GanonsSoul.option_trigger_skull_tokens:
             ganons_soul_tokens = self.ganons_soul_skull_tokens_required.value
+        win_condition_tokens = 0
+        if self.win_condition == WinCondition.option_trigger_skull_tokens:
+            win_condition_tokens = self.win_condition_skull_tokens_required.value
 
         required_skulltula_count = max(required_skulltula_count, rainbow_bridge_tokens, ganons_castle_boss_key_tokens,
-                                       ganons_soul_tokens)
+                                       ganons_soul_tokens, win_condition_tokens)
 
         if self.accessibility == Accessibility.option_full:
             # If full accessibility is enabled, assume all vanilla tokens are available and calculate the required shuffled tokens
@@ -2027,6 +2152,19 @@ class SohOptions(PerGameCommonOptions):
 
             decrement_option(option)
 
+        if self.win_condition_greg_modifier != WinConditionGregModifier.option_reward:
+            option = None
+            if self.win_condition == WinCondition.option_trigger_stones:
+                option = self.win_condition_stones_required
+            elif self.win_condition == WinCondition.option_trigger_medallions:
+                option = self.win_condition_medallions_required
+            elif self.win_condition == WinCondition.option_trigger_dungeon_rewards:
+                option = self.win_condition_dungeon_rewards_required
+            elif self.win_condition == WinCondition.option_trigger_dungeons:
+                option = self.win_condition_dungeons_required
+            decrement_option(option)
+            option = None
+
         if self.ganons_soul_greg_modifier != GanonsSoulGregModifier.option_reward:
             option = None
             if self.ganons_soul == GanonsSoul.option_trigger_stones:
@@ -2051,6 +2189,20 @@ class SohOptions(PerGameCommonOptions):
                 option = self.ganons_castle_boss_key_dungeons_required
 
             decrement_option(option)
+
+    def adjust_win_condition(self):
+        # "default" keeps the behavior from before the option: Triforce Hunt wins with the pieces, otherwise Ganon
+        if self.win_condition == WinCondition.option_default:
+            self.win_condition.value = (WinCondition.option_trigger_triforce_pieces if self.triforce_hunt
+                                        else WinCondition.option_defeat_ganon)
+        uses_pieces = {
+            "Win Condition": self.win_condition == WinCondition.option_trigger_triforce_pieces,
+            "Rainbow Bridge": self.rainbow_bridge == RainbowBridge.option_triforce_pieces,
+            "Ganon's Castle Boss Key": self.ganons_castle_boss_key == GanonsCastleBossKey.option_lacs_triforce_pieces,
+        }
+        for name, used in uses_pieces.items():
+            if used and not self.triforce_hunt:
+                raise OptionError(f"{name} \"Triforce Pieces\" needs Triforce Hunt.")
 
     def adjust_ganons_soul(self):
         # SoH 9.3.1 split "Shuffle Boss Souls: On + Ganon" into "On" plus its own Ganon's Soul setting (upstream
@@ -2103,9 +2255,18 @@ soh_option_groups = [
         MedallionLockedTrials,
         GanonsTrials,
         GanonsTrialsCount,
+        RainbowBridgeTriforcePiecesRequired,
         TriforceHunt,
         TriforceHuntPiecesTotal,
         TriforceHuntPiecesRequiredPercentage,
+        TriforceHuntPiecesLocation,
+        WinCondition,
+        WinConditionStonesRequired,
+        WinConditionMedallionsRequired,
+        WinConditionDungeonRewardsRequired,
+        WinConditionDungeonsRequired,
+        WinConditionSkullTokensRequired,
+        WinConditionGregModifier,
     ]),
     # OptionGroup("Shuffle Entrances", [
     #     # Dungeon Entrances
@@ -2188,6 +2349,7 @@ soh_option_groups = [
         GanonsCastleBossKeyDungeonRewardsRequired,
         GanonsCastleBossKeyDungeonsRequired,
         GanonsCastleBossKeySkullTokensRequired,
+        GanonsCastleBossKeyTriforcePiecesRequired,
         GanonsCastleBossKeyGregModifier,
         KeyRings,
         KeyRingsCount,

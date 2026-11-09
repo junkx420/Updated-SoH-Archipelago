@@ -144,6 +144,16 @@ def setup_options_from_slot_data(world: "SohWorld") -> None:
             world.options.true_no_logic.value = world.passthrough["no_logic"]
             world.options.shuffle_tycoon_wallet.value = world.passthrough.get(
                 "shuffle_tycoon_wallet", 1)
+            # Win Condition, Triforce Piece triggers (apworld 1.5+)
+            for key in ("win_condition", "win_condition_greg_modifier", "win_condition_stones_required",
+                        "win_condition_medallions_required", "win_condition_dungeon_rewards_required",
+                        "win_condition_dungeons_required", "win_condition_skull_tokens_required",
+                        "triforce_hunt_pieces_location"):
+                if key in world.passthrough:
+                    getattr(world.options, key).value = world.passthrough[key]
+            for key in ("rainbow_bridge_triforce_pieces_required", "ganons_castle_boss_key_triforce_pieces_required"):
+                if key in world.passthrough:
+                    getattr(world.options, key).value = max(1, world.passthrough[key])
             # Ganon's Soul (apworld 1.5+; older slot data only had shuffle_boss_souls "on_plus_ganons")
             for key in ("ganons_soul", "ganons_soul_greg_modifier", "ganons_soul_stones_required",
                         "ganons_soul_medallions_required", "ganons_soul_dungeon_rewards_required",

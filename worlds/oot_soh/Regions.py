@@ -487,7 +487,7 @@ def place_locked_items(world: "SohWorld") -> None:
 
     # Place Ganons Boss Key. Since SoH 9.3.1 the Light Arrow Cutscene is a normal location again; the lacs_* options are
     # triggers that grant the key (location_access/archipelago.py).
-    if world.options.ganons_castle_boss_key == GanonsCastleBossKey.option_vanilla and not world.options.triforce_hunt:
+    if world.options.ganons_castle_boss_key == GanonsCastleBossKey.option_vanilla and world.options.win_condition != WinCondition.option_trigger_triforce_pieces:
         place_from_pool(Locations.GANONS_CASTLE_TOWER_BOSS_KEY_CHEST, Items.GANONS_CASTLE_BOSS_KEY, world)
 
     # Place vanilla shop items if they're not shuffled

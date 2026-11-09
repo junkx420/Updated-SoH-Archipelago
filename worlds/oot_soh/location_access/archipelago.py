@@ -14,6 +14,8 @@ class EventLocations(StrEnum):
     TIME_TRAVEL = "Chamber of Sages"
     GANON_DEFEATED = "Ganon Defeated"
     TRIFORCE_HUNT_COMPLETION = "Triforce Hunt Completion"
+    WIN_CONDITION_TRIGGER = "Win Condition Trigger"
+    TRIFORCE_FOUND = "Triforce Found"
     MAGIC_BEAN_SALESMAN_SHOP = "Magic Bean Salesman Shop"
     GANONS_BOSS_KEY_TRIGGER = "Ganon's Boss Key Trigger"
     GANONS_SOUL_TRIGGER = "Ganon's Soul Trigger"
@@ -32,14 +34,15 @@ def set_region_rules(world: "SohWorld") -> None:
 
     # Triforce Hunt: the item pool has no Ganon's Boss Key (ItemPool.py), so Ganondorf's Lair opens without it, as in
     # the apworld before the 9.3.1 port
-    if bool(world.options.triforce_hunt):
+    pieces_win = world.options.win_condition == WinCondition.option_trigger_triforce_pieces
+    if pieces_win:
         override_connection(world, Regions.GANONS_TOWER_BEFORE_GANONDORF_LAIR, Regions.GANONS_TOWER_GANONDORF_LAIR,
                             lambda bundle: True_())
 
     # Ganon's Boss Key trigger (9.3.1 root.cpp LOCATION(RC_GANONS_BOSS_KEY, logic->CanTriggerGBK())). The client grants
     # the key itself when the condition is met (SeedContext.cpp PlaceArchipelagoTriggerItems), so the multiworld only
     # needs it as an event: the key is not in the item pool with these options.
-    if world.options.ganons_castle_boss_key.value in GBK_TRIGGER_OPTIONS and not bool(world.options.triforce_hunt):
+    if world.options.ganons_castle_boss_key.value in GBK_TRIGGER_OPTIONS and not pieces_win:
         add_events(Regions.ROOT, world, [
             (EventLocations.GANONS_BOSS_KEY_TRIGGER, Items.GANONS_CASTLE_BOSS_KEY, lambda bundle: can_trigger_gbk(bundle)),
         ])
@@ -53,9 +56,18 @@ def set_region_rules(world: "SohWorld") -> None:
 
     # Win condition (the apworld's goal; upstream 9.3.1 uses the RC_GANON / RC_WINCON trigger locations, see
     # docs/ap-update/feature-plan.md 1.6 / 2.1)
-    if bool(world.options.triforce_hunt):
+    # (9.3.1 RSK_WINCON; "default" is resolved in Options.adjust_win_condition)
+    if pieces_win:
         add_events(Regions.ROOT, world, [
             (EventLocations.TRIFORCE_HUNT_COMPLETION, Events.GAME_COMPLETED, lambda bundle: CanWinTriforceHunt()),
+        ])
+    elif world.options.win_condition == WinCondition.option_anywhere:
+        add_events(Regions.ROOT, world, [
+            (EventLocations.TRIFORCE_FOUND, Events.GAME_COMPLETED, lambda bundle: has_item(Items.TRIFORCE, bundle)),
+        ])
+    elif world.options.win_condition != WinCondition.option_defeat_ganon:
+        add_events(Regions.ROOT, world, [
+            (EventLocations.WIN_CONDITION_TRIGGER, Events.GAME_COMPLETED, lambda bundle: can_trigger_wincon(bundle)),
         ])
     else:
         add_events(Regions.GANONS_CASTLE_GANON_ARENA, world, [

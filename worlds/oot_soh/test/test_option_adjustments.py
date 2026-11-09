@@ -4,7 +4,7 @@ from typing import cast
 from types import SimpleNamespace
 
 from Options import Accessibility
-from ..Options import SohOptions, RainbowBridge, GanonsCastleBossKey, ShuffleTokens, GanonsSoul
+from ..Options import SohOptions, RainbowBridge, GanonsCastleBossKey, ShuffleTokens, GanonsSoul, WinCondition
 from ..Locations import token_amounts
 from ..Enums import TokenCounts
 
@@ -25,6 +25,9 @@ class TestSohOptionsForRequiredSkulltulaCount(TestCase):
 
         self.ganons_soul = GanonsSoul.option_start_with
         self.ganons_soul_skull_tokens_required = SimpleNamespace(value=0)
+
+        self.win_condition = WinCondition.option_defeat_ganon
+        self.win_condition_skull_tokens_required = SimpleNamespace(value=0)
 
         self.shuffle_skull_tokens = ShuffleTokens.option_off
     
@@ -76,6 +79,13 @@ class TestSohOptionsForRequiredSkulltulaCount(TestCase):
         # Ganon's Soul "Trigger Skull Tokens" (SoH 9.3.1) counts like the other token requirements
         self.ganons_soul = GanonsSoul.option_trigger_skull_tokens
         self.ganons_soul_skull_tokens_required.value = 120 - 70
+        self.shuffle_skull_tokens = ShuffleTokens.option_all
+        self.assertEqual(self.calculate_progression_skulltula_count(), 50)
+
+    def test_win_condition_tokens(self):
+        # Win Condition "Trigger Skull Tokens" (SoH 9.3.1) counts like the other token requirements
+        self.win_condition = WinCondition.option_trigger_skull_tokens
+        self.win_condition_skull_tokens_required.value = 120 - 70
         self.shuffle_skull_tokens = ShuffleTokens.option_all
         self.assertEqual(self.calculate_progression_skulltula_count(), 50)
 

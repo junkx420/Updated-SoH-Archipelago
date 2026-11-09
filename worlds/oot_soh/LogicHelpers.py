@@ -1389,7 +1389,8 @@ def can_build_rainbow_bridge(bundle: tuple[Regions, "SohWorld"]) -> Rule:
          | (OptionFilter(RainbowBridge, RainbowBridge.option_dungeon_rewards) & ItemsPlusGregEnough(target=FromOption(RainbowBridgeDungeonRewardsRequired), item_tag=GroupTag.Spiritual_Stone | GroupTag.Medallion, greg=greg)) \
          | (OptionFilter(RainbowBridge, RainbowBridge.option_dungeons) & ItemsPlusGregEnough(target=FromOption(RainbowBridgeDungeonsRequired), item_tag=dungeon_events, greg=greg)) \
          | (OptionFilter(RainbowBridge, RainbowBridge.option_tokens) & Has(Items.GOLD_SKULLTULA_TOKEN, count=FromOption(RainbowBridgeSkullTokensRequired))) \
-         | (OptionFilter(RainbowBridge, RainbowBridge.option_greg) & Has(Items.GREG_THE_GREEN_RUPEE))
+         | (OptionFilter(RainbowBridge, RainbowBridge.option_greg) & Has(Items.GREG_THE_GREEN_RUPEE)) \
+         | (OptionFilter(RainbowBridge, RainbowBridge.option_triforce_pieces) & TriforcePiecesAtLeast(requirement="rainbow_bridge_triforce_pieces_required"))
 
 
 GANONS_SOUL_TRIGGER_OPTIONS = [GanonsSoul.option_trigger_stones, GanonsSoul.option_trigger_medallions,
@@ -1398,19 +1399,23 @@ GANONS_SOUL_TRIGGER_OPTIONS = [GanonsSoul.option_trigger_stones, GanonsSoul.opti
 
 
 @dataclasses.dataclass
-class GanonsSoulTriforcePieces(Rule, game="Ship of Harkinian"):
-    """Triforce Pieces for the Ganon's Soul trigger; the count is capped at the pieces actually in the pool, which is
-    only known after create_triforce_pieces (ItemPool.py)."""
+class TriforcePiecesAtLeast(Rule, game="Ship of Harkinian"):
+    """Triforce Pieces for a trigger (Rainbow Bridge, Ganon's Boss Key, Ganon's Soul). `requirement` names the SohWorld
+    attribute with the count: it is capped at the pieces actually in the pool, which is only known after
+    create_triforce_pieces (ItemPool.py)."""
+    requirement: str = ""
+
     def _instantiate(self, world: "SohWorld") -> Rule.Resolved:  # type: ignore
-        return self.Resolved(player=world.player, caching_enabled=getattr(world, "rule_caching_enabled", False))
+        return self.Resolved(requirement=self.requirement, player=world.player,
+                             caching_enabled=getattr(world, "rule_caching_enabled", False))
 
     class Resolved(Rule.Resolved):
         item_name: str = str(Items.TRIFORCE_PIECE)
-        player: int
+        requirement: str = ""
 
         def _evaluate(self, state: CollectionState) -> bool:
             world = cast("SohWorld", state.multiworld.worlds[self.player])
-            return state.prog_items[self.player][self.item_name] >= world.ganons_soul_triforce_pieces_required
+            return state.prog_items[self.player][self.item_name] >= getattr(world, self.requirement)
 
         def item_dependencies(self) -> dict[str, set[int]]:
             return {self.item_name: {id(self)}}
@@ -1425,12 +1430,13 @@ def can_trigger_ganons_soul(bundle: tuple[Regions, "SohWorld"]) -> Rule:
          | (OptionFilter(GanonsSoul, GanonsSoul.option_trigger_dungeon_rewards) & ItemsPlusGregEnough(target=FromOption(GanonsSoulDungeonRewardsRequired), item_tag=GroupTag.Spiritual_Stone | GroupTag.Medallion, greg=greg)) \
          | (OptionFilter(GanonsSoul, GanonsSoul.option_trigger_dungeons) & ItemsPlusGregEnough(target=FromOption(GanonsSoulDungeonsRequired), item_tag=dungeon_events, greg=greg)) \
          | (OptionFilter(GanonsSoul, GanonsSoul.option_trigger_skull_tokens) & Has(Items.GOLD_SKULLTULA_TOKEN, count=FromOption(GanonsSoulSkullTokensRequired))) \
-         | (OptionFilter(GanonsSoul, GanonsSoul.option_trigger_triforce_pieces) & GanonsSoulTriforcePieces())
+         | (OptionFilter(GanonsSoul, GanonsSoul.option_trigger_triforce_pieces) & TriforcePiecesAtLeast(requirement="ganons_soul_triforce_pieces_required"))
 
 
 GBK_TRIGGER_OPTIONS = [GanonsCastleBossKey.option_lacs_vanilla, GanonsCastleBossKey.option_lacs_stones,
                        GanonsCastleBossKey.option_lacs_medallions, GanonsCastleBossKey.option_lacs_dungeon_rewards,
-                       GanonsCastleBossKey.option_lacs_dungeons, GanonsCastleBossKey.option_lacs_skull_tokens]
+                       GanonsCastleBossKey.option_lacs_dungeons, GanonsCastleBossKey.option_lacs_skull_tokens,
+                       GanonsCastleBossKey.option_lacs_triforce_pieces]
 
 
 def can_trigger_gbk(bundle: tuple[Regions, "SohWorld"]) -> Rule:
@@ -1444,7 +1450,19 @@ def can_trigger_gbk(bundle: tuple[Regions, "SohWorld"]) -> Rule:
          | (OptionFilter(GanonsCastleBossKey, GanonsCastleBossKey.option_lacs_medallions) & ItemsPlusGregEnough(target=FromOption(GanonsCastleBossKeyMedallionsRequired), item_tag=GroupTag.Medallion, greg=greg)) \
          | (OptionFilter(GanonsCastleBossKey, GanonsCastleBossKey.option_lacs_dungeon_rewards) & ItemsPlusGregEnough(target=FromOption(GanonsCastleBossKeyDungeonRewardsRequired), item_tag=GroupTag.Spiritual_Stone | GroupTag.Medallion, greg=greg)) \
          | (OptionFilter(GanonsCastleBossKey, GanonsCastleBossKey.option_lacs_dungeons) & ItemsPlusGregEnough(target=FromOption(GanonsCastleBossKeyDungeonsRequired), item_tag=dungeon_events, greg=greg)) \
-         | (OptionFilter(GanonsCastleBossKey, GanonsCastleBossKey.option_lacs_skull_tokens) & Has(Items.GOLD_SKULLTULA_TOKEN, count=FromOption(GanonsCastleBossKeySkullTokensRequired)))
+         | (OptionFilter(GanonsCastleBossKey, GanonsCastleBossKey.option_lacs_skull_tokens) & Has(Items.GOLD_SKULLTULA_TOKEN, count=FromOption(GanonsCastleBossKeySkullTokensRequired))) \
+         | (OptionFilter(GanonsCastleBossKey, GanonsCastleBossKey.option_lacs_triforce_pieces) & TriforcePiecesAtLeast(requirement="gbk_triforce_pieces_required"))
+
+
+def can_trigger_wincon(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    """9.3.1 Logic::CanTriggerWincon (pseudo-location RC_WINCON in Root) for the trigger win conditions except
+    Triforce Pieces, which keeps the apworld's CanWinTriforceHunt. Greg counts in logic only with "reward"."""
+    greg = FromOption(WinConditionGregModifier)
+    return (OptionFilter(WinCondition, WinCondition.option_trigger_stones) & ItemsPlusGregEnough(target=FromOption(WinConditionStonesRequired), item_tag=GroupTag.Spiritual_Stone, greg=greg)) \
+         | (OptionFilter(WinCondition, WinCondition.option_trigger_medallions) & ItemsPlusGregEnough(target=FromOption(WinConditionMedallionsRequired), item_tag=GroupTag.Medallion, greg=greg)) \
+         | (OptionFilter(WinCondition, WinCondition.option_trigger_dungeon_rewards) & ItemsPlusGregEnough(target=FromOption(WinConditionDungeonRewardsRequired), item_tag=GroupTag.Spiritual_Stone | GroupTag.Medallion, greg=greg)) \
+         | (OptionFilter(WinCondition, WinCondition.option_trigger_dungeons) & ItemsPlusGregEnough(target=FromOption(WinConditionDungeonsRequired), item_tag=dungeon_events, greg=greg)) \
+         | (OptionFilter(WinCondition, WinCondition.option_trigger_skull_tokens) & Has(Items.GOLD_SKULLTULA_TOKEN, count=FromOption(WinConditionSkullTokensRequired)))
 
 
 

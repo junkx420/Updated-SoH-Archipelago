@@ -112,6 +112,10 @@ def get_dungeon_item_prefill_items(world: "SohWorld", overworld_shuffle: bool) -
         if world.options.shuffle_dungeon_rewards == shuffle_setting:
             shuffle_items += list(dungeon_reward_item_mapping.values())
 
+        # Triforce Pieces (9.3.1 RSK_TRIFORCE_HUNT_PIECES_LOCATION); missing ones are skipped when extracting
+        if world.options.triforce_hunt and world.options.triforce_hunt_pieces_location == shuffle_setting:
+            shuffle_items += [Items.TRIFORCE_PIECE] * world.options.triforce_hunt_pieces_total.value
+
         # Ganon's Soul (9.3.1 RSK_GANONS_SOUL "Any Dungeon" / "Overworld")
         if world.options.ganons_soul == shuffle_setting:
             shuffle_items.append(Items.GANONS_SOUL)
