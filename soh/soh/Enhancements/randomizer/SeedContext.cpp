@@ -879,6 +879,13 @@ void Context::ParseArchipelagoOptions() {
     } else if (slotData["start_with_links_pocket"] == 3) {
         mOptions[RSK_LINKS_POCKET].Set(RO_LINKS_POCKET_NOTHING);
     }
+    // 9.3.1 gameplay switches (apworld 1.5+). They used to be left at whatever the local randomizer menu had;
+    // now they always come from the slot data, off when an older apworld doesn't send them.
+    mOptions[RSK_BUNNY_HOOD].Set(slotData.value("bunny_hood_effect", 0));
+    mOptions[RSK_MASKS_AS_ADULT].Set(slotData.value("masks_as_adult", 0));
+    mOptions[RSK_EARLY_GRANNYS_SHOP].Set(slotData.value("early_grannys_shop", 0));
+    mOptions[RSK_SWORDLESS_EPONA_ITEMS].Set(slotData.value("swordless_epona_items", 0));
+    mOptions[RSK_SHOP_SHIELDS_AND_TUNICS_ONLY_REFILL].Set(slotData.value("shop_shields_and_tunics_only_refill", 0));
     // apworld 1.5+: which kind of dungeon reward Link's Pocket may get (same order as RandoOptionLinksPocketReward)
     if (slotData.contains("links_pocket_reward")) {
         mOptions[RSK_LINKS_POCKET_REWARD].Set(slotData["links_pocket_reward"].get<uint8_t>());
