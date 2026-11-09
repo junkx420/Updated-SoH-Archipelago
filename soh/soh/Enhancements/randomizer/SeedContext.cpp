@@ -563,7 +563,9 @@ void Context::ParseArchipelagoOptions() {
     mOptions[RSK_RAINBOW_BRIDGE_DUNGEON_COUNT].Set(slotData["rainbow_bridge_dungeons_required"]);
     mOptions[RSK_RAINBOW_BRIDGE_TOKEN_COUNT].Set(slotData["rainbow_bridge_skull_tokens_required"]);
     mOptions[RSK_BRIDGE_OPTIONS].Set(slotData["rainbow_bridge_greg_modifier"]);
-    if (slotData["skip_ganons_trials"] == 0) {
+    // apworld option ganons_trials: 0 = skip, 1 = set number (ganons_trials_count, the chosen trials in required_trials).
+    // This used to read "skip_ganons_trials", which the apworld never sends, so every seed took the set-number branch.
+    if (slotData.value("ganons_trials", 0) == 0 || slotData.value("ganons_trials_count", 0) == 0) {
         mOptions[RSK_GANONS_TRIALS].Set(RO_GANONS_TRIALS_SKIP);
         mOptions[RSK_TRIAL_COUNT].Set(0);
         mTrials->RemoveAllTrials();
