@@ -554,6 +554,10 @@ void Context::ParseArchipelagoOptions() {
     // (same migration as upstream ConfigVersion7Updater)
     if (slotData["rainbow_bridge"] == 7) {
         mOptions[RSK_RAINBOW_BRIDGE].Set(RO_BRIDGE_GREG);
+    } else if (slotData["rainbow_bridge"] == 8) {
+        // apworld 1.5 appended "Triforce Pieces" as 8 (9.3.1 has it at 7, before Greg)
+        mOptions[RSK_RAINBOW_BRIDGE].Set(RO_BRIDGE_TRIFORCE_PIECES);
+        mOptions[RSK_RAINBOW_BRIDGE_TRIFORCE_COUNT].Set(slotData.value("rainbow_bridge_triforce_pieces_required", 0));
     } else {
         mOptions[RSK_RAINBOW_BRIDGE].Set(slotData["rainbow_bridge"]);
     }
@@ -814,6 +818,8 @@ void Context::ParseArchipelagoOptions() {
         mOptions[RSK_GANONS_BOSS_KEY].Set(RO_GANON_BOSS_KEY_DUNGEONS);
     } else if (slotData["ganons_castle_boss_key"] == 7) {
         mOptions[RSK_GANONS_BOSS_KEY].Set(RO_GANON_BOSS_KEY_TOKENS);
+    } else if (slotData["ganons_castle_boss_key"] == 8) {
+        mOptions[RSK_GANONS_BOSS_KEY].Set(RO_GANON_BOSS_KEY_TRIFORCE_PIECES);
     }
     mOptions[RSK_SKIP_CHILD_STEALTH].Set(RO_GENERIC_NO);
     mOptions[RSK_STARTING_STICKS].Set(slotData["start_with_stick_ammo"]);
@@ -934,17 +940,40 @@ void Context::ParseArchipelagoOptions() {
     mOptions[RSK_SHUFFLE_100_GS_REWARD].Set(slotData["shuffle_100_gs_reward"]);
     // 9.3.1 folded Triforce Hunt (Off/Win/GBK) into "Total Pieces" (0 = off) plus the win condition
     // "Trigger-Triforce Pieces" (upstream #5838, mapping as in ConfigVersion7Updater). The counts are now the
-    // real numbers, so the old "- 1" correction is gone. The apworld only knows "Win".
+    // real numbers, so the old "- 1" correction is gone.
     if (slotData["triforce_hunt"] != 0) {
         uint8_t triforcePieceTotal = slotData["triforce_hunt_pieces_total"];
         uint8_t triforcePieceRequired = slotData["triforce_hunt_pieces_required"];
         mOptions[RSK_TRIFORCE_HUNT_PIECES_TOTAL].Set(triforcePieceTotal);
+        mOptions[RSK_TRIFORCE_HUNT_PIECES_LOCATION].Set(slotData.value("triforce_hunt_pieces_location", 2));
         mOptions[RSK_WINCON].Set(RO_WINCON_TRIFORCE_PIECES);
         mOptions[RSK_WINCON_TRIFORCE_COUNT].Set(triforcePieceRequired);
         mOptions[RSK_GBK_TRIFORCE_COUNT].Set(triforcePieceRequired);
     } else {
         mOptions[RSK_TRIFORCE_HUNT_PIECES_TOTAL].Set(0);
         mOptions[RSK_WINCON].Set(RO_WINCON_DEFEAT_GANON);
+    }
+    // apworld 1.5+ sends its own Win Condition ("default" already resolved). apworld values:
+    // 1 defeat_ganon, 2 anywhere, 3..7 trigger stones/medallions/dungeon rewards/dungeons/tokens, 8 triforce pieces.
+    if (slotData.contains("win_condition")) {
+        static const std::unordered_map<int, uint8_t> winconByApValue = {
+            { 1, RO_WINCON_DEFEAT_GANON }, { 2, RO_WINCON_ANYWHERE },   { 3, RO_WINCON_STONES },
+            { 4, RO_WINCON_MEDALLIONS },   { 5, RO_WINCON_REWARDS },    { 6, RO_WINCON_DUNGEONS },
+            { 7, RO_WINCON_TOKENS },       { 8, RO_WINCON_TRIFORCE_PIECES },
+        };
+        if (const auto it = winconByApValue.find(slotData["win_condition"].get<int>()); it != winconByApValue.end()) {
+            mOptions[RSK_WINCON].Set(it->second);
+        }
+        mOptions[RSK_WINCON_OPTIONS].Set(slotData.value("win_condition_greg_modifier", 0));
+        mOptions[RSK_WINCON_STONE_COUNT].Set(slotData.value("win_condition_stones_required", 3));
+        mOptions[RSK_WINCON_MEDALLION_COUNT].Set(slotData.value("win_condition_medallions_required", 6));
+        mOptions[RSK_WINCON_REWARD_COUNT].Set(slotData.value("win_condition_dungeon_rewards_required", 9));
+        mOptions[RSK_WINCON_DUNGEON_COUNT].Set(slotData.value("win_condition_dungeons_required", 8));
+        mOptions[RSK_WINCON_TOKEN_COUNT].Set(slotData.value("win_condition_skull_tokens_required", 100));
+    }
+    // Ganon's Boss Key "Triforce Pieces" has its own count (it used to share the win condition's)
+    if (slotData["ganons_castle_boss_key"] == 8) {
+        mOptions[RSK_GBK_TRIFORCE_COUNT].Set(slotData.value("ganons_castle_boss_key_triforce_pieces_required", 0));
     }
     mOptions[RSK_SHUFFLE_BEAN_SOULS].Set(RO_GENERIC_NO);
     // 9.3.1 split "On + Ganon" (apworld value 2) into "On" plus the standalone Ganon's Soul setting
