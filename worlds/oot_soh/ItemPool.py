@@ -287,7 +287,7 @@ def create_item_pool(world: "SohWorld") -> None:
             if world.options.shuffle_master_sword and not world.options.start_with_master_sword:
                 items_to_create[Items.MASTER_SWORD] += 1
 
-            if world.options.shuffle_weird_egg:
+            if world.options.shuffle_weird_egg == ShuffleWeirdEgg.option_on:
                 items_to_create[Items.WEIRD_EGG] += 1
 
             if world.options.shuffle_ocarina_buttons:

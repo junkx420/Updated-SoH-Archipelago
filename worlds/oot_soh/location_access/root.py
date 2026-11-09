@@ -45,9 +45,9 @@ def set_region_rules(world: "SohWorld") -> None:
         (EventLocations.ROOT_MET_ZELDA, Events.MET_ZELDA,
          lambda bundle: starting_zeldas_letter(bundle) & Not(False_())),
         (EventLocations.ROOT_MALON_RETURNED_FROM_CASTLE, Events.MALON_RETURNED_FROM_CASTLE,
-         lambda bundle: True_(options=[OptionFilter(SkipChildZelda, True)])),
+         lambda bundle: True_(options=[OptionFilter(ShuffleWeirdEgg, ShuffleWeirdEgg.option_skip_waking_talon)])),
         (EventLocations.ROOT_TALON_RETURNED_FROM_CASTLE, Events.TALON_RETURNED_FROM_CASTLE,
-         lambda bundle: True_(options=[OptionFilter(SkipChildZelda, True)])),
+         lambda bundle: True_(options=[OptionFilter(ShuffleWeirdEgg, ShuffleWeirdEgg.option_skip_waking_talon)])),
     ])
     # Locations
     add_locations(Regions.ROOT, world, [
@@ -61,7 +61,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.SONG_FROM_IMPA,
          lambda bundle: starting_zeldas_letter(bundle) & Not(False_())),
         (Locations.HC_MALON_EGG,
-         lambda bundle: True_(options=[OptionFilter(SkipChildZelda, True)])),
+         lambda bundle: True_(options=[OptionFilter(ShuffleWeirdEgg, ShuffleWeirdEgg.option_skip_waking_talon)])),
         (Locations.HC_ZELDAS_LETTER,
          lambda bundle: starting_zeldas_letter(bundle) & Not(False_())),
         (Locations.MARKET_TOT_MASTER_SWORD,

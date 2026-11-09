@@ -47,3 +47,23 @@ class TestGateClosedNoSkip(ZeldaBase):
     def test_zelda_needs_egg(self):
         self.assertFalse(self.reachable_from_start(Locations.SONG_FROM_IMPA))
         self.assertFalse(self.reachable_from_start(Locations.HC_ZELDAS_LETTER))
+
+
+class TestSkipWakingTalonOnly(ZeldaBase):
+    # 9.3.1 Weird Egg "Skip Waking Talon" without Skip Child Zelda: Talon and Malon are back at the ranch from the
+    # start, the Malon egg check is done; Zelda still has to be met
+    __test__ = True
+    options = {"skip_child_zelda": False, "kakariko_gate": "closed", "shuffle_weird_egg": "skip_waking_talon"}
+
+    def test_talon_skipped(self):
+        self.assertTrue(self.reachable_from_start(Locations.HC_MALON_EGG))
+        self.assertFalse(self.reachable_from_start(Locations.SONG_FROM_IMPA))
+
+
+class TestSkipChildZeldaSetsEgg(ZeldaBase):
+    __test__ = True
+    options = {"skip_child_zelda": True, "shuffle_weird_egg": True}
+
+    def test_egg_option(self):
+        from ..Options import ShuffleWeirdEgg
+        self.assertEqual(self.world.options.shuffle_weird_egg.value, ShuffleWeirdEgg.option_skip_waking_talon)

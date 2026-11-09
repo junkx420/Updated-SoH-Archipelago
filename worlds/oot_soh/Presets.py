@@ -229,7 +229,7 @@ hell_mode_options = {
     "shuffle_ocarinas":                                 ShuffleOcarinas.option_true,
     "shuffle_ocarina_buttons":                          ShuffleOcarinaButtons.option_true,
     "shuffle_swim":                                     ShuffleSwim.option_true,
-    "shuffle_weird_egg":                                ShuffleWeirdEgg.option_true,
+    "shuffle_weird_egg":                                ShuffleWeirdEgg.option_on,
     "shuffle_gerudo_membership_card":                   ShuffleGerudoMembershipCard.option_true,
     "shuffle_fishing_pole":                             ShuffleFishingPole.option_true,
     "shuffle_deku_stick_bag":                           ShuffleDekuStickBag.option_true,

@@ -423,8 +423,9 @@ def place_locked_items(world: "SohWorld") -> None:
         # Zeldas Letter gets placed to it's location
         place_from_pool(Locations.HC_ZELDAS_LETTER, Items.ZELDAS_LETTER, world)
 
-        # If not skip_child_zelda and not shuffle_weird_egg, place the weird egg
-        if not world.options.shuffle_weird_egg:
+        # If the egg isn't shuffled, Malon has it (with Skip Waking Talon the check is already done at the start,
+        # 9.3.1 savefile.cpp, and the egg isn't needed)
+        if world.options.shuffle_weird_egg != ShuffleWeirdEgg.option_on:
             place_from_pool(Locations.HC_MALON_EGG, Items.WEIRD_EGG, world)
     else:
         world.precollect_from_pool(Items.ZELDAS_LETTER)

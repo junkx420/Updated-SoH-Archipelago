@@ -348,9 +348,12 @@ class ShuffleSwim(Toggle):
     display_name = "Shuffle Swim"
 
 
-class ShuffleWeirdEgg(Toggle):
+class ShuffleWeirdEgg(Choice):
     """
-    Shuffles the Weird Egg from Malon into the item pool. Enabling Skip Child Zelda disables this feature.
+    Off - Malon gives you the Weird Egg at Hyrule Castle.
+    On - Shuffles the Weird Egg from Malon into the item pool.
+    Skip Waking Talon - Talon is already awake and back at Lon Lon Ranch, the egg isn't needed
+    (Ship of Harkinian 9.3.1 setting). Skip Child Zelda always uses this.
     The Weird Egg is required to unlock several events:
       - Zelda's Lullaby from Impa
       - Saria's Song in Sacred Forest Meadow
@@ -359,6 +362,12 @@ class ShuffleWeirdEgg(Toggle):
       - Happy Mask Shop side quest
     """
     display_name = "Shuffle Weird Egg"
+    option_off = 0
+    option_on = 1
+    option_skip_waking_talon = 2
+    alias_false = 0
+    alias_true = 1
+    default = 0
 
 
 class ShuffleGerudoMembershipCard(Toggle):
@@ -2035,6 +2044,10 @@ class SohOptions(PerGameCommonOptions):
         
 
     def adjust_starting_items(self):
+        # SoH 9.3.1: Skip Child Zelda = starting with Zelda's Letter + Weird Egg "Skip Waking Talon"
+        if self.skip_child_zelda:
+            self.shuffle_weird_egg.value = ShuffleWeirdEgg.option_skip_waking_talon
+
         if self.shuffle_deku_stick_bag == ShuffleDekuStickBag.option_true:
             self.start_with_stick_ammo.value = StartWithStickAmmo.option_false
 
