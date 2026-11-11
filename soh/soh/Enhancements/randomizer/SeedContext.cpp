@@ -724,7 +724,7 @@ void Context::ParseArchipelagoOptions() {
     mOptions[RSK_SHUFFLE_BOULDERS].Set(slotData.value("shuffle_boulders", static_cast<int>(RO_SHUFFLE_BOULDERS_OFF)));
     mOptions[RSK_SHUFFLE_CRATES].Set(slotData["shuffle_crates"]);
     mOptions[RSK_SHUFFLE_TREES].Set(slotData["shuffle_trees"]);
-    mOptions[RSK_SHUFFLE_BUSHES].Set(RO_GENERIC_NO);
+    mOptions[RSK_SHUFFLE_BUSHES].Set(slotData.value("shuffle_bushes", static_cast<int>(RO_GENERIC_NO)));
     mOptions[RSK_SHUFFLE_FROG_SONG_RUPEES].Set(slotData["shuffle_frog_song_rupees"]);
     mOptions[RSK_SHUFFLE_BEGGAR].Set(slotData.value("shuffle_beggar", static_cast<int>(RO_GENERIC_OFF)));
     mOptions[RSK_ITEM_POOL].Set(0);
@@ -1057,7 +1057,7 @@ void Context::ParseArchipelagoOptions() {
     if (slotData["ganons_castle_boss_key"] == 8) {
         mOptions[RSK_GBK_TRIFORCE_COUNT].Set(slotData.value("ganons_castle_boss_key_triforce_pieces_required", 0));
     }
-    mOptions[RSK_SHUFFLE_BEAN_SOULS].Set(RO_GENERIC_NO);
+    mOptions[RSK_SHUFFLE_BEAN_SOULS].Set(slotData.value("shuffle_bean_souls", static_cast<int>(RO_GENERIC_NO)));
     // 9.3.1 split "On + Ganon" (apworld value 2) into "On" plus the standalone Ganon's Soul setting
     // (upstream #5838, mapping as in ConfigVersion7Updater)
     if (slotData["shuffle_boss_souls"] == 2) {
