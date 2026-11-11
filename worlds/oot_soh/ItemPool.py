@@ -737,7 +737,7 @@ def give_starting_items(world: "SohWorld") -> None:
         for _ in range(world.options.start_with_strength.value):
             world.precollect_from_pool(Items.STRENGTH_UPGRADE)
     if world.options.start_with_scale:
-        for _ in range(world.options.start_with_scale.value + (1 if world.options.shuffle_swim else 0)):
+        for _ in range(world.options.start_with_scale.value):  # Shuffle Swim turns the starting scale off
             world.precollect_from_pool(Items.PROGRESSIVE_SCALE)
     if world.options.start_with_wallet:
         for _ in range(world.options.start_with_wallet.value + (1 if world.options.shuffle_childs_wallet else 0)):

@@ -2278,6 +2278,7 @@ class StartWithStrength(Choice):
 class StartWithScale(Choice):
     """
     Start with the Scale at this level. The matching items are taken out of the item pool.
+    Turned off when Shuffle Swim is on (as in Ship of Harkinian).
     """
     display_name = "Start with Scale"
     option_off = 0
@@ -2758,6 +2759,13 @@ class SohOptions(PerGameCommonOptions):
         # SoH 9.3.1: Skip Child Zelda = starting with Zelda's Letter + Weird Egg "Skip Waking Talon"
         if self.skip_child_zelda:
             self.shuffle_weird_egg.value = ShuffleWeirdEgg.option_skip_waking_talon
+
+        # SoH 9.3.1 settings.cpp (FinalizeSettings / RSK_SHUFFLE_SWIM callback): Shuffle Swim sets the starting scale to 0.
+        # The client gives a starting scale without the swim ability, so a starting scale would put swimming in logic
+        # without the player being able to swim.
+        if self.shuffle_swim and self.start_with_scale:
+            logging.warning("Shuffle Swim is on: Start with Scale is turned off (as in SoH 9.3.1).")
+            self.start_with_scale.value = StartWithScale.option_off
 
         if self.shuffle_deku_stick_bag == ShuffleDekuStickBag.option_true:
             self.start_with_stick_ammo.value = StartWithStickAmmo.option_false
