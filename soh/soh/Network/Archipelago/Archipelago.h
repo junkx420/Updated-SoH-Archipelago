@@ -118,6 +118,9 @@ class ArchipelagoClient {
     };
 
     static std::string SanitizeName(const std::string& name);
+    // AP location name -> RandomizerCheck. Like StaticData::locationNameToEnum, but when a vanilla check and its
+    // Master Quest counterpart share a spoiler name, the vanilla one wins (the apworld has no Master Quest).
+    static RandomizerCheck LocationFromName(const std::string& name);
 
     std::unique_ptr<APClient> apClient;
     bool itemQueued;

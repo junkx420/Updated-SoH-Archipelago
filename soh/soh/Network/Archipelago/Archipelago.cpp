@@ -626,7 +626,7 @@ void ArchipelagoClient::InitForeignHints() {
 
 void ArchipelagoClient::QueueExternalCheck(const int64_t apLocation) {
     const std::string checkName = apClient->get_location_name(apLocation, AP_Client_consts::AP_GAME_NAME);
-    const uint32_t RC = static_cast<uint32_t>(Rando::StaticData::locationNameToEnum[checkName]);
+    const uint32_t RC = static_cast<uint32_t>(ArchipelagoClient::LocationFromName(checkName));
 
     if (RC == RC_UNKNOWN_CHECK) {
         ArchipelagoConsole_SendMessage("[ERROR] Attempting to queue an unknown location (RC_UNKOWN_CHECK), skipping.");
@@ -858,6 +858,26 @@ std::string GetUtf8char(const std::string& string, size_t position) {
         width = 1;
     }
     return string.substr(position, width);
+}
+
+RandomizerCheck ArchipelagoClient::LocationFromName(const std::string& name) {
+    // StaticData::InitHashMaps fills locationNameToEnum in RandomizerCheck order, so with a duplicate name the later
+    // (Master Quest) check wins, e.g. "Ganon's Castle Water Trial Left Stalagmite 1" (ShuffleIcicles.cpp) maps to
+    // RC_GANONS_CASTLE_MQ_WATER_TRIAL_LEFT_STALAGMITE_1. The shared map stays as it is for upstream code.
+    const auto it = Rando::StaticData::locationNameToEnum.find(name);
+    if (it == Rando::StaticData::locationNameToEnum.end()) {
+        return RC_UNKNOWN_CHECK;
+    }
+    if (Rando::StaticData::GetLocation(it->second)->GetQuest() != RCQUEST_MQ) {
+        return it->second;
+    }
+    for (int rc = 1; rc < RC_MAX; rc++) {
+        const auto location = Rando::StaticData::GetLocation(static_cast<RandomizerCheck>(rc));
+        if (location->GetQuest() != RCQUEST_MQ && location->GetName() == name) {
+            return static_cast<RandomizerCheck>(rc);
+        }
+    }
+    return it->second;
 }
 
 std::string ArchipelagoClient::SanitizeName(const std::string& name) {
@@ -1547,7 +1567,7 @@ extern "C" void Archipelago_InitSaveFile() {
                                     ARRAY_COUNT(gSaveContext.ship.quest.data.archipelago.roomPass));
 
     for (uint32_t i = 0; i < scoutedItems.size(); i++) {
-        RandomizerCheck rc = Rando::StaticData::locationNameToEnum[scoutedItems[i].locationName];
+        RandomizerCheck rc = ArchipelagoClient::LocationFromName(scoutedItems[i].locationName);
 
         gSaveContext.ship.quest.data.archipelago.locations[rc].itemFlags = scoutedItems[i].flags;
         SohUtils::CopyStringToCharArray(gSaveContext.ship.quest.data.archipelago.locations[rc].itemName,

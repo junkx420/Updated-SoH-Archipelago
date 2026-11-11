@@ -1221,7 +1221,7 @@ void Context::ParseArchipelagoItemsLocations(const std::vector<ArchipelagoClient
     }
 
     for (const ArchipelagoClient::ApItem& ap_item : scouted_items) {
-        const RandomizerCheck rc = StaticData::locationNameToEnum[ap_item.locationName];
+        const RandomizerCheck rc = ArchipelagoClient::LocationFromName(ap_item.locationName);
 
         AddLocation(rc);
         const auto ctx = Rando::Context::GetInstance();
@@ -1263,7 +1263,7 @@ void Context::ParseArchipelagoItemsLocations(const std::vector<ArchipelagoClient
     for (auto it = vanillaShopItems.begin(); it != vanillaShopItems.end(); it++) {
         std::string location = it.key();
         std::string itemName = it.value();
-        const RandomizerCheck rc = StaticData::locationNameToEnum[location];
+        const RandomizerCheck rc = ArchipelagoClient::LocationFromName(location);
         const RandomizerGet item = StaticData::itemNameToEnum[itemName];
         itemLocationTable[rc].SetPlacedItem(item);
     }
@@ -1273,7 +1273,7 @@ void Context::ParseArchipelagoItemsLocations(const std::vector<ArchipelagoClient
     for (auto it = shopPrices.begin(); it != shopPrices.end(); it++) {
         std::string location = it.key();
         uint16_t price = it.value();
-        const RandomizerCheck rc = StaticData::locationNameToEnum[location];
+        const RandomizerCheck rc = ArchipelagoClient::LocationFromName(location);
         itemLocationTable[rc].SetCustomPrice(price);
     }
 }
