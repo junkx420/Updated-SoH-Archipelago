@@ -612,6 +612,14 @@ void Context::ParseArchipelagoOptions() {
     mOptions[RSK_SHUFFLE_OCARINA].Set(slotData["shuffle_ocarinas"]);
     mOptions[RSK_SHUFFLE_OCARINA_BUTTONS].Set(slotData["shuffle_ocarina_buttons"]);
     mOptions[RSK_SHUFFLE_SWIM].Set(slotData["shuffle_swim"]);
+    // 9.3.1 ability shuffles (apworld 1.5+); were never set from slot data before, older apworlds = off.
+    // shuffle_open_chest uses the RO_OPEN_CHEST_* values (off/on/progressive). With Shuffle Grab the apworld sends
+    // start_with_strength = 0, as settings.cpp does.
+    mOptions[RSK_SHUFFLE_CLIMB].Set(slotData.value("shuffle_climb", static_cast<int>(RO_GENERIC_OFF)));
+    mOptions[RSK_SHUFFLE_CRAWL].Set(slotData.value("shuffle_crawl", static_cast<int>(RO_GENERIC_OFF)));
+    mOptions[RSK_SHUFFLE_GRAB].Set(slotData.value("shuffle_grab", static_cast<int>(RO_GENERIC_OFF)));
+    mOptions[RSK_SHUFFLE_SPEAK].Set(slotData.value("shuffle_speak", static_cast<int>(RO_GENERIC_OFF)));
+    mOptions[RSK_SHUFFLE_OPEN_CHEST].Set(slotData.value("shuffle_open_chest", static_cast<int>(RO_OPEN_CHEST_OFF)));
     mOptions[RSK_STARTING_DEKU_SHIELD].Set(slotData["start_with_deku_shield"]);
     mOptions[RSK_STARTING_KOKIRI_SWORD].Set(slotData["start_with_kokiri_sword"]);
     mOptions[RSK_STARTING_MASTER_SWORD].Set(slotData["start_with_master_sword"]);
