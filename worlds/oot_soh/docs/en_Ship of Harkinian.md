@@ -101,11 +101,13 @@ Ship of Harkinian:
 
 ## Is "X" feature in SoH Archipelago?
 
-If it is not in the `.yaml` file it likely has not been added to our Archipelago implementation yet. A short list of popular features that have yet to be added:
+If it is not in the `.yaml` file it likely has not been added to our Archipelago implementation yet. Entrance
+randomization is supported for dungeon entrances (optionally with Ganon's Castle) and for grotto/grave entrances. A
+short list of popular features that have yet to be added:
 
-* Entrance Randomization
-* Gossip Stone Hints
+* The other entrance shuffles (overworld, interiors, boss rooms, owl drops, warp songs, spawns, mixed and decoupled pools)
 * Master Quest Dungeons
+* Silver Rupee Shuffle
 
 ## Can I use my settings from the original OOT Archipelago?
 
