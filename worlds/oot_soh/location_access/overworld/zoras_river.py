@@ -100,7 +100,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (EventLocations.ZORAS_RIVER_ADULT_CAN_PASS_TIME, Events.ADULT_CAN_PASS_TIME,
          lambda bundle: is_adult(bundle)),
         (EventLocations.ZORAS_RIVER_PLANT_ZORAS_RIVER_BEAN, Events.PLANT_ZORAS_RIVER_BEAN,
-         lambda bundle: can_plant_bean(bundle)),
+         lambda bundle: can_plant_bean(bundle, Items.ZORAS_RIVER_BEAN_SOUL)),
         (EventLocations.ZORAS_RIVER_FAIRY_ACCESS, Events.CAN_ACCESS_FAIRIES,
          lambda bundle: call_gossip_fairy(bundle) | (is_child(bundle) & can_use(Items.STICKS, bundle)) | (is_child(bundle) & bean_planted(bundle, Events.PLANT_ZORAS_RIVER_BEAN) & can_use(Items.SONG_OF_STORMS, bundle))),
     ])

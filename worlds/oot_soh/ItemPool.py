@@ -14,6 +14,9 @@ if TYPE_CHECKING:
     from . import SohWorld
 
 
+BEAN_SOULS = [Items.DEATH_MOUNTAIN_CRATER_BEAN_SOUL, Items.DEATH_MOUNTAIN_TRAIL_BEAN_SOUL, Items.DESERT_COLOSSUS_BEAN_SOUL, Items.GERUDO_VALLEY_BEAN_SOUL, Items.GRAVEYARD_BEAN_SOUL, Items.KOKIRI_FOREST_BEAN_SOUL, Items.LAKE_HYLIA_BEAN_SOUL, Items.LOST_WOODS_BRIDGE_BEAN_SOUL, Items.LOST_WOODS_BEAN_SOUL, Items.ZORAS_RIVER_BEAN_SOUL]
+
+
 def create_item_pool(world: "SohWorld") -> None:
     items_to_create: dict[str, int] = {
         item: data.quantity_in_item_pool for item, data in item_data_table.items()}
@@ -240,6 +243,11 @@ def create_item_pool(world: "SohWorld") -> None:
         if not world.options.start_with_mask_of_truth:
             items_to_create[Items.MASK_OF_TRUTH] = 1
 
+    # Shuffle Bean Souls (3drando/item_pool.cpp): one soul per bean patch (2 each with plentiful, see below)
+    if world.options.shuffle_bean_souls:
+        for soul in BEAN_SOULS:
+            items_to_create[soul] = 1
+
     # Shuffle Treasure Chest Game (3drando/item_pool.cpp): a key ring or 6 small keys (7 / 2 with plentiful, see below)
     if world.options.shuffle_treasure_chest_game:
         if world.options.chest_game_key_ring:
@@ -357,7 +365,9 @@ def create_item_pool(world: "SohWorld") -> None:
 
             items_to_create[Items.CLAIM_CHECK] += 1
 
-            # TODO Bean Souls
+            if world.options.shuffle_bean_souls:
+                for soul in BEAN_SOULS:
+                    items_to_create[soul] += 1
 
             if world.options.shuffle_boss_souls:
                 items_to_create[Items.GOHMAS_SOUL] += 1

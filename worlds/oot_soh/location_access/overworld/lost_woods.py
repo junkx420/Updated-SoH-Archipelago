@@ -30,7 +30,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.THE_LOST_WOODS, world, [
         (EventLocations.THE_LOST_WOODS_PLANT_LOST_WOODS_BRIDGE_BEAN, Events.PLANT_LOST_WOODS_BRIDGE_BEAN,
-         lambda bundle: can_plant_bean(bundle)),
+         lambda bundle: can_plant_bean(bundle, Items.LOST_WOODS_BRIDGE_BEAN_SOUL)),
         (EventLocations.THE_LOST_WOODS_FAIRY_ACCESS, Events.CAN_ACCESS_FAIRIES,
          lambda bundle: is_child(bundle) & bean_planted(bundle, Events.PLANT_LOST_WOODS_BRIDGE_BEAN) & can_use(Items.SONG_OF_STORMS, bundle)),
         (EventLocations.THE_LOST_WOODS_BUG_ACCESS, Events.CAN_ACCESS_BUGS,
@@ -51,7 +51,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.LW_TARGET_IN_WOODS,
          lambda bundle: is_child(bundle) & can_use(Items.FAIRY_SLINGSHOT, bundle)),
         (Locations.LW_GS_BEAN_PATCH_NEAR_BRIDGE,
-         lambda bundle: can_spawn_soil_skull(bundle) & can_attack(bundle)),
+         lambda bundle: can_spawn_soil_skull(bundle, Items.LOST_WOODS_BRIDGE_BEAN_SOUL) & can_attack(bundle)),
         (Locations.LW_UNDERWATER_SHORTCUT_RUPEE1,
          lambda bundle: is_child(bundle) & (has_item(Items.SILVER_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle) | can_use(Items.BOOMERANG, bundle))),
         (Locations.LW_UNDERWATER_SHORTCUT_RUPEE2,
@@ -137,7 +137,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.LW_BEYOND_MIDO, world, [
         (EventLocations.LW_BEYOND_MIDO_PLANT_LOST_WOODS_THEATER_BEAN, Events.PLANT_LOST_WOODS_THEATER_BEAN,
-         lambda bundle: can_plant_bean(bundle)),
+         lambda bundle: can_plant_bean(bundle, Items.LOST_WOODS_BEAN_SOUL)),
         (EventLocations.LW_BEYOND_MIDO_FAIRY_ACCESS, Events.CAN_ACCESS_FAIRIES,
          lambda bundle: can_use(Items.STICKS, bundle) | (is_child(bundle) & bean_planted(bundle, Events.PLANT_LOST_WOODS_THEATER_BEAN) & can_use(Items.SONG_OF_STORMS, bundle))),
     ])
@@ -150,7 +150,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.LW_GS_ABOVE_THEATER,
          lambda bundle: is_adult(bundle) & ((bean_planted(bundle, Events.PLANT_LOST_WOODS_THEATER_BEAN) & can_get_enemy_drop(bundle, Enemies.GOLD_SKULLTULA)) | (can_do_trick(Tricks.LW_GS_BEAN, bundle) & can_use(Items.HOOKSHOT, bundle) & (can_use(Items.LONGSHOT, bundle) | can_use(Items.FAIRY_BOW, bundle) | can_use(Items.FAIRY_SLINGSHOT, bundle) | can_use(Items.BOMBCHUS_5, bundle) | can_use(Items.DINS_FIRE, bundle)))) & can_get_nighttime_gs(bundle)),
         (Locations.LW_GS_BEAN_PATCH_NEAR_THEATER,
-         lambda bundle: can_spawn_soil_skull(bundle) & (can_get_enemy_drop(bundle, Enemies.GOLD_SKULLTULA) | (True_(options=[OptionFilter(ShuffleScrubs, ShuffleScrubs.option_off)]) & can_reflect_nuts(bundle)))),
+         lambda bundle: can_spawn_soil_skull(bundle, Items.LOST_WOODS_BEAN_SOUL) & (can_get_enemy_drop(bundle, Enemies.GOLD_SKULLTULA) | (True_(options=[OptionFilter(ShuffleScrubs, ShuffleScrubs.option_off)]) & can_reflect_nuts(bundle)))),
         (Locations.LW_BOULDER_RUPEE,
          lambda bundle: blast_or_smash(bundle)),
         (Locations.LW_BEAN_SPROUT_NEAR_THEATRE_FAIRY1,

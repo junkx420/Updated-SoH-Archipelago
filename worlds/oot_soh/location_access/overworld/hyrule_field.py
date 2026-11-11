@@ -265,64 +265,122 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: is_child(bundle) & can_bonk_trees(bundle)),
         (Locations.HF_TEKTITE_GROTTO_TREE,
          lambda bundle: can_bonk_trees(bundle)),
-        # DEFERRED RC_HF_BUSH_NEAR_LAKE_1: true
-        # DEFERRED RC_HF_BUSH_NEAR_LAKE_2: true
-        # DEFERRED RC_HF_BUSH_NEAR_LAKE_3: true
-        # DEFERRED RC_HF_BUSH_NEAR_LAKE_4: true
-        # DEFERRED RC_HF_BUSH_NEAR_LAKE_5: true
-        # DEFERRED RC_HF_BUSH_NEAR_LAKE_6: true
-        # DEFERRED RC_HF_BUSH_NEAR_LAKE_7: true
-        # DEFERRED RC_HF_BUSH_NEAR_LAKE_8: true
-        # DEFERRED RC_HF_BUSH_NEAR_LAKE_9: true
-        # DEFERRED RC_HF_BUSH_NEAR_LAKE_10: true
-        # DEFERRED RC_HF_BUSH_NEAR_LAKE_11: true
-        # DEFERRED RC_HF_NORTHERN_BUSH_1: true
-        # DEFERRED RC_HF_NORTHERN_BUSH_2: true
-        # DEFERRED RC_HF_NORTHERN_BUSH_3: true
-        # DEFERRED RC_HF_NORTHERN_BUSH_4: true
-        # DEFERRED RC_HF_NORTHERN_BUSH_5: true
-        # DEFERRED RC_HF_NORTHERN_BUSH_6: true
-        # DEFERRED RC_HF_CHILD_NORTHERN_BUSH_1: logic->IsChild
-        # DEFERRED RC_HF_CHILD_NORTHERN_BUSH_2: logic->IsChild
-        # DEFERRED RC_HF_CHILD_NORTHERN_BUSH_3: logic->IsChild
-        # DEFERRED RC_HF_CHILD_NORTHERN_BUSH_4: logic->IsChild
-        # DEFERRED RC_HF_CHILD_NORTHERN_BUSH_5: logic->IsChild
-        # DEFERRED RC_HF_CHILD_NORTHERN_BUSH_6: logic->IsChild
-        # DEFERRED RC_HF_CHILD_NORTHERN_BUSH_7: logic->IsChild
-        # DEFERRED RC_HF_CHILD_NORTHERN_BUSH_8: logic->IsChild
-        # DEFERRED RC_HF_CHILD_NORTHERN_BUSH_9: logic->IsChild
-        # DEFERRED RC_HF_CHILD_NORTHERN_BUSH_10: logic->IsChild
-        # DEFERRED RC_HF_CHILD_NORTHERN_BUSH_11: logic->IsChild
-        # DEFERRED RC_HF_BUSH_BY_ROCKY_PATH_1: true
-        # DEFERRED RC_HF_BUSH_BY_ROCKY_PATH_2: true
-        # DEFERRED RC_HF_BUSH_BY_ROCKY_PATH_3: true
-        # DEFERRED RC_HF_BUSH_BY_ROCKY_PATH_4: true
-        # DEFERRED RC_HF_BUSH_BY_ROCKY_PATH_5: true
-        # DEFERRED RC_HF_BUSH_BY_ROCKY_PATH_6: true
-        # DEFERRED RC_HF_SOUTHERN_BUSH_1: true
-        # DEFERRED RC_HF_SOUTHERN_BUSH_2: true
-        # DEFERRED RC_HF_SOUTHERN_BUSH_3: true
-        # DEFERRED RC_HF_SOUTHERN_BUSH_4: true
-        # DEFERRED RC_HF_SOUTHERN_BUSH_5: true
-        # DEFERRED RC_HF_SOUTHERN_BUSH_6: true
-        # DEFERRED RC_HF_SOUTHERN_BUSH_7: true
-        # DEFERRED RC_HF_SOUTHERN_BUSH_8: true
-        # DEFERRED RC_HF_SOUTHERN_BUSH_9: true
-        # DEFERRED RC_HF_SOUTHERN_BUSH_10: true
-        # DEFERRED RC_HF_SOUTHERN_BUSH_11: true
-        # DEFERRED RC_HF_SOUTHERN_BUSH_12: true
-        # DEFERRED RC_HF_CHILD_SOUTHERN_BUSH_1: logic->IsChild
-        # DEFERRED RC_HF_CHILD_SOUTHERN_BUSH_2: logic->IsChild
-        # DEFERRED RC_HF_CHILD_SOUTHERN_BUSH_3: logic->IsChild
-        # DEFERRED RC_HF_CHILD_SOUTHERN_BUSH_4: logic->IsChild
-        # DEFERRED RC_HF_CHILD_SOUTHERN_BUSH_5: logic->IsChild
-        # DEFERRED RC_HF_CHILD_SOUTHERN_BUSH_6: logic->IsChild
-        # DEFERRED RC_HF_CHILD_SOUTHERN_BUSH_7: logic->IsChild
-        # DEFERRED RC_HF_CHILD_SOUTHERN_BUSH_8: logic->IsChild
-        # DEFERRED RC_HF_CHILD_SOUTHERN_BUSH_9: logic->IsChild
-        # DEFERRED RC_HF_CHILD_SOUTHERN_BUSH_10: logic->IsChild
-        # DEFERRED RC_HF_CHILD_SOUTHERN_BUSH_11: logic->IsChild
-        # DEFERRED RC_HF_CHILD_SOUTHERN_BUSH_12: logic->IsChild
+        (Locations.HF_BUSH_NEAR_LAKE_1,
+         lambda bundle: True_()),
+        (Locations.HF_BUSH_NEAR_LAKE_2,
+         lambda bundle: True_()),
+        (Locations.HF_BUSH_NEAR_LAKE_3,
+         lambda bundle: True_()),
+        (Locations.HF_BUSH_NEAR_LAKE_4,
+         lambda bundle: True_()),
+        (Locations.HF_BUSH_NEAR_LAKE_5,
+         lambda bundle: True_()),
+        (Locations.HF_BUSH_NEAR_LAKE_6,
+         lambda bundle: True_()),
+        (Locations.HF_BUSH_NEAR_LAKE_7,
+         lambda bundle: True_()),
+        (Locations.HF_BUSH_NEAR_LAKE_8,
+         lambda bundle: True_()),
+        (Locations.HF_BUSH_NEAR_LAKE_9,
+         lambda bundle: True_()),
+        (Locations.HF_BUSH_NEAR_LAKE_10,
+         lambda bundle: True_()),
+        (Locations.HF_BUSH_NEAR_LAKE_11,
+         lambda bundle: True_()),
+        (Locations.HF_NORTHERN_BUSH_1,
+         lambda bundle: True_()),
+        (Locations.HF_NORTHERN_BUSH_2,
+         lambda bundle: True_()),
+        (Locations.HF_NORTHERN_BUSH_3,
+         lambda bundle: True_()),
+        (Locations.HF_NORTHERN_BUSH_4,
+         lambda bundle: True_()),
+        (Locations.HF_NORTHERN_BUSH_5,
+         lambda bundle: True_()),
+        (Locations.HF_NORTHERN_BUSH_6,
+         lambda bundle: True_()),
+        (Locations.HF_CHILD_NORTHERN_BUSH_1,
+         lambda bundle: is_child(bundle)),
+        (Locations.HF_CHILD_NORTHERN_BUSH_2,
+         lambda bundle: is_child(bundle)),
+        (Locations.HF_CHILD_NORTHERN_BUSH_3,
+         lambda bundle: is_child(bundle)),
+        (Locations.HF_CHILD_NORTHERN_BUSH_4,
+         lambda bundle: is_child(bundle)),
+        (Locations.HF_CHILD_NORTHERN_BUSH_5,
+         lambda bundle: is_child(bundle)),
+        (Locations.HF_CHILD_NORTHERN_BUSH_6,
+         lambda bundle: is_child(bundle)),
+        (Locations.HF_CHILD_NORTHERN_BUSH_7,
+         lambda bundle: is_child(bundle)),
+        (Locations.HF_CHILD_NORTHERN_BUSH_8,
+         lambda bundle: is_child(bundle)),
+        (Locations.HF_CHILD_NORTHERN_BUSH_9,
+         lambda bundle: is_child(bundle)),
+        (Locations.HF_CHILD_NORTHERN_BUSH_10,
+         lambda bundle: is_child(bundle)),
+        (Locations.HF_CHILD_NORTHERN_BUSH_11,
+         lambda bundle: is_child(bundle)),
+        (Locations.HF_BUSH_BY_ROCKY_PATH_1,
+         lambda bundle: True_()),
+        (Locations.HF_BUSH_BY_ROCKY_PATH_2,
+         lambda bundle: True_()),
+        (Locations.HF_BUSH_BY_ROCKY_PATH_3,
+         lambda bundle: True_()),
+        (Locations.HF_BUSH_BY_ROCKY_PATH_4,
+         lambda bundle: True_()),
+        (Locations.HF_BUSH_BY_ROCKY_PATH_5,
+         lambda bundle: True_()),
+        (Locations.HF_BUSH_BY_ROCKY_PATH_6,
+         lambda bundle: True_()),
+        (Locations.HF_SOUTHERN_BUSH_1,
+         lambda bundle: True_()),
+        (Locations.HF_SOUTHERN_BUSH_2,
+         lambda bundle: True_()),
+        (Locations.HF_SOUTHERN_BUSH_3,
+         lambda bundle: True_()),
+        (Locations.HF_SOUTHERN_BUSH_4,
+         lambda bundle: True_()),
+        (Locations.HF_SOUTHERN_BUSH_5,
+         lambda bundle: True_()),
+        (Locations.HF_SOUTHERN_BUSH_6,
+         lambda bundle: True_()),
+        (Locations.HF_SOUTHERN_BUSH_7,
+         lambda bundle: True_()),
+        (Locations.HF_SOUTHERN_BUSH_8,
+         lambda bundle: True_()),
+        (Locations.HF_SOUTHERN_BUSH_9,
+         lambda bundle: True_()),
+        (Locations.HF_SOUTHERN_BUSH_10,
+         lambda bundle: True_()),
+        (Locations.HF_SOUTHERN_BUSH_11,
+         lambda bundle: True_()),
+        (Locations.HF_SOUTHERN_BUSH_12,
+         lambda bundle: True_()),
+        (Locations.HF_CHILD_SOUTHERN_BUSH_1,
+         lambda bundle: is_child(bundle)),
+        (Locations.HF_CHILD_SOUTHERN_BUSH_2,
+         lambda bundle: is_child(bundle)),
+        (Locations.HF_CHILD_SOUTHERN_BUSH_3,
+         lambda bundle: is_child(bundle)),
+        (Locations.HF_CHILD_SOUTHERN_BUSH_4,
+         lambda bundle: is_child(bundle)),
+        (Locations.HF_CHILD_SOUTHERN_BUSH_5,
+         lambda bundle: is_child(bundle)),
+        (Locations.HF_CHILD_SOUTHERN_BUSH_6,
+         lambda bundle: is_child(bundle)),
+        (Locations.HF_CHILD_SOUTHERN_BUSH_7,
+         lambda bundle: is_child(bundle)),
+        (Locations.HF_CHILD_SOUTHERN_BUSH_8,
+         lambda bundle: is_child(bundle)),
+        (Locations.HF_CHILD_SOUTHERN_BUSH_9,
+         lambda bundle: is_child(bundle)),
+        (Locations.HF_CHILD_SOUTHERN_BUSH_10,
+         lambda bundle: is_child(bundle)),
+        (Locations.HF_CHILD_SOUTHERN_BUSH_11,
+         lambda bundle: is_child(bundle)),
+        (Locations.HF_CHILD_SOUTHERN_BUSH_12,
+         lambda bundle: is_child(bundle)),
         (Locations.HF_CASTLE_EXIT_ARROW_SIGN,
          lambda bundle: can_read(bundle)),
         (Locations.HF_WOODED_EXIT_ARROW_SIGN,
@@ -616,4 +674,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (62): ['RC_HF_BUSH_NEAR_LAKE_1', 'RC_HF_BUSH_NEAR_LAKE_2', 'RC_HF_BUSH_NEAR_LAKE_3', 'RC_HF_BUSH_NEAR_LAKE_4', 'RC_HF_BUSH_NEAR_LAKE_5', 'RC_HF_BUSH_NEAR_LAKE_6', 'RC_HF_BUSH_NEAR_LAKE_7', 'RC_HF_BUSH_NEAR_LAKE_8', 'RC_HF_BUSH_NEAR_LAKE_9', 'RC_HF_BUSH_NEAR_LAKE_10', 'RC_HF_BUSH_NEAR_LAKE_11', 'RC_HF_NORTHERN_BUSH_1', 'RC_HF_NORTHERN_BUSH_2', 'RC_HF_NORTHERN_BUSH_3', 'RC_HF_NORTHERN_BUSH_4', 'RC_HF_NORTHERN_BUSH_5', 'RC_HF_NORTHERN_BUSH_6', 'RC_HF_CHILD_NORTHERN_BUSH_1', 'RC_HF_CHILD_NORTHERN_BUSH_2', 'RC_HF_CHILD_NORTHERN_BUSH_3', 'RC_HF_CHILD_NORTHERN_BUSH_4', 'RC_HF_CHILD_NORTHERN_BUSH_5', 'RC_HF_CHILD_NORTHERN_BUSH_6', 'RC_HF_CHILD_NORTHERN_BUSH_7', 'RC_HF_CHILD_NORTHERN_BUSH_8', 'RC_HF_CHILD_NORTHERN_BUSH_9', 'RC_HF_CHILD_NORTHERN_BUSH_10', 'RC_HF_CHILD_NORTHERN_BUSH_11', 'RC_HF_BUSH_BY_ROCKY_PATH_1', 'RC_HF_BUSH_BY_ROCKY_PATH_2', 'RC_HF_BUSH_BY_ROCKY_PATH_3', 'RC_HF_BUSH_BY_ROCKY_PATH_4', 'RC_HF_BUSH_BY_ROCKY_PATH_5', 'RC_HF_BUSH_BY_ROCKY_PATH_6', 'RC_HF_SOUTHERN_BUSH_1', 'RC_HF_SOUTHERN_BUSH_2', 'RC_HF_SOUTHERN_BUSH_3', 'RC_HF_SOUTHERN_BUSH_4', 'RC_HF_SOUTHERN_BUSH_5', 'RC_HF_SOUTHERN_BUSH_6']
+# deferred locations (4): ['RC_HF_SOUTHEAST_GROTTO_GOSSIP_STONE', 'RC_HF_OPEN_GROTTO_GOSSIP_STONE', 'RC_HF_COW_GROTTO_GOSSIP_STONE', 'RC_HF_NEAR_MARKET_GROTTO_GOSSIP_STONE']

@@ -711,6 +711,23 @@ class ShuffleBeggar(Toggle):
     display_name = "Shuffle Beggar"
 
 
+class ShuffleBushes(Toggle):
+    """
+    Cutting a bush in Hyrule Field or Zora's Fountain can give a randomized item (Ship of Harkinian 9.3.1: "Shuffle
+    Bushes"). 64 new locations: 58 in Hyrule Field and 6 in Zora's Fountain; some of them can only be cut as child.
+    """
+    display_name = "Shuffle Bushes"
+
+
+class ShuffleBeanSouls(Toggle):
+    """
+    Adds a Bean Soul for each of the 10 magic bean patches to the pool (Ship of Harkinian 9.3.1: "Shuffle Bean
+    Souls"). Without a patch's Bean Soul you can't plant a bean there, and the Gold Skulltula in its soil doesn't
+    appear. No new locations.
+    """
+    display_name = "Shuffle Bean Souls"
+
+
 class ShuffleTreasureChestGame(Toggle):
     """
     Shuffles the Treasure Chest Game in Hyrule Market (Ship of Harkinian 9.3.1: "Shuffle Chest Minigame"). Both chests
@@ -2503,6 +2520,8 @@ class SohOptions(PerGameCommonOptions):
     shuffle_frog_song_rupees: ShuffleFrogSongRupees
     shuffle_beggar: ShuffleBeggar
     shuffle_treasure_chest_game: ShuffleTreasureChestGame
+    shuffle_bushes: ShuffleBushes
+    shuffle_bean_souls: ShuffleBeanSouls
     shuffle_adult_trade_items: ShuffleAdultTradeItems
     shuffle_boss_souls: ShuffleBossSouls
     ganons_soul: GanonsSoul
@@ -3052,6 +3071,8 @@ soh_option_groups = [
         ShuffleFrogSongRupees,
         ShuffleBeggar,
         ShuffleTreasureChestGame,
+        ShuffleBushes,
+        ShuffleBeanSouls,
         ShuffleAdultTradeItems,
         Shuffle100GSReward,
         ShuffleBossSouls,

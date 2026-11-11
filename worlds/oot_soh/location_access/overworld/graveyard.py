@@ -22,7 +22,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.THE_GRAVEYARD, world, [
         (EventLocations.THE_GRAVEYARD_PLANT_GRAVEYARD_BEAN, Events.PLANT_GRAVEYARD_BEAN,
-         lambda bundle: can_plant_bean(bundle)),
+         lambda bundle: can_plant_bean(bundle, Items.GRAVEYARD_BEAN_SOUL)),
         (EventLocations.THE_GRAVEYARD_FAIRY_ACCESS, Events.CAN_ACCESS_FAIRIES,
          lambda bundle: (at_day(bundle) & can_use(Items.STICKS, bundle)) | (is_child(bundle) & bean_planted(bundle, Events.PLANT_GRAVEYARD_BEAN) & can_use(Items.SONG_OF_STORMS, bundle))),
         (EventLocations.THE_GRAVEYARD_BUG_ACCESS, Events.CAN_ACCESS_BUGS,
@@ -39,7 +39,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.GRAVEYARD_GS_WALL,
          lambda bundle: is_child(bundle) & hookshot_or_boomerang(bundle) & at_night(bundle) & can_get_nighttime_gs(bundle)),
         (Locations.GRAVEYARD_GS_BEAN_PATCH,
-         lambda bundle: can_spawn_soil_skull(bundle) & can_attack(bundle)),
+         lambda bundle: can_spawn_soil_skull(bundle, Items.GRAVEYARD_BEAN_SOUL) & can_attack(bundle)),
         (Locations.GRAVEYARD_BEAN_SPROUT_FAIRY1,
          lambda bundle: is_child(bundle) & bean_planted(bundle, Events.PLANT_GRAVEYARD_BEAN) & can_use(Items.SONG_OF_STORMS, bundle)),
         (Locations.GRAVEYARD_BEAN_SPROUT_FAIRY2,

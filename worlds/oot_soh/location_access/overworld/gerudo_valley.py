@@ -98,14 +98,14 @@ def set_region_rules(world: "SohWorld") -> None:
         (EventLocations.GV_UPPER_STREAM_ADULT_CAN_PASS_TIME, Events.ADULT_CAN_PASS_TIME,
          lambda bundle: is_adult(bundle)),
         (EventLocations.GV_UPPER_STREAM_PLANT_GERUDO_VALLEY_BEAN, Events.PLANT_GERUDO_VALLEY_BEAN,
-         lambda bundle: can_plant_bean(bundle)),
+         lambda bundle: can_plant_bean(bundle, Items.GERUDO_VALLEY_BEAN_SOUL)),
         (EventLocations.GV_UPPER_STREAM_FAIRY_ACCESS, Events.CAN_ACCESS_FAIRIES,
          lambda bundle: call_gossip_fairy(bundle) | (is_child(bundle) & bean_planted(bundle, Events.PLANT_GERUDO_VALLEY_BEAN) & can_use(Items.SONG_OF_STORMS, bundle))),
     ])
     # Locations
     add_locations(Regions.GV_UPPER_STREAM, world, [
         (Locations.GV_GS_BEAN_PATCH,
-         lambda bundle: can_spawn_soil_skull(bundle) & can_attack(bundle)),
+         lambda bundle: can_spawn_soil_skull(bundle, Items.GERUDO_VALLEY_BEAN_SOUL) & can_attack(bundle)),
         (Locations.GV_COW,
          lambda bundle: is_child(bundle) & can_use(Items.EPONAS_SONG, bundle)),
         (Locations.GV_BEAN_SPROUT_FAIRY1,

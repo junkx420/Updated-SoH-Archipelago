@@ -544,6 +544,8 @@ class SohWorld(CachedRuleBuilderWorld):
             "shuffle_frog_song_rupees": self.options.shuffle_frog_song_rupees.value,
             "shuffle_beggar": self.options.shuffle_beggar.value,
             "shuffle_treasure_chest_game": self.options.shuffle_treasure_chest_game.value,
+            "shuffle_bushes": self.options.shuffle_bushes.value,
+            "shuffle_bean_souls": self.options.shuffle_bean_souls.value,
             "shuffle_adult_trade_items": self.options.shuffle_adult_trade_items.value,
             "shuffle_boss_souls": self.options.shuffle_boss_souls.value,
             "shuffle_fountain_fairies": self.options.shuffle_fountain_fairies.value,

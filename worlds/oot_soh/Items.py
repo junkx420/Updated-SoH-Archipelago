@@ -48,6 +48,7 @@ class GroupTag(IntFlag):
     Health_Upgrade = auto()
     Trap = auto()
     Boss_Soul = auto()
+    Bean_Soul = auto()
     Ocarina_Button = auto()
     Overworld_Key = auto()
     Trade_Item = auto()
@@ -380,6 +381,16 @@ item_data_table: dict[Items, SohItemData] = {
     Items.MASK_OF_TRUTH: SohItemData(284, IC.progression, 0, tags=GroupTag.Mask | GroupTag.Trade_Item),
     # SoH 9.3.1 Shuffle Scarecrow's Song: new ID 285
     Items.SCARECROWS_SONG: SohItemData(285, IC.progression, 0, tags=GroupTag.Song),
+    Items.DEATH_MOUNTAIN_CRATER_BEAN_SOUL: SohItemData(286, IC.progression, 0, tags=GroupTag.Bean_Soul),
+    Items.DEATH_MOUNTAIN_TRAIL_BEAN_SOUL: SohItemData(287, IC.progression, 0, tags=GroupTag.Bean_Soul),
+    Items.DESERT_COLOSSUS_BEAN_SOUL: SohItemData(288, IC.progression, 0, tags=GroupTag.Bean_Soul),
+    Items.GERUDO_VALLEY_BEAN_SOUL: SohItemData(289, IC.progression, 0, tags=GroupTag.Bean_Soul),
+    Items.GRAVEYARD_BEAN_SOUL: SohItemData(290, IC.progression, 0, tags=GroupTag.Bean_Soul),
+    Items.KOKIRI_FOREST_BEAN_SOUL: SohItemData(291, IC.progression, 0, tags=GroupTag.Bean_Soul),
+    Items.LAKE_HYLIA_BEAN_SOUL: SohItemData(292, IC.progression, 0, tags=GroupTag.Bean_Soul),
+    Items.LOST_WOODS_BRIDGE_BEAN_SOUL: SohItemData(293, IC.progression, 0, tags=GroupTag.Bean_Soul),
+    Items.LOST_WOODS_BEAN_SOUL: SohItemData(294, IC.progression, 0, tags=GroupTag.Bean_Soul),
+    Items.ZORAS_RIVER_BEAN_SOUL: SohItemData(295, IC.progression, 0, tags=GroupTag.Bean_Soul),
     Items.STICKS: SohItemData(None, child_only=True),
     Items.NUTS: SohItemData(None),
     Items.EPONA: SohItemData(None),

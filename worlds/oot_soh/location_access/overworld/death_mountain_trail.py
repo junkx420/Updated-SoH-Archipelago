@@ -32,7 +32,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (EventLocations.DEATH_MOUNTAIN_TRAIL_ADULT_CAN_PASS_TIME, Events.ADULT_CAN_PASS_TIME,
          lambda bundle: is_adult(bundle)),
         (EventLocations.DEATH_MOUNTAIN_TRAIL_PLANT_DEATH_MOUNTAIN_TRAIL_BEAN, Events.PLANT_DEATH_MOUNTAIN_TRAIL_BEAN,
-         lambda bundle: can_plant_bean(bundle) & (has_explosives(bundle) | has_item(Items.GORONS_BRACELET, bundle))),
+         lambda bundle: can_plant_bean(bundle, Items.DEATH_MOUNTAIN_TRAIL_BEAN_SOUL) & (has_explosives(bundle) | has_item(Items.GORONS_BRACELET, bundle))),
         (EventLocations.DEATH_MOUNTAIN_TRAIL_FAIRY_ACCESS, Events.CAN_ACCESS_FAIRIES,
          lambda bundle: is_child(bundle) & bean_planted(bundle, Events.PLANT_DEATH_MOUNTAIN_TRAIL_BEAN) & can_use(Items.SONG_OF_STORMS, bundle) & (has_explosives(bundle) | has_item(Items.GORONS_BRACELET, bundle))),
     ])
@@ -43,7 +43,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.DMT_FREESTANDING_POH,
          lambda bundle: is_adult(bundle) | take_damage(bundle) | can_use(Items.HOVER_BOOTS, bundle) | bunny_hood(bundle)),
         (Locations.DMT_GS_BEAN_PATCH,
-         lambda bundle: can_spawn_soil_skull(bundle) & (has_explosives(bundle) | has_item(Items.GORONS_BRACELET, bundle) | (can_do_trick(Tricks.DMT_SOIL_GS, bundle) & (take_damage(bundle) | can_use(Items.HOVER_BOOTS, bundle)) & can_use(Items.BOOMERANG, bundle)))),
+         lambda bundle: can_spawn_soil_skull(bundle, Items.DEATH_MOUNTAIN_TRAIL_BEAN_SOUL) & (has_explosives(bundle) | has_item(Items.GORONS_BRACELET, bundle) | (can_do_trick(Tricks.DMT_SOIL_GS, bundle) & (take_damage(bundle) | can_use(Items.HOVER_BOOTS, bundle)) & can_use(Items.BOOMERANG, bundle)))),
         (Locations.DMT_GS_NEAR_KAK,
          lambda bundle: blast_or_smash(bundle) & (has_climb(bundle) | can_use(Items.HOOKSHOT, bundle) | can_use(Items.BOOMERANG, bundle))),
         (Locations.DMT_GS_ABOVE_DODONGOS_CAVERN,

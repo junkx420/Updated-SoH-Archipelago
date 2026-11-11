@@ -369,7 +369,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.DMC_CENTRAL, world, [
         (EventLocations.DMC_CENTRAL_PLANT_DEATH_MOUNTAIN_CRATER_BEAN, Events.PLANT_DEATH_MOUNTAIN_CRATER_BEAN,
-         lambda bundle: can_plant_bean(bundle)),
+         lambda bundle: can_plant_bean(bundle, Items.DEATH_MOUNTAIN_CRATER_BEAN_SOUL)),
         (EventLocations.DMC_CENTRAL_FAIRY_ACCESS, Events.CAN_ACCESS_FAIRIES,
          lambda bundle: is_child(bundle) & bean_planted(bundle, Events.PLANT_DEATH_MOUNTAIN_CRATER_BEAN) & can_use(Items.SONG_OF_STORMS, bundle)),
     ])
@@ -378,7 +378,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.SHEIK_IN_CRATER,
          lambda bundle: is_adult(bundle)),
         (Locations.DMC_GS_BEAN_PATCH,
-         lambda bundle: can_spawn_soil_skull(bundle) & can_kill_enemy(bundle, Enemies.GOLD_SKULLTULA)),
+         lambda bundle: can_spawn_soil_skull(bundle, Items.DEATH_MOUNTAIN_CRATER_BEAN_SOUL) & can_kill_enemy(bundle, Enemies.GOLD_SKULLTULA)),
         (Locations.DMC_NEAR_WARP_PLATFORM_RED_RUPEE,
          lambda bundle: is_child(bundle)),
         (Locations.DMC_MIDDLE_PLATFORM_RED_RUPEE,

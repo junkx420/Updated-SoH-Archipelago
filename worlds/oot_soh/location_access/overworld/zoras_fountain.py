@@ -51,12 +51,18 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle) & blast_or_smash(bundle)),
         (Locations.ZF_TREE,
          lambda bundle: is_child(bundle) & can_bonk_trees(bundle)),
-        # DEFERRED RC_ZF_BUSH_1: logic->IsChild
-        # DEFERRED RC_ZF_BUSH_2: logic->IsChild
-        # DEFERRED RC_ZF_BUSH_3: logic->IsChild
-        # DEFERRED RC_ZF_BUSH_4: logic->IsChild
-        # DEFERRED RC_ZF_BUSH_5: logic->IsChild
-        # DEFERRED RC_ZF_BUSH_6: logic->IsChild
+        (Locations.ZF_BUSH_1,
+         lambda bundle: is_child(bundle)),
+        (Locations.ZF_BUSH_2,
+         lambda bundle: is_child(bundle)),
+        (Locations.ZF_BUSH_3,
+         lambda bundle: is_child(bundle)),
+        (Locations.ZF_BUSH_4,
+         lambda bundle: is_child(bundle)),
+        (Locations.ZF_BUSH_5,
+         lambda bundle: is_child(bundle)),
+        (Locations.ZF_BUSH_6,
+         lambda bundle: is_child(bundle)),
         (Locations.ZF_LOG_BUTTERFLY_FAIRY,
          lambda bundle: is_child(bundle) & at_day(bundle) & can_use(Items.STICKS, bundle)),
         (Locations.ZF_JABU_JABU_PLATFORM_RECTANGLE_SIGN,
@@ -219,4 +225,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (8): ['RC_ZF_FAIRY_GOSSIP_STONE', 'RC_ZF_JABU_GOSSIP_STONE', 'RC_ZF_BUSH_1', 'RC_ZF_BUSH_2', 'RC_ZF_BUSH_3', 'RC_ZF_BUSH_4', 'RC_ZF_BUSH_5', 'RC_ZF_BUSH_6']
+# deferred locations (2): ['RC_ZF_FAIRY_GOSSIP_STONE', 'RC_ZF_JABU_GOSSIP_STONE']

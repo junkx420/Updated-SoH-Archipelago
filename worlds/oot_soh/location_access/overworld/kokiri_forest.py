@@ -24,7 +24,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.KOKIRI_FOREST, world, [
         (EventLocations.KOKIRI_FOREST_PLANT_KOKIRI_FOREST_BEAN, Events.PLANT_KOKIRI_FOREST_BEAN,
-         lambda bundle: can_plant_bean(bundle)),
+         lambda bundle: can_plant_bean(bundle, Items.KOKIRI_FOREST_BEAN_SOUL)),
         (EventLocations.KOKIRI_FOREST_FAIRY_ACCESS, Events.CAN_ACCESS_FAIRIES,
          lambda bundle: (is_child(bundle) & bean_planted(bundle, Events.PLANT_KOKIRI_FOREST_BEAN) & can_use(Items.SONG_OF_STORMS, bundle))),
         (EventLocations.KOKIRI_FOREST_SHOWED_MIDO_SWORD_AND_SHIELD, Events.SHOWED_MIDO_SWORD_AND_SHIELD,
@@ -35,7 +35,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.KF_GS_KNOW_IT_ALL_HOUSE,
          lambda bundle: is_child(bundle) & can_kill_enemy(bundle, Enemies.GOLD_SKULLTULA, EnemyDistance.CLOSE) & can_get_nighttime_gs(bundle)),
         (Locations.KF_GS_BEAN_PATCH,
-         lambda bundle: can_spawn_soil_skull(bundle) & can_kill_enemy(bundle, Enemies.GOLD_SKULLTULA, EnemyDistance.CLOSE)),
+         lambda bundle: can_spawn_soil_skull(bundle, Items.KOKIRI_FOREST_BEAN_SOUL) & can_kill_enemy(bundle, Enemies.GOLD_SKULLTULA, EnemyDistance.CLOSE)),
         (Locations.KF_GS_HOUSE_OF_TWINS,
          lambda bundle: is_adult(bundle) & can_get_nighttime_gs(bundle) & (can_get_enemy_drop(bundle, Enemies.GOLD_SKULLTULA, EnemyDistance.BOOMERANG) | (can_do_trick(Tricks.KF_ADULT_GS, bundle) & can_use(Items.HOVER_BOOTS, bundle) & can_kill_enemy(bundle, Enemies.GOLD_SKULLTULA, EnemyDistance.SHORT_JUMPSLASH)))),
         (Locations.KF_BEAN_SPROUT_FAIRY1,

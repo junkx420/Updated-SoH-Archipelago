@@ -1334,8 +1334,9 @@ def cleared_enough_dungeons(amount: int):
     return HasFromList(*dungeon_events, count=amount)
 
 
-def can_spawn_soil_skull(bundle: tuple[Regions, "SohWorld"]) -> Rule:
-    return is_child(bundle) & can_use(Items.BOTTLE_WITH_BUGS, bundle)
+def can_spawn_soil_skull(bundle: tuple[Regions, "SohWorld"], soul: Items) -> Rule:
+    # logic.cpp CanSpawnSoilSkull: IsChild && CanUse(RG_BOTTLE_WITH_BUGS) && HasItem(bean soul)
+    return is_child(bundle) & can_use(Items.BOTTLE_WITH_BUGS, bundle) & has_bean_soul(bundle, soul)
 
 
 def fire_timer_at_least(bundle: tuple[Regions, "SohWorld"], amount: int) -> Rule:
@@ -1862,10 +1863,15 @@ def can_avoid_enemy(bundle: tuple[Regions, "SohWorld"], enemy: Enemies, distance
 
 
 # --- beans ---------------------------------------------------------------------------------------------------------
-def can_plant_bean(bundle: tuple[Regions, "SohWorld"]) -> Rule:
-    # location_access.cpp CanPlantBean: bean soul (always held, no bean soul shuffle) && beans && (child || Skip
-    # Planting Beans)
-    return has_item(Items.MAGIC_BEAN, bundle) & (is_child(bundle) | True_(options=[OptionFilter(SkipPlantingBeans, True)]))
+def has_bean_soul(bundle: tuple[Regions, "SohWorld"], soul: Items) -> Rule:
+    # logic.cpp: without Shuffle Bean Souls every soul counts as owned (logic.cpp sets the RAND_INF_*_BEAN_SOUL flags)
+    return OptionFilter(ShuffleBeanSouls, False) | has_item(soul, bundle)
+
+
+def can_plant_bean(bundle: tuple[Regions, "SohWorld"], soul: Items) -> Rule:
+    # location_access.cpp CanPlantBean: HasItem(bean soul) && beans && (child || Skip Planting Beans)
+    return (has_bean_soul(bundle, soul) & has_item(Items.MAGIC_BEAN, bundle)
+            & (is_child(bundle) | True_(options=[OptionFilter(SkipPlantingBeans, True)])))
 
 
 def bean_planted(bundle: tuple[Regions, "SohWorld"], plant_event: Events) -> Rule:
