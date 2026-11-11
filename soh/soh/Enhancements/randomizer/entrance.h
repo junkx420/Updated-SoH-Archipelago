@@ -138,6 +138,8 @@ class EntranceShuffler {
     void UnshuffleAllEntrances();
     void ParseJson(const nlohmann::json& spoilerFileJson);
     void ApplyEntranceOverrides();
+    // Archipelago: dungeon entrances shuffled by the apworld (slot data "dungeon_entrances")
+    void ApplyArchipelagoEntrances(const nlohmann::json& pairs);
 
     static const Entrance* GetEntranceByIndex(int16_t index);
 
@@ -154,6 +156,7 @@ class EntranceShuffler {
                              int retryCount = 20);
     bool ShuffleEntrances(std::vector<Entrance*>& entrances, std::vector<Entrance*>& targetEntrances,
                           std::vector<EntrancePair>& rollbacks);
+    void SetBlueWarpTargets();
     bool mNoRandomEntrances;
     int mTotalRandomizableEntrances = 0;
     int mCurNumRandomizedEntrances = 0;

@@ -1,4 +1,5 @@
 #include "entrance.h"
+#include "randomizerEnumStrings.h"
 #include "soh/Enhancements/game-interactor/GameInteractor.h"
 
 #include "3drando/fill.hpp"
@@ -1519,6 +1520,20 @@ int EntranceShuffler::ShuffleAllEntrances() {
         }
     }
 
+    SetBlueWarpTargets();
+
+    // Validate the world one last time to ensure all special conditions are still valid
+    if (!ValidateWorld(nullptr)) {
+        return ENTRANCE_SHUFFLE_FAILURE;
+    }
+
+    return ENTRANCE_SHUFFLE_SUCCESS;
+}
+
+// Archipelago: moved out of ShuffleAllEntrances unchanged, so the Archipelago path (ApplyArchipelagoEntrances)
+// determines the blue warp targets of the entrances placed by the apworld the same way.
+void EntranceShuffler::SetBlueWarpTargets() {
+    auto ctx = Rando::Context::GetInstance();
     // Determine blue warp targets
     // RANDOTODO: add bluewarp shuffle
     if (true /* ctx->GetOption(RSK_SHUFFLE_BLUEWARP_ENTRANCES).Is(RO_BLUEWARP_ENTRANCE_SHUFFLE_DUNGEON) */) {
@@ -1607,13 +1622,6 @@ int EntranceShuffler::ShuffleAllEntrances() {
             pair.first->SetReplacement(target);
         }
     }
-
-    // Validate the world one last time to ensure all special conditions are still valid
-    if (!ValidateWorld(nullptr)) {
-        return ENTRANCE_SHUFFLE_FAILURE;
-    }
-
-    return ENTRANCE_SHUFFLE_SUCCESS;
 }
 
 void EntranceShuffler::CreateEntranceOverrides() {
@@ -1669,6 +1677,62 @@ void EntranceShuffler::CreateEntranceOverrides() {
         SPDLOG_DEBUG("\tReplacement {}", replacementIndex);
         i++;
     }
+}
+
+// Archipelago: the apworld shuffles the dungeon entrances (worlds/oot_soh/EntranceShuffle.py) and sends, for each
+// slot, the forward entrance (outside -> entryway) and the forward entrance it is replaced by, as RandomizerRegion
+// names. The connections change like ChangeConnections does for a coupled pair, then the blue warps and the
+// overrides are made like after ShuffleAllEntrances.
+void EntranceShuffler::ApplyArchipelagoEntrances(const nlohmann::json& pairs) {
+    UnshuffleAllEntrances();
+    if (!pairs.is_array() || pairs.empty()) {
+        return;
+    }
+    std::unordered_map<std::string, RandomizerRegion> regionByName;
+    for (int rr = RR_NONE; rr < RR_MAX; rr++) {
+        regionByName[std::string(EnumToString(static_cast<RandomizerRegion>(rr)))] = static_cast<RandomizerRegion>(rr);
+    }
+    auto regionOf = [&](const nlohmann::json& pair, const char* key) {
+        auto it = regionByName.find(pair.value(key, std::string()));
+        return it != regionByName.end() ? it->second : RR_NONE;
+    };
+
+    RegionTable_Init();
+    SetAllEntrancesData();
+
+    struct Placed {
+        Entrance* entrance;
+        Entrance* replacement;
+    };
+    std::vector<Placed> placed;
+    for (const auto& pair : pairs) {
+        Entrance* entrance = GetEntrance(regionOf(pair, "from"), regionOf(pair, "to"));
+        Entrance* replacement = GetEntrance(regionOf(pair, "replacement_from"), regionOf(pair, "replacement_to"));
+        if (entrance == nullptr || replacement == nullptr || entrance->GetReverse() == nullptr ||
+            replacement->GetReverse() == nullptr) {
+            SPDLOG_ERROR("Archipelago: unknown dungeon entrance in slot data: {}", pair.dump());
+            continue;
+        }
+        placed.push_back({ entrance, replacement });
+    }
+    // the forward entrances and their reverses form the whole permutation, so disconnect them all first
+    for (auto& p : placed) {
+        p.entrance->Disconnect();
+        p.entrance->GetReverse()->Disconnect();
+    }
+    for (auto& p : placed) {
+        p.entrance->Connect(p.replacement->GetOriginalConnectedRegionKey());
+        p.entrance->SetReplacement(p.replacement);
+        p.entrance->SetAsShuffled();
+        Entrance* placedReverse = p.replacement->GetReverse();
+        placedReverse->Connect(p.entrance->GetReverse()->GetOriginalConnectedRegionKey());
+        placedReverse->SetReplacement(p.entrance->GetReverse());
+        placedReverse->SetAsShuffled();
+    }
+    SetBlueWarpTargets();
+    mNoRandomEntrances = false;
+    CreateEntranceOverrides();
+    SetAreas();
 }
 
 /// @brief set all the entrances to be 0 to indicate an unshuffled entrance
