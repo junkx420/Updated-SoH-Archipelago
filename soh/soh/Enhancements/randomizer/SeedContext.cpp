@@ -738,8 +738,8 @@ void Context::ParseArchipelagoOptions() {
     mOptions[RSK_BOSS_KEY_HINT].Set(slotData["boss_key_hint"]);
     mOptions[RSK_DAMPES_DIARY_HINT].Set(slotData["dampe_diary_hint"]);
     mOptions[RSK_GREG_HINT].Set(slotData["greg_hint"]);
-    // Loach not currently enabled in AP
-    mOptions[RSK_LOACH_HINT].Set(RO_GENERIC_OFF); // slotData["hyrule_loach_hint"]);
+    // Only meaningful with Fishsanity "Hyrule Loach" (apworld 1.5+)
+    mOptions[RSK_LOACH_HINT].Set(slotData.value("hyrule_loach_hint", static_cast<int>(RO_GENERIC_OFF)));
     mOptions[RSK_SARIA_HINT].Set(slotData["saria_hint"]);
     mOptions[RSK_MIDO_HINT].Set(slotData["mido_hint"]);
     mOptions[RSK_FROGS_HINT].Set(slotData["frog_game_hint"]);
@@ -1087,6 +1087,8 @@ void Context::ParseArchipelagoOptions() {
         mOptions[RSK_FISHSANITY].Set(RO_FISHSANITY_OVERWORLD);
     } else if (slotData["shuffle_fish"] == 3) {
         mOptions[RSK_FISHSANITY].Set(RO_FISHSANITY_BOTH);
+    } else if (slotData["shuffle_fish"] == 4) {
+        mOptions[RSK_FISHSANITY].Set(RO_FISHSANITY_HYRULE_LOACH);
     }
     mOptions[RSK_FISHSANITY_POND_COUNT].Set(slotData.value("fishsanity_pond_count", 15));
     mOptions[RSK_FISHSANITY_AGE_SPLIT].Set(slotData.value("fishsanity_age_split", 1));
