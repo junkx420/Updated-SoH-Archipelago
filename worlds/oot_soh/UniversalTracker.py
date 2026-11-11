@@ -12,6 +12,7 @@ def setup_options_from_slot_data(world: "SohWorld") -> None:
             world.passthrough = world.multiworld.re_gen_passthrough["Ship of Harkinian"]
             world.options.closed_forest.value = world.passthrough["closed_forest"]
             world.options.shuffle_dungeon_entrances.value = world.passthrough.get("shuffle_dungeon_entrances", 0)  # apworld 1.5+
+            world.options.shuffle_grotto_entrances.value = world.passthrough.get("shuffle_grotto_entrances", 0)  # apworld 1.5+
             world.options.kakariko_gate.value = world.passthrough["kakariko_gate"]
             world.options.door_of_time.value = world.passthrough["door_of_time"]
             world.options.zoras_fountain.value = world.passthrough["zoras_fountain"]

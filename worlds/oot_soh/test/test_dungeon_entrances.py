@@ -2,7 +2,7 @@
 from .bases import SohTestBase
 from ..Enums import Regions
 from ..EntranceShuffle import (DUNGEON_ENTRANCES, GANONS_CASTLE_ENTRANCE, find_exit, dungeon_entrance_slot_data,
-                               dungeon_entrance_hint_data)
+                               entrance_hint_data)
 
 
 def target(test: SohTestBase, entrance) -> str:
@@ -57,7 +57,7 @@ class DungeonShuffleChecks:
                 self.assertTrue(pair[key].startswith("RR_"), pair)
 
     def test_hints_name_the_entrance(self):
-        hints = dungeon_entrance_hint_data(self.world)
+        hints = entrance_hint_data(self.world)
         moved = {dungeon for slot, dungeon in self.placement().items() if slot != dungeon}
         if moved:
             self.assertTrue(hints)

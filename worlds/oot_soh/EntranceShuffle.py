@@ -1,6 +1,9 @@
-"""Dungeon entrance shuffle (SoH 9.3.1 RSK_SHUFFLE_DUNGEON_ENTRANCES, soh/soh/Enhancements/randomizer/entrance.cpp).
+"""Dungeon and grotto entrance shuffle (SoH 9.3.1 RSK_SHUFFLE_DUNGEON_ENTRANCES / RSK_SHUFFLE_GROTTO_ENTRANCES,
+soh/soh/Enhancements/randomizer/entrance.cpp).
 
-Pool: EntranceType::Dungeon (+ EntranceType::GanonDungeon with "On + Ganon"), coupled (no decoupled entrances).
+Pools: EntranceType::Dungeon (+ EntranceType::GanonDungeon with "On + Ganon") and EntranceType::GrottoGrave, each
+coupled (no decoupled or mixed pools). Like upstream (ShuffleAllEntrances) the pools are shuffled one after the
+other, dungeons first; a pool is drawn again until the world validates, with the pools before it already fixed.
 Like upstream (entrance.cpp ChangeConnections), every entrance keeps its own rule and only its target changes:
 the entrance outside slot A leads into dungeon B, and B's exit leads back out to A's return region.
 Blue warps follow the "Determine blue warp targets" block of EntranceShuffler::ShuffleAllEntrances.
@@ -8,7 +11,9 @@ Blue warps follow the "Determine blue warp targets" block of EntranceShuffler::S
 Upstream places the entrances one by one with an assumed search after each placement (ShuffleEntrancePool,
 ValidateWorld); the only check that applies with dungeon entrances alone is that all locations stay reachable
 (allLocationsReachable). Here a whole permutation is drawn and checked with all items of the world, and redrawn
-if a location can't be reached.
+if a location can't be reached. Not ported: the extra sphere-0 checks ValidateWorld makes for Closed Forest "On"
+with grotto shuffle (starting area, time passing and Temple of Time without items); upstream assumes both ages from
+the start there, the apworld only gets adult Link through time travel (decision 2026-11-11).
 """
 from typing import NamedTuple, TYPE_CHECKING
 
@@ -68,12 +73,60 @@ GANONS_CASTLE_ENTRANCE = DungeonEntrance(
 # "On + Ganon" and adult start; one draw costs about 30 ms, so 2000 makes a failure practically impossible.
 MAX_ATTEMPTS = 2000
 
+# entrance.cpp SetAllEntrancesData, EntranceType::GrottoGrave (in this order): 33 grottos and the 4 graves.
+# Generated from the upstream table; name = apworld name of the grotto region.
+GROTTO_ENTRANCES: list[DungeonEntrance] = [
+    DungeonEntrance("Colossus Grotto", Regions.DESERT_COLOSSUS, Regions.COLOSSUS_GROTTO, Regions.DESERT_COLOSSUS, None, None),
+    DungeonEntrance("LH Grotto", Regions.LAKE_HYLIA, Regions.LH_GROTTO, Regions.LAKE_HYLIA, None, None),
+    DungeonEntrance("ZR Storms Grotto", Regions.ZORAS_RIVER, Regions.ZR_STORMS_GROTTO, Regions.ZORAS_RIVER, None, None),
+    DungeonEntrance("ZR Fairy Grotto", Regions.ZR_ATOP_LADDER, Regions.ZR_FAIRY_GROTTO, Regions.ZR_ATOP_LADDER, None, None),
+    DungeonEntrance("ZR Open Grotto", Regions.ZR_ATOP_LADDER, Regions.ZR_OPEN_GROTTO, Regions.ZR_ATOP_LADDER, None, None),
+    DungeonEntrance("DMC Scrub Grotto", Regions.DMC_POT_GROTTO_EXIT, Regions.DMC_SCRUB_GROTTO, Regions.DMC_POT_GROTTO_ENTRY, None, None),
+    DungeonEntrance("DMC Upper Grotto", Regions.DMC_ROCK_GROTTO, Regions.DMC_UPPER_GROTTO, Regions.DMC_ROCKS_GROTTO_ENTRY, None, None),
+    DungeonEntrance("GC Grotto", Regions.GC_GROTTO_PLATFORM, Regions.GC_GROTTO, Regions.GC_GROTTO_PLATFORM, None, None),
+    DungeonEntrance("DMT Storms Grotto", Regions.DEATH_MOUNTAIN_TRAIL, Regions.DMT_STORMS_GROTTO, Regions.DEATH_MOUNTAIN_TRAIL, None, None),
+    DungeonEntrance("DMT Cow Grotto", Regions.DEATH_MOUNTAIN_ROCKFALL, Regions.DMT_COW_GROTTO, Regions.DEATH_MOUNTAIN_ROCKFALL, None, None),
+    DungeonEntrance("Kak Open Grotto", Regions.KAK_BACKYARD, Regions.KAK_OPEN_GROTTO, Regions.KAK_BACKYARD, None, None),
+    DungeonEntrance("Kak Redead Grotto", Regions.KAKARIKO_VILLAGE, Regions.KAK_REDEAD_GROTTO, Regions.KAKARIKO_VILLAGE, None, None),
+    DungeonEntrance("HC Storms Grotto", Regions.HC_MOAT, Regions.HC_STORMS_GROTTO, Regions.CASTLE_GROUNDS_FROM_GROTTO, None, None),
+    DungeonEntrance("HF Tektite Grotto", Regions.HYRULE_FIELD, Regions.HF_TEKTITE_GROTTO, Regions.HYRULE_FIELD, None, None),
+    DungeonEntrance("HF Near Kak Grotto", Regions.HYRULE_FIELD, Regions.HF_NEAR_KAK_GROTTO, Regions.HYRULE_FIELD, None, None),
+    DungeonEntrance("HF Fairy Grotto", Regions.HYRULE_FIELD, Regions.HF_FAIRY_GROTTO, Regions.HYRULE_FIELD, None, None),
+    DungeonEntrance("HF Near Market Grotto", Regions.HYRULE_FIELD, Regions.HF_NEAR_MARKET_GROTTO, Regions.HYRULE_FIELD, None, None),
+    DungeonEntrance("HF Cow Grotto", Regions.HYRULE_FIELD, Regions.HF_COW_GROTTO, Regions.HYRULE_FIELD, None, None),
+    DungeonEntrance("HF Inside Fence Grotto", Regions.HYRULE_FIELD, Regions.HF_INSIDE_FENCE_GROTTO, Regions.HYRULE_FIELD, None, None),
+    DungeonEntrance("HF Open Grotto", Regions.HYRULE_FIELD, Regions.HF_OPEN_GROTTO, Regions.HYRULE_FIELD, None, None),
+    DungeonEntrance("HF Southeast Grotto", Regions.HYRULE_FIELD, Regions.HF_SOUTHEAST_GROTTO, Regions.HYRULE_FIELD, None, None),
+    DungeonEntrance("LLR Grotto", Regions.LON_LON_RANCH, Regions.LLR_GROTTO, Regions.LON_LON_RANCH, None, None),
+    DungeonEntrance("SFM Wolfos Grotto", Regions.SFM_ENTRYWAY, Regions.SFM_WOLFOS_GROTTO, Regions.SFM_ENTRYWAY, None, None),
+    DungeonEntrance("SFM Storms Grotto", Regions.SACRED_FOREST_MEADOW, Regions.SFM_STORMS_GROTTO, Regions.SACRED_FOREST_MEADOW, None, None),
+    DungeonEntrance("SFM Fairy Grotto", Regions.SFM_OUTSIDE_FAIRY_GROTTO, Regions.SFM_FAIRY_GROTTO, Regions.SFM_OUTSIDE_FAIRY_GROTTO, None, None),
+    DungeonEntrance("LW Scrubs Grotto", Regions.LW_BEYOND_MIDO, Regions.LW_SCRUBS_GROTTO, Regions.LW_BEYOND_MIDO, None, None),
+    DungeonEntrance("LW Near Shortcuts Grotto", Regions.THE_LOST_WOODS, Regions.LW_NEAR_SHORTCUTS_GROTTO, Regions.THE_LOST_WOODS, None, None),
+    DungeonEntrance("KF Storms Grotto", Regions.KF_OUTSIDE_LOST_WOODS, Regions.KF_STORMS_GROTTO, Regions.KF_OUTSIDE_LOST_WOODS, None, None),
+    DungeonEntrance("ZD Storms Grotto", Regions.ZORAS_DOMAIN_ISLAND, Regions.ZD_STORMS_GROTTO, Regions.ZORAS_DOMAIN_ISLAND, None, None),
+    DungeonEntrance("GF Storms Grotto", Regions.GF_NEAR_GROTTO, Regions.GF_STORMS_GROTTO, Regions.GF_NEAR_GROTTO, None, None),
+    DungeonEntrance("GV Storms Grotto", Regions.GV_FORTRESS_SIDE, Regions.GV_STORMS_GROTTO, Regions.GV_FORTRESS_SIDE, None, None),
+    DungeonEntrance("GV Octorok Grotto", Regions.GV_GROTTO_LEDGE, Regions.GV_OCTOROK_GROTTO, Regions.GV_GROTTO_LEDGE, None, None),
+    DungeonEntrance("Deku Theater", Regions.LW_BEYOND_MIDO, Regions.DEKU_THEATER, Regions.LW_BEYOND_MIDO, None, None),
+    DungeonEntrance("Graveyard Shield Grave", Regions.THE_GRAVEYARD, Regions.GRAVEYARD_SHIELD_GRAVE, Regions.THE_GRAVEYARD, None, None),
+    DungeonEntrance("Graveyard Heart Piece Grave", Regions.THE_GRAVEYARD, Regions.GRAVEYARD_HEART_PIECE_GRAVE, Regions.THE_GRAVEYARD, None, None),
+    DungeonEntrance("Graveyard Composers Grave", Regions.THE_GRAVEYARD, Regions.GRAVEYARD_COMPOSERS_GRAVE, Regions.THE_GRAVEYARD, None, None),
+    DungeonEntrance("Graveyard Dampes Grave", Regions.THE_GRAVEYARD, Regions.GRAVEYARD_DAMPES_GRAVE, Regions.THE_GRAVEYARD, None, None),
+]
+
 
 def dungeon_entrance_pool(world: "SohWorld") -> list[DungeonEntrance]:
+    if world.options.shuffle_dungeon_entrances == ShuffleDungeonEntrances.option_off:
+        return []
     pool = list(DUNGEON_ENTRANCES)
     if world.options.shuffle_dungeon_entrances == ShuffleDungeonEntrances.option_on_plus_ganon:
         pool.append(GANONS_CASTLE_ENTRANCE)
     return pool
+
+
+def grotto_entrance_pool(world: "SohWorld") -> list[DungeonEntrance]:
+    return list(GROTTO_ENTRANCES) if world.options.shuffle_grotto_entrances else []
 
 
 def find_exit(world: "SohWorld", parent: Regions, target: Regions) -> Entrance:
@@ -90,8 +143,8 @@ def reconnect(entrance: Entrance, region: Region) -> None:
     entrance.connect(region)
 
 
-class ShuffledDungeons:
-    """Entrance objects of the pool, collected once from the vanilla graph."""
+class ShuffledPool:
+    """Entrance objects of a pool, collected once from the vanilla graph."""
 
     def __init__(self, world: "SohWorld", pool: list[DungeonEntrance]):
         self.world = world
@@ -101,16 +154,16 @@ class ShuffledDungeons:
         self.blue_warp = [find_exit(world, d.boss_room, d.blue_warp_to) if d.boss_room else None for d in pool]
 
     def apply(self, placement: list[int]) -> None:
-        """placement[slot] = index of the dungeon behind the entrance of slot"""
+        """placement[slot] = index of the entry (dungeon, grotto) behind the entrance of slot"""
         region = self.world.get_region
-        for slot, dungeon in enumerate(placement):
-            self_slot, placed = self.pool[slot], self.pool[dungeon]
+        for slot, placed_index in enumerate(placement):
+            self_slot, placed = self.pool[slot], self.pool[placed_index]
             reconnect(self.forward[slot], region(str(placed.entryway)))
-            reconnect(self.reverse[dungeon], region(str(self_slot.exit_to)))
-            if self.blue_warp[dungeon] is not None:
+            reconnect(self.reverse[placed_index], region(str(self_slot.exit_to)))
+            if self.blue_warp[placed_index] is not None:
                 # bossRoomExitPairs: the blue warp of the placed dungeon goes to the blue warp target of the slot
                 # (dungeonExits); slots without one (BotW, Ice Cavern, GTG) send it to the slot's exit
-                reconnect(self.blue_warp[dungeon], region(str(self_slot.blue_warp_to or self_slot.exit_to)))
+                reconnect(self.blue_warp[placed_index], region(str(self_slot.blue_warp_to or self_slot.exit_to)))
 
 
 def all_locations_reachable(world: "SohWorld") -> bool:
@@ -120,33 +173,37 @@ def all_locations_reachable(world: "SohWorld") -> bool:
             and world.multiworld.completion_condition[world.player](state))
 
 
-def shuffle_dungeon_entrances(world: "SohWorld") -> None:
-    world.dungeon_entrance_placement = {}
-    if world.options.shuffle_dungeon_entrances == ShuffleDungeonEntrances.option_off:
-        return
-    pool = dungeon_entrance_pool(world)
-    dungeons = ShuffledDungeons(world, pool)
+def shuffle_pool(world: "SohWorld", pool: list[DungeonEntrance], passthrough_key: str, what: str) -> dict[str, str]:
+    """Shuffles one coupled pool and returns slot name -> placed name."""
+    if not pool:
+        return {}
+    shuffled = ShuffledPool(world, pool)
     index = {d.name: i for i, d in enumerate(pool)}
 
     if getattr(world, "using_ut", False):
         # Universal Tracker: rebuild the placement of the generated seed
-        placed = world.passthrough.get("dungeon_entrance_placement", {})
-        dungeons.apply([index[placed.get(d.name, d.name)] for d in pool])
-        world.dungeon_entrance_placement = dict(placed)
-        return
+        placed = world.passthrough.get(passthrough_key, {})
+        shuffled.apply([index[placed.get(d.name, d.name)] for d in pool])
+        return dict(placed)
 
     for _ in range(MAX_ATTEMPTS):
         placement = list(range(len(pool)))
         world.random.shuffle(placement)
-        dungeons.apply(placement)
+        shuffled.apply(placement)
         if all_locations_reachable(world):
-            world.dungeon_entrance_placement = {pool[slot].name: pool[dungeon].name
-                                                for slot, dungeon in enumerate(placement)}
-            for slot, dungeon in world.dungeon_entrance_placement.items():
-                world.multiworld.spoiler.set_entrance(f"{slot} Entrance", dungeon, "both", world.player)
-            return
-    raise OptionError(f"Ship of Harkinian (player {world.player}): no valid dungeon entrance placement found in "
+            result = {pool[slot].name: pool[placed].name for slot, placed in enumerate(placement)}
+            for slot, placed in result.items():
+                world.multiworld.spoiler.set_entrance(f"{slot} Entrance", placed, "both", world.player)
+            return result
+    raise OptionError(f"Ship of Harkinian (player {world.player}): no valid {what} entrance placement found in "
                       f"{MAX_ATTEMPTS} attempts")
+
+
+def shuffle_entrances(world: "SohWorld") -> None:
+    world.dungeon_entrance_placement = shuffle_pool(world, dungeon_entrance_pool(world),
+                                                    "dungeon_entrance_placement", "dungeon")
+    world.grotto_entrance_placement = shuffle_pool(world, grotto_entrance_pool(world),
+                                                   "grotto_entrance_placement", "grotto")
 
 
 DUNGEON_TAGS: dict[str, DungeonLocations] = {
@@ -165,25 +222,40 @@ DUNGEON_TAGS: dict[str, DungeonLocations] = {
 }
 
 
-def dungeon_entrance_hint_data(world: "SohWorld") -> dict[int, str]:
-    """Archipelago hint info (World.extend_hint_information): locations of a moved dungeon get the entrance it is
-    behind now, e.g. "Dodongo's Cavern Entrance"."""
-    by_tag = {DUNGEON_TAGS[dungeon]: f"{slot} Entrance"
-              for slot, dungeon in world.dungeon_entrance_placement.items() if slot != dungeon}
+def entrance_hint_data(world: "SohWorld") -> dict[int, str]:
+    """Archipelago hint info (World.extend_hint_information): locations of a moved dungeon or grotto get the entrance
+    they are behind now, e.g. "Dodongo's Cavern Entrance". Grotto locations are found by their region."""
+    dungeon_by_tag = {DUNGEON_TAGS[placed]: f"{slot} Entrance"
+                      for slot, placed in world.dungeon_entrance_placement.items() if slot != placed}
+    region_of = {d.name: str(d.entryway) for d in GROTTO_ENTRANCES}
+    grotto_by_region = {region_of[placed]: f"{slot} Entrance"
+                        for slot, placed in world.grotto_entrance_placement.items() if slot != placed}
     hints = {}
     for location in world.multiworld.get_locations(world.player):
+        if location.address is None:
+            continue
         data = location_data_table.get(location.name)
-        if location.address is not None and data is not None and data.dungeon_tag in by_tag:
-            hints[location.address] = by_tag[data.dungeon_tag]
+        if data is not None and data.dungeon_tag in dungeon_by_tag:
+            hints[location.address] = dungeon_by_tag[data.dungeon_tag]
+        elif location.parent_region is not None and location.parent_region.name in grotto_by_region:
+            hints[location.address] = grotto_by_region[location.parent_region.name]
     return hints
 
 
-def dungeon_entrance_slot_data(world: "SohWorld") -> list[dict[str, str]]:
+def entrance_slot_data(placement: dict[str, str], pool: list[DungeonEntrance]) -> list[dict[str, str]]:
     """Coupled pairs for the client, as upstream region keys (the apworld region members are named after them): the
-    forward entrance of each slot (outside -> entryway) is replaced by the forward entrance of the dungeon placed there
+    forward entrance of each slot (outside -> entryway) is replaced by the forward entrance of the entry placed there
     (upstream Entrance::GetReplacement); the client derives the reverse and blue warps like upstream does."""
-    by_name = {d.name: d for d in DUNGEON_ENTRANCES + [GANONS_CASTLE_ENTRANCE]}
+    by_name = {d.name: d for d in pool}
     return [{"from": f"RR_{by_name[slot].outside.name}", "to": f"RR_{by_name[slot].entryway.name}",
-             "replacement_from": f"RR_{by_name[dungeon].outside.name}",
-             "replacement_to": f"RR_{by_name[dungeon].entryway.name}"}
-            for slot, dungeon in world.dungeon_entrance_placement.items()]
+             "replacement_from": f"RR_{by_name[placed].outside.name}",
+             "replacement_to": f"RR_{by_name[placed].entryway.name}"}
+            for slot, placed in placement.items()]
+
+
+def dungeon_entrance_slot_data(world: "SohWorld") -> list[dict[str, str]]:
+    return entrance_slot_data(world.dungeon_entrance_placement, DUNGEON_ENTRANCES + [GANONS_CASTLE_ENTRANCE])
+
+
+def grotto_entrance_slot_data(world: "SohWorld") -> list[dict[str, str]]:
+    return entrance_slot_data(world.grotto_entrance_placement, GROTTO_ENTRANCES)

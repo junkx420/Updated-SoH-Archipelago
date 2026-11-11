@@ -22,8 +22,8 @@ from .SongShuffle import pre_fill_songs, get_prefill_songs
 from .ShopItems import fill_shop_items, generate_prices
 from .Presets import oot_soh_options_presets
 from .UniversalTracker import setup_options_from_slot_data
-from .EntranceShuffle import (shuffle_dungeon_entrances, dungeon_entrance_slot_data,
-                             dungeon_entrance_hint_data)
+from .EntranceShuffle import (shuffle_entrances, dungeon_entrance_slot_data, grotto_entrance_slot_data,
+                             entrance_hint_data)
 from settings import Group, Bool
 from Options import OptionError
 from rule_builder.rules import Has, CanReachLocation, Rule, True_
@@ -132,6 +132,7 @@ class SohWorld(CachedRuleBuilderWorld):
         self.pre_fill_pool = list[SohItem]()
         self.reserved_pre_fill_locations = list[Locations]()
         self.dungeon_entrance_placement: dict[str, str] = {}  # slot (entrance) -> dungeon behind it
+        self.grotto_entrance_placement: dict[str, str] = {}  # slot (entrance) -> grotto behind it
 
         apworld_manifest = orjson.loads(pkgutil.get_data(
             __name__, "archipelago.json").decode("utf-8"))
@@ -370,10 +371,10 @@ class SohWorld(CachedRuleBuilderWorld):
         self.removed_unreachable_events = removed
 
     def connect_entrances(self) -> None:
-        shuffle_dungeon_entrances(self)
+        shuffle_entrances(self)
 
     def extend_hint_information(self, hint_data: dict[int, dict[int, str]]) -> None:
-        entrance_hints = dungeon_entrance_hint_data(self)
+        entrance_hints = entrance_hint_data(self)
         if entrance_hints:
             hint_data[self.player] = entrance_hints
 
@@ -499,6 +500,9 @@ class SohWorld(CachedRuleBuilderWorld):
             "shuffle_dungeon_entrances": self.options.shuffle_dungeon_entrances.value,
             "dungeon_entrances": dungeon_entrance_slot_data(self),
             "dungeon_entrance_placement": self.dungeon_entrance_placement,
+            "shuffle_grotto_entrances": self.options.shuffle_grotto_entrances.value,
+            "grotto_entrances": grotto_entrance_slot_data(self),
+            "grotto_entrance_placement": self.grotto_entrance_placement,
             "kakariko_gate": self.options.kakariko_gate.value,
             "door_of_time": self.options.door_of_time.value,
             "zoras_fountain": self.options.zoras_fountain.value,

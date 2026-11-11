@@ -786,6 +786,15 @@ class ShuffleDungeonEntrances(Choice):
     default = 0
 
 
+class ShuffleGrottoEntrances(Toggle):
+    """
+    Shuffles the entrances of the grottos and graves among each other (Ship of Harkinian 9.3.1: "Shuffle Grotto
+    Entrances"): the 33 grottos (including the Deku Theater and the fairy and scrub grottos) and the 4 Graveyard
+    graves. The entrances stay coupled: leaving a grotto brings you back out where you entered it.
+    """
+    display_name = "Shuffle Grotto Entrances"
+
+
 class ShuffleBeanSouls(Toggle):
     """
     Adds a Bean Soul for each of the 10 magic bean patches to the pool (Ship of Harkinian 9.3.1: "Shuffle Bean
@@ -2520,6 +2529,7 @@ class MerchantAffordablePrices(Toggle):
 class SohOptions(PerGameCommonOptions):
     closed_forest: ClosedForest
     shuffle_dungeon_entrances: ShuffleDungeonEntrances
+    shuffle_grotto_entrances: ShuffleGrottoEntrances
     kakariko_gate: KakarikoGate
     door_of_time: DoorOfTime
     zoras_fountain: ZorasFountain
@@ -3104,6 +3114,7 @@ soh_option_groups = [
     ]),
     OptionGroup("Shuffle Entrances", [
         ShuffleDungeonEntrances,
+        ShuffleGrottoEntrances,
     ]),
     # not supported yet (SoH 9.3.1 has these too):
     # OptionGroup("Shuffle Entrances", [
