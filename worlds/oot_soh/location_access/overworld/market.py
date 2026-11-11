@@ -361,29 +361,30 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.MARKET_TREASURE_CHEST_GAME, world, [
         (Locations.MARKET_GREG_HINT,
          lambda bundle: has_item(Items.CHILD_WALLET, bundle) & has_speak(bundle, "HYLIAN")),
-        # DEFERRED RC_MARKET_TREASURE_CHEST_GAME_SHOPKEEPER: logic->HasItem(RG_CHILD_WALLET) && logic->HasItem(RG_SPEAK_HYLIAN) && ctx->GetOption(RSK_SHUFFLE_CHEST_MINIGAME)
+        (Locations.MARKET_CHEST_GAME_SHOPKEEPER,
+         lambda bundle: has_item(Items.CHILD_WALLET, bundle) & has_speak(bundle, "HYLIAN") & True_(options=[OptionFilter(ShuffleTreasureChestGame, True)])),
         (Locations.MARKET_CHEST_GAME_FIRST_ROOM_KEY,
-         lambda bundle: can_open_large_chest(bundle) & (((False_()) & small_keys_scene("SCENE_TREASURE_BOX_SHOP", 1, bundle) | (Not(False_())) & (has_item(Items.CHILD_WALLET, bundle) & has_speak(bundle, "HYLIAN") & can_use(Items.LENS_OF_TRUTH, bundle))))),
+         lambda bundle: can_open_large_chest(bundle) & (((True_(options=[OptionFilter(ShuffleTreasureChestGame, True)])) & small_keys_scene("SCENE_TREASURE_BOX_SHOP", 1, bundle) | (Not(True_(options=[OptionFilter(ShuffleTreasureChestGame, True)]))) & (has_item(Items.CHILD_WALLET, bundle) & has_speak(bundle, "HYLIAN") & can_use(Items.LENS_OF_TRUTH, bundle))))),
         (Locations.MARKET_CHEST_GAME_FIRST_ROOM_ITEM,
-         lambda bundle: can_open_large_chest(bundle) & (((False_()) & small_keys_scene("SCENE_TREASURE_BOX_SHOP", 1, bundle) | (Not(False_())) & (has_item(Items.CHILD_WALLET, bundle) & has_speak(bundle, "HYLIAN") & can_use(Items.LENS_OF_TRUTH, bundle))))),
+         lambda bundle: can_open_large_chest(bundle) & (((True_(options=[OptionFilter(ShuffleTreasureChestGame, True)])) & small_keys_scene("SCENE_TREASURE_BOX_SHOP", 1, bundle) | (Not(True_(options=[OptionFilter(ShuffleTreasureChestGame, True)]))) & (has_item(Items.CHILD_WALLET, bundle) & has_speak(bundle, "HYLIAN") & can_use(Items.LENS_OF_TRUTH, bundle))))),
         (Locations.MARKET_CHEST_GAME_SECOND_ROOM_KEY,
-         lambda bundle: can_open_large_chest(bundle) & (((False_()) & small_keys_scene("SCENE_TREASURE_BOX_SHOP", 2, bundle) | (Not(False_())) & (has_item(Items.CHILD_WALLET, bundle) & has_speak(bundle, "HYLIAN") & can_use(Items.LENS_OF_TRUTH, bundle))))),
+         lambda bundle: can_open_large_chest(bundle) & (((True_(options=[OptionFilter(ShuffleTreasureChestGame, True)])) & small_keys_scene("SCENE_TREASURE_BOX_SHOP", 2, bundle) | (Not(True_(options=[OptionFilter(ShuffleTreasureChestGame, True)]))) & (has_item(Items.CHILD_WALLET, bundle) & has_speak(bundle, "HYLIAN") & can_use(Items.LENS_OF_TRUTH, bundle))))),
         (Locations.MARKET_CHEST_GAME_SECOND_ROOM_ITEM,
-         lambda bundle: can_open_large_chest(bundle) & (((False_()) & small_keys_scene("SCENE_TREASURE_BOX_SHOP", 2, bundle) | (Not(False_())) & (has_item(Items.CHILD_WALLET, bundle) & has_speak(bundle, "HYLIAN") & can_use(Items.LENS_OF_TRUTH, bundle))))),
+         lambda bundle: can_open_large_chest(bundle) & (((True_(options=[OptionFilter(ShuffleTreasureChestGame, True)])) & small_keys_scene("SCENE_TREASURE_BOX_SHOP", 2, bundle) | (Not(True_(options=[OptionFilter(ShuffleTreasureChestGame, True)]))) & (has_item(Items.CHILD_WALLET, bundle) & has_speak(bundle, "HYLIAN") & can_use(Items.LENS_OF_TRUTH, bundle))))),
         (Locations.MARKET_CHEST_GAME_THIRD_ROOM_KEY,
-         lambda bundle: can_open_large_chest(bundle) & (((False_()) & small_keys_scene("SCENE_TREASURE_BOX_SHOP", 3, bundle) | (Not(False_())) & (has_item(Items.CHILD_WALLET, bundle) & has_speak(bundle, "HYLIAN") & can_use(Items.LENS_OF_TRUTH, bundle))))),
+         lambda bundle: can_open_large_chest(bundle) & (((True_(options=[OptionFilter(ShuffleTreasureChestGame, True)])) & small_keys_scene("SCENE_TREASURE_BOX_SHOP", 3, bundle) | (Not(True_(options=[OptionFilter(ShuffleTreasureChestGame, True)]))) & (has_item(Items.CHILD_WALLET, bundle) & has_speak(bundle, "HYLIAN") & can_use(Items.LENS_OF_TRUTH, bundle))))),
         (Locations.MARKET_CHEST_GAME_THIRD_ROOM_ITEM,
-         lambda bundle: can_open_large_chest(bundle) & (((False_()) & small_keys_scene("SCENE_TREASURE_BOX_SHOP", 3, bundle) | (Not(False_())) & (has_item(Items.CHILD_WALLET, bundle) & has_speak(bundle, "HYLIAN") & can_use(Items.LENS_OF_TRUTH, bundle))))),
+         lambda bundle: can_open_large_chest(bundle) & (((True_(options=[OptionFilter(ShuffleTreasureChestGame, True)])) & small_keys_scene("SCENE_TREASURE_BOX_SHOP", 3, bundle) | (Not(True_(options=[OptionFilter(ShuffleTreasureChestGame, True)]))) & (has_item(Items.CHILD_WALLET, bundle) & has_speak(bundle, "HYLIAN") & can_use(Items.LENS_OF_TRUTH, bundle))))),
         (Locations.MARKET_CHEST_GAME_FOURTH_ROOM_KEY,
-         lambda bundle: can_open_large_chest(bundle) & (((False_()) & small_keys_scene("SCENE_TREASURE_BOX_SHOP", 4, bundle) | (Not(False_())) & (has_item(Items.CHILD_WALLET, bundle) & has_speak(bundle, "HYLIAN") & can_use(Items.LENS_OF_TRUTH, bundle))))),
+         lambda bundle: can_open_large_chest(bundle) & (((True_(options=[OptionFilter(ShuffleTreasureChestGame, True)])) & small_keys_scene("SCENE_TREASURE_BOX_SHOP", 4, bundle) | (Not(True_(options=[OptionFilter(ShuffleTreasureChestGame, True)]))) & (has_item(Items.CHILD_WALLET, bundle) & has_speak(bundle, "HYLIAN") & can_use(Items.LENS_OF_TRUTH, bundle))))),
         (Locations.MARKET_CHEST_GAME_FOURTH_ROOM_ITEM,
-         lambda bundle: can_open_large_chest(bundle) & (((False_()) & small_keys_scene("SCENE_TREASURE_BOX_SHOP", 4, bundle) | (Not(False_())) & (has_item(Items.CHILD_WALLET, bundle) & has_speak(bundle, "HYLIAN") & can_use(Items.LENS_OF_TRUTH, bundle))))),
+         lambda bundle: can_open_large_chest(bundle) & (((True_(options=[OptionFilter(ShuffleTreasureChestGame, True)])) & small_keys_scene("SCENE_TREASURE_BOX_SHOP", 4, bundle) | (Not(True_(options=[OptionFilter(ShuffleTreasureChestGame, True)]))) & (has_item(Items.CHILD_WALLET, bundle) & has_speak(bundle, "HYLIAN") & can_use(Items.LENS_OF_TRUTH, bundle))))),
         (Locations.MARKET_CHEST_GAME_FIFTH_ROOM_KEY,
-         lambda bundle: can_open_large_chest(bundle) & (((False_()) & small_keys_scene("SCENE_TREASURE_BOX_SHOP", 5, bundle) | (Not(False_())) & (has_item(Items.CHILD_WALLET, bundle) & has_speak(bundle, "HYLIAN") & can_use(Items.LENS_OF_TRUTH, bundle))))),
+         lambda bundle: can_open_large_chest(bundle) & (((True_(options=[OptionFilter(ShuffleTreasureChestGame, True)])) & small_keys_scene("SCENE_TREASURE_BOX_SHOP", 5, bundle) | (Not(True_(options=[OptionFilter(ShuffleTreasureChestGame, True)]))) & (has_item(Items.CHILD_WALLET, bundle) & has_speak(bundle, "HYLIAN") & can_use(Items.LENS_OF_TRUTH, bundle))))),
         (Locations.MARKET_CHEST_GAME_FIFTH_ROOM_ITEM,
-         lambda bundle: can_open_large_chest(bundle) & (((False_()) & small_keys_scene("SCENE_TREASURE_BOX_SHOP", 5, bundle) | (Not(False_())) & (has_item(Items.CHILD_WALLET, bundle) & has_speak(bundle, "HYLIAN") & can_use(Items.LENS_OF_TRUTH, bundle))))),
+         lambda bundle: can_open_large_chest(bundle) & (((True_(options=[OptionFilter(ShuffleTreasureChestGame, True)])) & small_keys_scene("SCENE_TREASURE_BOX_SHOP", 5, bundle) | (Not(True_(options=[OptionFilter(ShuffleTreasureChestGame, True)]))) & (has_item(Items.CHILD_WALLET, bundle) & has_speak(bundle, "HYLIAN") & can_use(Items.LENS_OF_TRUTH, bundle))))),
         (Locations.MARKET_TREASURE_CHEST_GAME_REWARD,
-         lambda bundle: can_open_large_chest(bundle) & (((False_()) & small_keys_scene("SCENE_TREASURE_BOX_SHOP", 6, bundle) | (Not(False_())) & (has_item(Items.CHILD_WALLET, bundle) & has_speak(bundle, "HYLIAN") & can_use(Items.LENS_OF_TRUTH, bundle))))),
+         lambda bundle: can_open_large_chest(bundle) & (((True_(options=[OptionFilter(ShuffleTreasureChestGame, True)])) & small_keys_scene("SCENE_TREASURE_BOX_SHOP", 6, bundle) | (Not(True_(options=[OptionFilter(ShuffleTreasureChestGame, True)]))) & (has_item(Items.CHILD_WALLET, bundle) & has_speak(bundle, "HYLIAN") & can_use(Items.LENS_OF_TRUTH, bundle))))),
     ])
     # Connections
     connect_regions(Regions.MARKET_TREASURE_CHEST_GAME, world, [
@@ -448,7 +449,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
 
 # ---- summary
-# notes: ['TODO feature 3.10']
+# notes: []
 # helpers not in LogicHelpers yet: []
 # TODO count: 0
 # new regions: []
@@ -456,4 +457,4 @@ def set_region_rules(world: "SohWorld") -> None:
 # tricks missing in apworld: []
 # enemies missing: []
 # items missing: []
-# deferred locations (1): ['RC_MARKET_TREASURE_CHEST_GAME_SHOPKEEPER']
+# deferred locations (0): []

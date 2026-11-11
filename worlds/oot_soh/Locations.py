@@ -159,16 +159,6 @@ base_location_table: dict[str, SohLocData] = {
     Locations.MARKET_LOST_DOG:                                              SohLocData(46, LocTag.Hyrule_Market),
     Locations.MARKET_TREASURE_CHEST_GAME_REWARD:                            SohLocData(47, LocTag.Hyrule_Market | LocTag.Minigame),
     Locations.MARKET_10_BIG_POES:                                           SohLocData(48, LocTag.Hyrule_Market),
-    # Locations.MARKET_CHEST_GAME_FIRST_ROOM_ITEM:                          SohLocData(49),
-    # Locations.MARKET_CHEST_GAME_SECOND_ROOM_ITEM:                         SohLocData(50),
-    # Locations.MARKET_CHEST_GAME_THIRD_ROOM_ITEM:                          SohLocData(51),
-    # Locations.MARKET_CHEST_GAME_FOURTH_ROOM_ITEM:                         SohLocData(52),
-    # Locations.MARKET_CHEST_GAME_FIFTH_ROOM_ITEM:                          SohLocData(53),
-    # Locations.MARKET_CHEST_GAME_FIRST_ROOM_KEY:                           SohLocData(54),
-    # Locations.MARKET_CHEST_GAME_SECOND_ROOM_KEY:                          SohLocData(55),
-    # Locations.MARKET_CHEST_GAME_THIRD_ROOM_KEY:                           SohLocData(56),
-    # Locations.MARKET_CHEST_GAME_FOURTH_ROOM_KEY:                          SohLocData(57),
-    # Locations.MARKET_CHEST_GAME_FIFTH_ROOM_KEY:                           SohLocData(58),
     Locations.MARKET_TOT_LIGHT_ARROW_CUTSCENE:                              SohLocData(59, LocTag.Temple_of_Time),
     Locations.MARKET_TOT_MASTER_SWORD:                                      SohLocData(60, LocTag.Temple_of_Time),
     Locations.HC_GREAT_FAIRY_REWARD:                                        SohLocData(63, LocTag.Hyrule_Castle | LocTag.Great_Fairy_Reward),
@@ -3194,6 +3184,23 @@ scarecrows_song_location_table: dict[str, SohLocData] = {
     Locations.LH_SCARECROWS_SONG:                          SohLocData(3028, LocTag.Lake_Hylia),
 }
 
+# SoH 9.3.1 Shuffle Treasure Chest Game (ShuffleTreasureChestGame.cpp, RCTYPE_CHEST_GAME). IDs 49-58 were reserved for
+# the chest game rooms since the original apworld; the shopkeeper (key for buying the game) is new: ID 3029 after the
+# Scarecrow's Song (3028). The reward chest (ID 47) stays in the base table.
+chest_game_location_table: dict[str, SohLocData] = {
+    Locations.MARKET_CHEST_GAME_FIRST_ROOM_ITEM:                SohLocData(49, LocTag.Hyrule_Market | LocTag.Minigame),
+    Locations.MARKET_CHEST_GAME_SECOND_ROOM_ITEM:               SohLocData(50, LocTag.Hyrule_Market | LocTag.Minigame),
+    Locations.MARKET_CHEST_GAME_THIRD_ROOM_ITEM:                SohLocData(51, LocTag.Hyrule_Market | LocTag.Minigame),
+    Locations.MARKET_CHEST_GAME_FOURTH_ROOM_ITEM:               SohLocData(52, LocTag.Hyrule_Market | LocTag.Minigame),
+    Locations.MARKET_CHEST_GAME_FIFTH_ROOM_ITEM:                SohLocData(53, LocTag.Hyrule_Market | LocTag.Minigame),
+    Locations.MARKET_CHEST_GAME_FIRST_ROOM_KEY:                 SohLocData(54, LocTag.Hyrule_Market | LocTag.Minigame),
+    Locations.MARKET_CHEST_GAME_SECOND_ROOM_KEY:                SohLocData(55, LocTag.Hyrule_Market | LocTag.Minigame),
+    Locations.MARKET_CHEST_GAME_THIRD_ROOM_KEY:                 SohLocData(56, LocTag.Hyrule_Market | LocTag.Minigame),
+    Locations.MARKET_CHEST_GAME_FOURTH_ROOM_KEY:                SohLocData(57, LocTag.Hyrule_Market | LocTag.Minigame),
+    Locations.MARKET_CHEST_GAME_FIFTH_ROOM_KEY:                 SohLocData(58, LocTag.Hyrule_Market | LocTag.Minigame),
+    Locations.MARKET_CHEST_GAME_SHOPKEEPER:                     SohLocData(3029, LocTag.Hyrule_Market | LocTag.Minigame),
+}
+
 fish_pond_location_table: dict[str, SohLocData] = {
     Locations.LH_CHILD_POND_FISH1:         SohLocData(2345, LocTag.Lake_Hylia | LocTag.Pond_Fish),
     Locations.LH_CHILD_POND_FISH2:         SohLocData(2346, LocTag.Lake_Hylia | LocTag.Pond_Fish),
@@ -3314,6 +3321,7 @@ location_data_table: dict[str, SohLocData] = {
     **boulders_overworld_location_table,
     **boulders_dungeon_location_table,
     **scarecrows_song_location_table,
+    **chest_game_location_table,
     **grass_overworld_location_table,
     **grass_dungeon_location_table,
     **tree_location_table,

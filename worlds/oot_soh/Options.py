@@ -711,6 +711,17 @@ class ShuffleBeggar(Toggle):
     display_name = "Shuffle Beggar"
 
 
+class ShuffleTreasureChestGame(Toggle):
+    """
+    Shuffles the Treasure Chest Game in Hyrule Market (Ship of Harkinian 9.3.1: "Shuffle Chest Minigame"). Both chests
+    of each of the five rooms (an item chest and a key chest) and the shopkeeper become checks, opening one chest no
+    longer seals the other, and the Lens of Truth is no longer needed. The game's keys (6 Chest Game Small Keys, or
+    one Chest Game Key Ring) are added to the item pool and each room needs one more key. The final reward chest is
+    always a check. 11 new locations.
+    """
+    display_name = "Shuffle Treasure Chest Game"
+
+
 class ShuffleAdultTradeItems(Toggle):
     """
     Adds all adult trade quest items to the pool. If this is turned off, only the Claim Check is in the pool.
@@ -1238,7 +1249,7 @@ class KeyRings(Choice):
     
     Selecting key ring for dungeons will have no effect if Small Keys are set to Vanilla.
     
-    If Gerudo Fortress Carpenters is set to Normal, and Gerudo Fortress Keys is set to anything other than Vanilla, then the maximum amount of Key Rings that can be selected by Count will be 9. Otherwise, the maximum amount of Key Rings will be 8.
+    There are 8 dungeon key rings, plus one for Gerudo Fortress (only if Gerudo Fortress Carpenters is Normal and Gerudo Fortress Keys isn't Vanilla) and one for the Treasure Chest Game (only if Shuffle Treasure Chest Game is on). The maximum amount of Key Rings that Count can select is the number of those that are available; a higher count is lowered to it.
     """
     display_name = "Key Rings"
     option_off = 0
@@ -1249,11 +1260,11 @@ class KeyRings(Choice):
 
 class KeyRingsCount(Range):
     """
-    If "Count" is selected for the Key Rings option, this is the count that will be used. If 9 is selected and Gerudo Fortress Keys don't meet the specified requirements, this option will be set to 8.
+    If "Count" is selected for the Key Rings option, this is the count that will be used. The maximum is 10 (8 dungeons + Gerudo Fortress + Treasure Chest Game); keyrings that aren't available (Gerudo Fortress Keys not shuffled, Treasure Chest Game not shuffled) reduce the maximum, and a higher count is lowered to it.
     """
     display_name = "Key Rings Count"
     range_start = 0
-    range_end = 9
+    range_end = 10
     default = 0
 
 
@@ -1262,6 +1273,13 @@ class GerudoFortressKeyring(Toggle):
     Only used if Key Rings option is set to "Selection". Will only work if Gerudo Fortress Keys meet the specified requirements.
     """
     display_name = "Gerudo Fortress Keyring"
+
+
+class ChestGameKeyring(Toggle):
+    """
+    Only used if Key Rings option is set to "Selection". Will only work if Shuffle Treasure Chest Game is on.
+    """
+    display_name = "Treasure Chest Game Keyring"
 
 
 class ForestTempleKeyring(Toggle):
@@ -2484,6 +2502,7 @@ class SohOptions(PerGameCommonOptions):
     shuffle_merchants_maximum_price: ShuffleMerchantsMaximumPrice
     shuffle_frog_song_rupees: ShuffleFrogSongRupees
     shuffle_beggar: ShuffleBeggar
+    shuffle_treasure_chest_game: ShuffleTreasureChestGame
     shuffle_adult_trade_items: ShuffleAdultTradeItems
     shuffle_boss_souls: ShuffleBossSouls
     ganons_soul: GanonsSoul
@@ -2515,6 +2534,7 @@ class SohOptions(PerGameCommonOptions):
     key_rings: KeyRings
     key_rings_count: KeyRingsCount
     gerudo_fortress_key_ring: GerudoFortressKeyring
+    chest_game_key_ring: ChestGameKeyring
     forest_temple_key_ring: ForestTempleKeyring
     fire_temple_key_ring: FireTempleKeyring
     water_temple_key_ring: WaterTempleKeyring
@@ -3031,6 +3051,7 @@ soh_option_groups = [
         MerchantAffordablePrices,
         ShuffleFrogSongRupees,
         ShuffleBeggar,
+        ShuffleTreasureChestGame,
         ShuffleAdultTradeItems,
         Shuffle100GSReward,
         ShuffleBossSouls,
@@ -3066,6 +3087,7 @@ soh_option_groups = [
         KeyRings,
         KeyRingsCount,
         GerudoFortressKeyring,
+        ChestGameKeyring,
         ForestTempleKeyring,
         FireTempleKeyring,
         WaterTempleKeyring,

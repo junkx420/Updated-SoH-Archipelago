@@ -240,6 +240,13 @@ def create_item_pool(world: "SohWorld") -> None:
         if not world.options.start_with_mask_of_truth:
             items_to_create[Items.MASK_OF_TRUTH] = 1
 
+    # Shuffle Treasure Chest Game (3drando/item_pool.cpp): a key ring or 6 small keys (7 / 2 with plentiful, see below)
+    if world.options.shuffle_treasure_chest_game:
+        if world.options.chest_game_key_ring:
+            items_to_create[Items.TREASURE_GAME_KEY_RING] = 1
+        else:
+            items_to_create[Items.TREASURE_GAME_SMALL_KEY] = 6
+
     # Max Hearts logic for Item Pool
     max_hearts: int = 20
     if world.options.item_pool == "scarce":
@@ -275,6 +282,12 @@ def create_item_pool(world: "SohWorld") -> None:
 
             if world.options.shuffle_skull_tokens:
                 items_to_create[Items.GOLD_SKULLTULA_TOKEN] += 10
+
+            if world.options.shuffle_treasure_chest_game:
+                if world.options.chest_game_key_ring:
+                    items_to_create[Items.TREASURE_GAME_KEY_RING] += 1
+                else:
+                    items_to_create[Items.TREASURE_GAME_SMALL_KEY] += 1
 
             if world.options.gerudo_fortress_key_ring and world.options.fortress_carpenters == "normal":
                 items_to_create[Items.GERUDO_FORTRESS_KEY_RING] += 1

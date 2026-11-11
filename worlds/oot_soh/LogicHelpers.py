@@ -1253,6 +1253,7 @@ key_to_ring: dict[Items, Items] = {
     Items.TRAINING_GROUND_SMALL_KEY: Items.TRAINING_GROUND_KEY_RING,
     Items.SPIRIT_TEMPLE_SMALL_KEY: Items.SPIRIT_TEMPLE_KEY_RING,
     Items.GANONS_CASTLE_SMALL_KEY: Items.GANONS_CASTLE_KEY_RING,
+    Items.TREASURE_GAME_SMALL_KEY: Items.TREASURE_GAME_KEY_RING,
 }
 
 
@@ -1980,10 +1981,6 @@ SCENE_SMALL_KEYS = {
 
 def small_keys_scene(scene: str, amount: int, bundle: tuple[Regions, "SohWorld"]) -> Rule:
     # Logic::SmallKeys(SceneID, amount)
-    if scene == "SCENE_TREASURE_BOX_SHOP":
-        # Treasure Chest Game keys only matter with the Treasure Chest Game shuffle (feature 3.10), which the
-        # apworld doesn't offer yet, so the key branch never applies.
-        return False_()  # TODO feature 3.10
     return small_keys(SCENE_SMALL_KEYS[scene], amount, bundle)
 
 

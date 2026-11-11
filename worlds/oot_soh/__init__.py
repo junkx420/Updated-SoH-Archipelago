@@ -152,26 +152,34 @@ class SohWorld(CachedRuleBuilderWorld):
 
         # Figure out Keyring Situation
         key_ring_options: list = [self.options.gerudo_fortress_key_ring, self.options.forest_temple_key_ring, self.options.fire_temple_key_ring, self.options.water_temple_key_ring,
-                                  self.options.spirit_temple_key_ring, self.options.shadow_temple_key_ring, self.options.bottom_of_the_well_key_ring, self.options.gerudo_training_ground_key_ring, self.options.ganons_castle_key_ring]
+                                  self.options.spirit_temple_key_ring, self.options.shadow_temple_key_ring, self.options.bottom_of_the_well_key_ring, self.options.gerudo_training_ground_key_ring, self.options.ganons_castle_key_ring,
+                                  self.options.chest_game_key_ring]
 
         if self.options.key_rings != "selection":
             for option in key_ring_options:
                 option.value = False
 
+        # settings.cpp: the Gerudo Fortress key ring only counts with normal carpenters and shuffled Gerudo keys, the
+        # Treasure Chest Game key ring only with the Treasure Chest Game shuffle
+        fortress_keys_shuffled = not (self.options.fortress_carpenters == "normal" and self.options.gerudo_fortress_key_shuffle == "vanilla")
         if self.options.key_rings == "count":
-            # Fix count if Gerudo Fortress Keys aren't allowed
-            if self.options.fortress_carpenters == "normal" and self.options.gerudo_fortress_key_shuffle == "vanilla":
-                if self.options.key_rings_count.value > 8:
-                    self.options.key_rings_count.value = 8
+            if not fortress_keys_shuffled:
                 key_ring_options.remove(self.options.gerudo_fortress_key_ring)
+            if not self.options.shuffle_treasure_chest_game:
+                key_ring_options.remove(self.options.chest_game_key_ring)
+            if self.options.key_rings_count.value > len(key_ring_options):
+                self.options.key_rings_count.value = len(key_ring_options)
 
             self.random.shuffle(key_ring_options)
 
             # Set only the chosen
             for index in range(self.options.key_rings_count.value):
                 key_ring_options[index].value = True
-        elif self.options.key_rings == "selection" and self.options.fortress_carpenters == "normal" and self.options.gerudo_fortress_key_shuffle == "vanilla":
-            self.options.gerudo_fortress_key_ring.value = False
+        elif self.options.key_rings == "selection":
+            if self.options.fortress_carpenters == "normal" and self.options.gerudo_fortress_key_shuffle == "vanilla":
+                self.options.gerudo_fortress_key_ring.value = False
+            if not self.options.shuffle_treasure_chest_game:
+                self.options.chest_game_key_ring.value = False
 
         if self.options.ganons_trials == "set_number" and self.options.ganons_trials_count.value > 0:
             self.ganons_trials = [str(trial) for trial in GanonsTrials]
@@ -183,6 +191,7 @@ class SohWorld(CachedRuleBuilderWorld):
         if self.using_ut:
             self.ganons_trials = self.passthrough.get("required_trials", 6)
             self.options.gerudo_fortress_key_ring.value = self.passthrough.get("gerudo_fortress_key_ring", False)
+            self.options.chest_game_key_ring.value = self.passthrough.get("chest_game_key_ring", False)  # apworld 1.5+
             self.options.forest_temple_key_ring.value = self.passthrough.get("forest_temple_key_ring", False)
             self.options.fire_temple_key_ring.value = self.passthrough.get("fire_temple_key_ring", False)
             self.options.water_temple_key_ring.value = self.passthrough.get("water_temple_key_ring", False)
@@ -534,6 +543,7 @@ class SohWorld(CachedRuleBuilderWorld):
             "shuffle_merchants": self.options.shuffle_merchants.value,
             "shuffle_frog_song_rupees": self.options.shuffle_frog_song_rupees.value,
             "shuffle_beggar": self.options.shuffle_beggar.value,
+            "shuffle_treasure_chest_game": self.options.shuffle_treasure_chest_game.value,
             "shuffle_adult_trade_items": self.options.shuffle_adult_trade_items.value,
             "shuffle_boss_souls": self.options.shuffle_boss_souls.value,
             "shuffle_fountain_fairies": self.options.shuffle_fountain_fairies.value,
@@ -557,6 +567,7 @@ class SohWorld(CachedRuleBuilderWorld):
             "key_rings": self.options.key_rings.value,
             "key_rings_count": self.options.key_rings_count.value,
             "gerudo_fortress_key_ring": self.options.gerudo_fortress_key_ring.value,
+            "chest_game_key_ring": self.options.chest_game_key_ring.value,
             "forest_temple_key_ring": self.options.forest_temple_key_ring.value,
             "fire_temple_key_ring": self.options.fire_temple_key_ring.value,
             "water_temple_key_ring": self.options.water_temple_key_ring.value,
