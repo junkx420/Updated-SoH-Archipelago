@@ -63,7 +63,10 @@ GANONS_CASTLE_ENTRANCE = DungeonEntrance(
     "Ganon's Castle", Regions.GANONS_CASTLE_LEDGE, Regions.GANONS_CASTLE_ENTRYWAY,
     Regions.CASTLE_GROUNDS_FROM_GANONS_CASTLE, None, Regions.CASTLE_GROUNDS_FROM_GANONS_CASTLE)
 
-MAX_ATTEMPTS = 100
+# Upstream's rules leave fewer valid placements than one might think (e.g. Jabu Jabu's entrance needs child Link with a
+# fish, so no adult-only dungeon fits there). Measured over 30 seeds: up to 29 draws with "On", up to 79 with
+# "On + Ganon" and adult start; one draw costs about 30 ms, so 2000 makes a failure practically impossible.
+MAX_ATTEMPTS = 2000
 
 
 def dungeon_entrance_pool(world: "SohWorld") -> list[DungeonEntrance]:
