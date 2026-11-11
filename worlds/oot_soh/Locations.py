@@ -3286,9 +3286,8 @@ fish_pond_location_table: dict[str, SohLocData] = {
     Locations.LH_CHILD_POND_FISH13:        SohLocData(2357, LocTag.Lake_Hylia | LocTag.Pond_Fish),
     Locations.LH_CHILD_POND_FISH14:        SohLocData(2358, LocTag.Lake_Hylia | LocTag.Pond_Fish),
     Locations.LH_CHILD_POND_FISH15:        SohLocData(2359, LocTag.Lake_Hylia | LocTag.Pond_Fish),
-    # Locations.LH_CHILD_POND_LOACH1:      SohLocData(2360),
-    # Locations.LH_CHILD_POND_LOACH2:      SohLocData(2361),
-    # Locations.LH_HYRULE_LOACH_REWARD:    SohLocData(2362),
+    Locations.LH_CHILD_POND_LOACH1:        SohLocData(2360, LocTag.Lake_Hylia | LocTag.Pond_Fish),
+    Locations.LH_CHILD_POND_LOACH2:        SohLocData(2361, LocTag.Lake_Hylia | LocTag.Pond_Fish),
     Locations.LH_ADULT_POND_FISH1:         SohLocData(2363, LocTag.Lake_Hylia | LocTag.Pond_Fish),
     Locations.LH_ADULT_POND_FISH2:         SohLocData(2364, LocTag.Lake_Hylia | LocTag.Pond_Fish),
     Locations.LH_ADULT_POND_FISH3:         SohLocData(2365, LocTag.Lake_Hylia | LocTag.Pond_Fish),
@@ -3304,7 +3303,12 @@ fish_pond_location_table: dict[str, SohLocData] = {
     Locations.LH_ADULT_POND_FISH13:        SohLocData(2375, LocTag.Lake_Hylia | LocTag.Pond_Fish),
     Locations.LH_ADULT_POND_FISH14:        SohLocData(2376, LocTag.Lake_Hylia | LocTag.Pond_Fish),
     Locations.LH_ADULT_POND_FISH15:        SohLocData(2377, LocTag.Lake_Hylia | LocTag.Pond_Fish),
-    # Locations.LH_ADULT_POND_LOACH:       SohLocData(2378),
+    Locations.LH_ADULT_POND_LOACH:         SohLocData(2378, LocTag.Lake_Hylia | LocTag.Pond_Fish),
+}
+
+# SoH 9.3.1 Fishsanity "Shuffle only Hyrule Loach": the reward for the Hyrule Loach (ID reserved since the original apworld)
+hyrule_loach_location_table: dict[str, SohLocData] = {
+    Locations.LH_HYRULE_LOACH_REWARD:      SohLocData(2362, LocTag.Lake_Hylia),
 }
 
 fish_overworld_location_table: dict[str, SohLocData] = {
@@ -3398,6 +3402,7 @@ location_data_table: dict[str, SohLocData] = {
     **beggar_location_table,
     **fish_pond_location_table,
     **fish_overworld_location_table,
+    **hyrule_loach_location_table,
     **links_pocket_location_table,
     **child_zelda_location_table,
     **carpenters_location_table,

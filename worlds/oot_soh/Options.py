@@ -458,29 +458,32 @@ class ShuffleShopsMaximumPrice(Range):
 
 class ShuffleFish(Choice):
     """
-    Shuffles various fish in the game. The Hylian Loach is not included.
+    Shuffles various fish in the game.
     Off - Fish will not be shuffled. No changes will be made to fish behavior.
     Pond - Only the fishing pond's fish will be shuffled. Catching a fish in the fishing pond will grant a reward
     (how many: "Pond Fish Count", per age with "Pond Fish Age Split").
     Overworld - Only fish in generic grottos and Zora's domain will be shuffled. These fish will need a bottle in order to scoop them up.
     All - All fish will be shuffled.
+    Hyrule Loach - Only the Hyrule Loach is shuffled: the reward the fishing pond owner gives for catching it becomes a check
+    (nothing else is shuffled; see "Hyrule Loach Hint").
     """
     display_name = "Shuffle Fish"
     option_off = 0
     option_pond = 1
     option_overworld = 2
     option_all = 3
+    option_hyrule_loach = 4
     default = 0
 
 
 class FishsanityPondCount(Range):
     """
     How many fish in the fishing pond give a reward when Shuffle Fish includes the pond (Ship of Harkinian 9.3.1:
-    "Pond Fish Count"). The Hylian Loach values 16 and 17 are not supported yet.
+    "Pond Fish Count"). Values 16 and 17 also make the child Hyrule Loaches (and with Pond Fish Age Split the adult Hyrule Loach at 16) give a reward.
     """
     display_name = "Pond Fish Count"
     range_start = 0
-    range_end = 15
+    range_end = 17
     default = 15
 
 
@@ -1669,14 +1672,14 @@ class GregHint(Toggle):
     display_name = "Greg the Green Rupee Hint"
     default = 1
 
-#class HyruleLoachHint(Toggle):
-#    """
-#    Talking to the fishing pond owner and asking to talk about something will tell you what the reward for the Hyrule Loach is.
-#
-#    Loach hint is only avaliable with "Fishsanity" set to "Shuffle only Hyrule Loach"
-#    as that's the only setting where you present the loach to the fishing pond owner.
-#    """
-#    display_name = "Hyrule Loach Hint"
+class HyruleLoachHint(Toggle):
+    """
+    Talking to the fishing pond owner and asking to talk about something will tell you what the reward for the Hyrule Loach is.
+
+    Loach hint is only avaliable with "Shuffle Fish" set to "Hyrule Loach"
+    as that's the only setting where you present the loach to the fishing pond owner.
+    """
+    display_name = "Hyrule Loach Hint"
 
 class SariasHint(Toggle):
     """
@@ -2674,7 +2677,7 @@ class SohOptions(PerGameCommonOptions):
     boss_key_hint: BossKeyHint
     dampe_diary_hint: DampeDiaryHint
     greg_hint: GregHint
-    #hyrule_loach_hint: HyruleLoachHint
+    hyrule_loach_hint: HyruleLoachHint
     saria_hint: SariasHint
     mido_hint: MidosHint
     frog_game_hint: FrogOcarinaGameHint
@@ -2788,7 +2791,8 @@ class SohOptions(PerGameCommonOptions):
     def adjust_irrelevant_hints(self):
         # disable hints for items we don't have shuffled
         #hyrule_loach_hint
-        # todo turn loach off if fishsanity not set to loach only
+        if self.shuffle_fish != ShuffleFish.option_hyrule_loach:
+            self.hyrule_loach_hint.value = HyruleLoachHint.option_false
         if self.shuffle_cows == ShuffleCows.option_false:
             self.malon_hint.value = MalonHint.option_false
 
@@ -3155,7 +3159,7 @@ soh_option_groups = [
         BossKeyHint,
         DampeDiaryHint,
         GregHint,
-        #HyruleLoachHint,
+        HyruleLoachHint,
         SariasHint,
         MidosHint,
         FrogOcarinaGameHint,

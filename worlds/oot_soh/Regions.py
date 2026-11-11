@@ -25,7 +25,7 @@ from .Locations import SohLocation, base_location_table, \
     fairies_fountain_location_table, \
     fairies_stone_location_table, \
     fairies_bean_location_table, \
-    fairies_song_location_table,     fairies_butterfly_location_table,     signs_overworld_location_table,     signs_dungeon_location_table,     wonder_items_overworld_location_table,     wonder_items_dungeon_location_table,     icicle_location_table,     red_ice_location_table,     rocks_location_table,     boulders_overworld_location_table,     boulders_dungeon_location_table,     scarecrows_song_location_table,     chest_game_location_table,     bushes_location_table, \
+    fairies_song_location_table,     fairies_butterfly_location_table,     signs_overworld_location_table,     signs_dungeon_location_table,     wonder_items_overworld_location_table,     wonder_items_dungeon_location_table,     icicle_location_table,     red_ice_location_table,     rocks_location_table,     boulders_overworld_location_table,     boulders_dungeon_location_table,     scarecrows_song_location_table,     chest_game_location_table,     bushes_location_table,     hyrule_loach_location_table, \
     grass_overworld_location_table, \
     grass_dungeon_location_table, \
     fish_pond_location_table, \
@@ -267,14 +267,23 @@ def create_regions_and_locations(world: "SohWorld") -> None:
 
     # Fish (Pond)
     if world.options.shuffle_fish == "pond" or world.options.shuffle_fish == "all":
-        # fishsanity.cpp GetFishLocationIncluded: child fish 1..count, adult fish 1..count only with age split
+        # fishsanity.cpp GetFishLocationIncluded: child fish 1..count, adult fish 1..count only with age split; the
+        # Hyrule Loaches are pond "fish" 16 (child loach 1, adult loach) and 17 (child loach 2)
         pond_count = world.options.fishsanity_pond_count.value
         for number in range(1, pond_count + 1):
-            child_fish = Locations[f"LH_CHILD_POND_FISH{number}"]
-            world.included_locations[child_fish] = fish_pond_location_table[child_fish]
-            if world.options.fishsanity_age_split:
+            if number <= 15:
+                child_fish = Locations[f"LH_CHILD_POND_FISH{number}"]
                 adult_fish = Locations[f"LH_ADULT_POND_FISH{number}"]
+            else:
+                child_fish = Locations[f"LH_CHILD_POND_LOACH{number - 15}"]
+                adult_fish = Locations.LH_ADULT_POND_LOACH if number == 16 else None
+            world.included_locations[child_fish] = fish_pond_location_table[child_fish]
+            if world.options.fishsanity_age_split and adult_fish is not None:
                 world.included_locations[adult_fish] = fish_pond_location_table[adult_fish]
+
+    # Fishsanity "Shuffle only Hyrule Loach" (RO_FISHSANITY_HYRULE_LOACH): only the loach reward
+    if world.options.shuffle_fish == "hyrule_loach":
+        world.included_locations.update(hyrule_loach_location_table)
 
     # Fish (Overworld)
     if world.options.shuffle_fish == "overworld" or world.options.shuffle_fish == "all":

@@ -66,6 +66,7 @@ def setup_options_from_slot_data(world: "SohWorld") -> None:
             world.options.shuffle_fish.value = world.passthrough["shuffle_fish"]
             # apworld 1.5+; older seeds had 15 fish per age
             world.options.fishsanity_pond_count.value = world.passthrough.get("fishsanity_pond_count", 15)
+            world.options.hyrule_loach_hint.value = world.passthrough.get("hyrule_loach_hint", 0)  # apworld 1.5+
             world.options.fishsanity_age_split.value = world.passthrough.get("fishsanity_age_split", 1)
             world.options.shuffle_scrubs.value = world.passthrough["shuffle_scrubs"]
             # scrub_prices is handled in generate_scrub_prices
