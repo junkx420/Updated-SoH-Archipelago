@@ -143,3 +143,21 @@ class TestOpenChestOn(SohTestBase):
         self.assertFalse(large(self.multiworld.state))
         self.collect(self.world.create_item(Items.OPEN_CHESTS.value))
         self.assertTrue(large(self.multiworld.state))
+
+
+class TestShuffleChildsWalletTurnsOffStartingWallet(SohTestBase):
+    """settings.cpp: Shuffle Child's Wallet sets RSK_STARTING_WALLET to 0 (the client would give the wallet without
+    RAND_INF_HAS_WALLET, which holds no rupees)."""
+    options = {"shuffle_childs_wallet": True, "start_with_wallet": "adults_wallet"}
+
+    def test_starting_wallet_off(self):
+        self.assertEqual(0, self.world.options.start_with_wallet.value)
+        self.assertEqual(0, precollected(self, Items.PROGRESSIVE_WALLET))
+
+
+class TestStartingWalletWithoutShuffleChildsWallet(SohTestBase):
+    options = {"start_with_wallet": "adults_wallet"}
+
+    def test_starting_wallet_kept(self):
+        self.assertEqual(1, self.world.options.start_with_wallet.value)
+        self.assertEqual(2, precollected(self, Items.PROGRESSIVE_WALLET))  # child's wallet + adult's wallet

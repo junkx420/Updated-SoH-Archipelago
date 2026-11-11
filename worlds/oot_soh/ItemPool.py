@@ -770,7 +770,7 @@ def give_starting_items(world: "SohWorld") -> None:
         for _ in range(world.options.start_with_scale.value):  # Shuffle Swim turns the starting scale off
             world.precollect_from_pool(Items.PROGRESSIVE_SCALE)
     if world.options.start_with_wallet:
-        for _ in range(world.options.start_with_wallet.value + (1 if world.options.shuffle_childs_wallet else 0)):
+        for _ in range(world.options.start_with_wallet.value):  # Shuffle Child's Wallet turns the starting wallet off
             world.precollect_from_pool(Items.PROGRESSIVE_WALLET)
     if world.options.start_with_magic_meter:
         for _ in range(world.options.start_with_magic_meter.value):

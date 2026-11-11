@@ -2338,6 +2338,7 @@ class StartWithScale(Choice):
 class StartWithWallet(Choice):
     """
     Start with the Wallet at this level. The matching items are taken out of the item pool.
+    Turned off when Shuffle Child's Wallet is on (as in Ship of Harkinian).
     """
     display_name = "Start with Wallet"
     option_off = 0
@@ -2823,6 +2824,11 @@ class SohOptions(PerGameCommonOptions):
         if self.shuffle_grab and self.start_with_strength:
             logging.warning("Shuffle Grab is on: Start with Strength is turned off (as in SoH 9.3.1).")
             self.start_with_strength.value = StartWithStrength.option_off
+        # same for Shuffle Child's Wallet: settings.cpp sets RSK_STARTING_WALLET to 0. The client gives the starting
+        # wallet without RAND_INF_HAS_WALLET, and without that flag the wallet holds no rupees (hook_handlers.cpp).
+        if self.shuffle_childs_wallet and self.start_with_wallet:
+            logging.warning("Shuffle Child's Wallet is on: Start with Wallet is turned off (as in SoH 9.3.1).")
+            self.start_with_wallet.value = StartWithWallet.option_off
 
         if self.shuffle_deku_stick_bag == ShuffleDekuStickBag.option_true:
             self.start_with_stick_ammo.value = StartWithStickAmmo.option_false
