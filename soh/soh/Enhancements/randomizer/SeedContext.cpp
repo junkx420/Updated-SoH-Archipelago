@@ -475,9 +475,15 @@ void Context::ParseArchipelago() {
     Random_Init(GetSeed());
     // Options first: item parsing needs some of them (e.g. ice trap names) and options parsing uses no RNG.
     ParseArchipelagoOptions();
-    // connections chosen by the apworld; needs the options (region rules, decoupled = off)
-    mEntranceShuffler->ApplyArchipelagoEntrances(
-        apClient.GetSlotData().value("dungeon_entrances", nlohmann::json::array()));
+    // connections chosen by the apworld (dungeon and grotto pools); needs the options (region rules, decoupled = off)
+    {
+        const nlohmann::json slotData = apClient.GetSlotData();
+        nlohmann::json entrances = slotData.value("dungeon_entrances", nlohmann::json::array());
+        for (const auto& pair : slotData.value("grotto_entrances", nlohmann::json::array())) {
+            entrances.push_back(pair);
+        }
+        mEntranceShuffler->ApplyArchipelagoEntrances(entrances);
+    }
     ParseArchipelagoItemsLocations(apClient.GetScoutedItems());
     PlaceArchipelagoTriggerItems();
     ParseArchipelagoTricks();
@@ -1007,19 +1013,21 @@ void Context::ParseArchipelagoOptions() {
     mOptions[RSK_KEYRINGS_BOTTOM_OF_THE_WELL].Set(slotData["bottom_of_the_well_key_ring"]);
     mOptions[RSK_KEYRINGS_GTG].Set(slotData["gerudo_training_ground_key_ring"]);
     mOptions[RSK_KEYRINGS_GANONS_CASTLE].Set(slotData["ganons_castle_key_ring"]);
-    // Dungeon Entrance Shuffle (apworld 1.5+, off for older apworlds). RSK_SHUFFLE_ENTRANCES is the master switch the
-    // game hooks check; settings.cpp FinalizeSettings turns it on when any entrance shuffle is on. The other entrance
-    // shuffles aren't supported by the apworld.
+    // Dungeon and Grotto Entrance Shuffle (apworld 1.5+, off for older apworlds). RSK_SHUFFLE_ENTRANCES is the master
+    // switch the game hooks check; settings.cpp FinalizeSettings turns it on when any entrance shuffle is on. The other
+    // entrance shuffles aren't supported by the apworld.
     const uint8_t dungeonEntrances =
         slotData.value("shuffle_dungeon_entrances", static_cast<int>(RO_DUNGEON_ENTRANCE_SHUFFLE_OFF));
+    const uint8_t grottoEntrances = slotData.value("shuffle_grotto_entrances", static_cast<int>(RO_GENERIC_OFF));
     mOptions[RSK_SHUFFLE_DUNGEON_ENTRANCES].Set(dungeonEntrances);
-    mOptions[RSK_SHUFFLE_ENTRANCES].Set(dungeonEntrances != RO_DUNGEON_ENTRANCE_SHUFFLE_OFF ? RO_GENERIC_ON
-                                                                                             : RO_GENERIC_OFF);
+    mOptions[RSK_SHUFFLE_GROTTO_ENTRANCES].Set(grottoEntrances);
+    mOptions[RSK_SHUFFLE_ENTRANCES].Set(
+        (dungeonEntrances != RO_DUNGEON_ENTRANCE_SHUFFLE_OFF || grottoEntrances != RO_GENERIC_OFF) ? RO_GENERIC_ON
+                                                                                                   : RO_GENERIC_OFF);
     mOptions[RSK_SHUFFLE_GANONS_TOWER_ENTRANCE].Set(RO_GENERIC_OFF);
     mOptions[RSK_SHUFFLE_OVERWORLD_ENTRANCES].Set(0);
     mOptions[RSK_SHUFFLE_INTERIOR_ENTRANCES].Set(0);
     mOptions[RSK_SHUFFLE_THIEVES_HIDEOUT_ENTRANCES].Set(0);
-    mOptions[RSK_SHUFFLE_GROTTO_ENTRANCES].Set(0);
     mOptions[RSK_SHUFFLE_OWL_DROPS].Set(0);
     mOptions[RSK_SHUFFLE_WARP_SONGS].Set(0);
     mOptions[RSK_SHUFFLE_OVERWORLD_SPAWNS].Set(0);

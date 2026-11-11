@@ -1679,10 +1679,10 @@ void EntranceShuffler::CreateEntranceOverrides() {
     }
 }
 
-// Archipelago: the apworld shuffles the dungeon entrances (worlds/oot_soh/EntranceShuffle.py) and sends, for each
-// slot, the forward entrance (outside -> entryway) and the forward entrance it is replaced by, as RandomizerRegion
-// names. The connections change like ChangeConnections does for a coupled pair, then the blue warps and the
-// overrides are made like after ShuffleAllEntrances.
+// Archipelago: the apworld shuffles the dungeon and grotto entrances (worlds/oot_soh/EntranceShuffle.py) and sends,
+// for each slot, the forward entrance (outside -> entryway) and the forward entrance it is replaced by, as
+// RandomizerRegion names. The connections change like ChangeConnections does for a coupled pair, then the blue warps
+// and the overrides are made like after ShuffleAllEntrances.
 void EntranceShuffler::ApplyArchipelagoEntrances(const nlohmann::json& pairs) {
     UnshuffleAllEntrances();
     if (!pairs.is_array() || pairs.empty()) {

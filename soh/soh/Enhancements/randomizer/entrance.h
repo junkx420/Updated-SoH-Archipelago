@@ -138,7 +138,7 @@ class EntranceShuffler {
     void UnshuffleAllEntrances();
     void ParseJson(const nlohmann::json& spoilerFileJson);
     void ApplyEntranceOverrides();
-    // Archipelago: dungeon entrances shuffled by the apworld (slot data "dungeon_entrances")
+    // Archipelago: entrances shuffled by the apworld (slot data "dungeon_entrances" + "grotto_entrances")
     void ApplyArchipelagoEntrances(const nlohmann::json& pairs);
 
     static const Entrance* GetEntranceByIndex(int16_t index);
