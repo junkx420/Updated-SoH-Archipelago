@@ -22,7 +22,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.BOTW_ENTRYWAY, world, [
         (Regions.BOTW_CORRIDOR,
-         lambda bundle: True_() & has_crawl(bundle)),
+         lambda bundle: True_() & can_crawl(bundle)),
         (Regions.KAK_WELL,
          lambda bundle: True_()),
     ])
@@ -31,7 +31,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.BOTW_CORRIDOR, world, [
         (Regions.BOTW_ENTRYWAY,
-         lambda bundle: has_crawl(bundle) & can_climb_ladder(bundle)),
+         lambda bundle: can_crawl(bundle) & can_climb_ladder(bundle)),
         (Regions.BOTW_PERIMETER,
          lambda bundle: can_pass_enemy(bundle, Enemies.BIG_SKULLTULA)),
     ])
@@ -78,11 +78,11 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.BOTW_HIDDEN_POTS,
          lambda bundle: can_do_trick(Tricks.LENS_BOTW, bundle) | can_use(Items.LENS_OF_TRUTH, bundle)),
         (Regions.BOTW_CORNER_CRAWLSPACE,
-         lambda bundle: has_crawl(bundle)),
+         lambda bundle: can_crawl(bundle)),
         (Regions.BOTW_BEHIND_MOAT,
          lambda bundle: ((has_item(Events.BOTW_LOWERED_WATER, bundle) & (has_climb(bundle) | can_use(Items.HOOKSHOT, bundle))) | has_item(Items.BRONZE_SCALE, bundle) | (is_adult(bundle) & can_use(Items.IRON_BOOTS, bundle) & can_use(Items.HOOKSHOT, bundle)))),
         (Regions.BOTW_NEAR_BOSS_LOWER,
-         lambda bundle: has_item(Events.BOTW_LOWERED_WATER, bundle) & has_crawl(bundle)),
+         lambda bundle: has_item(Events.BOTW_LOWERED_WATER, bundle) & can_crawl(bundle)),
         (Regions.BOTW_B3_OOZE,
          lambda bundle: True_()),
         (Regions.BOTW_B3_BLOCKED_GRASS,
@@ -131,7 +131,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.BOTW_CORNER_CRAWLSPACE, world, [
         (Regions.BOTW_PERIMETER,
-         lambda bundle: has_crawl(bundle)),
+         lambda bundle: can_crawl(bundle)),
         (Regions.BOTW_HIDDEN_PITS_ROOM,
          lambda bundle: small_keys_scene("SCENE_BOTTOM_OF_THE_WELL", 3, bundle)),
     ])
@@ -251,7 +251,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.BOTW_NEAR_BOSS_LOWER, world, [
         (Regions.BOTW_PERIMETER,
-         lambda bundle: has_crawl(bundle) & (has_item(Events.BOTW_LOWERED_WATER, bundle) | has_item(Items.BRONZE_SCALE, bundle)) & has_climb(bundle)),
+         lambda bundle: can_crawl(bundle) & (has_item(Events.BOTW_LOWERED_WATER, bundle) | has_item(Items.BRONZE_SCALE, bundle)) & has_climb(bundle)),
         (Regions.BOTW_NEAR_BOSS_UPPER,
          lambda bundle: has_climb(bundle) | (is_adult(bundle) & can_ground_jump(bundle))),
     ])

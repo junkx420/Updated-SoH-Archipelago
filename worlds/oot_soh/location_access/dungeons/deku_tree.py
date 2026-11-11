@@ -300,7 +300,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.DEKU_TREE_BASEMENT_BACK_ROOM,
          lambda bundle: any_age_time(bundle, lambda bundle: has_fire_source_with_torch(bundle) | can_use(Items.FAIRY_BOW, bundle)) & any_age_time(bundle, lambda bundle: blast_or_smash(bundle))),
         (Regions.DEKU_TREE_BASEMENT_UPPER,
-         lambda bundle: any_age_time(bundle, lambda bundle: has_fire_source_with_torch(bundle) | can_use(Items.FAIRY_BOW, bundle)) & has_crawl(bundle)),
+         lambda bundle: any_age_time(bundle, lambda bundle: has_fire_source_with_torch(bundle) | can_use(Items.FAIRY_BOW, bundle)) & can_crawl(bundle)),
     ])
 
     # Deku Tree Basement Back Room  (upstream RR_DEKU_TREE_BASEMENT_BACK_ROOM, SCENE_DEKU_TREE)
@@ -337,7 +337,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.DEKU_TREE_BASEMENT_LOWER,
          lambda bundle: True_()),
         (Regions.DEKU_TREE_BASEMENT_BACK_LOBBY,
-         lambda bundle: has_crawl(bundle)),
+         lambda bundle: can_crawl(bundle)),
         (Regions.DEKU_TREE_OUTSIDE_BOSS_ROOM,
          lambda bundle: has_item(Events.DEKU_TREE_B1_BROKE_WEB, bundle) & (has_item(Items.BRONZE_SCALE, bundle) | can_use(Items.IRON_BOOTS, bundle))),
     ])

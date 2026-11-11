@@ -201,7 +201,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.KOKIRI_FOREST, world, [
         (Regions.KF_BOULDER_LOOP,
-         lambda bundle: has_crawl(bundle)),
+         lambda bundle: can_crawl(bundle)),
         (Regions.KF_LINKS_PORCH,
          lambda bundle: has_climb(bundle) | can_use(Items.HOVER_BOOTS, bundle) | ((is_child(bundle) | can_kill_enemy(bundle, Enemies.DEKU_BABA) | has_item(Events.FOREST_TEMPLE_COMPLETED, bundle)) & can_climb_ladder(bundle))),
         (Regions.KF_MIDOS_HOUSE,
@@ -317,7 +317,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.KF_BOULDER_LOOP, world, [
         (Regions.KOKIRI_FOREST,
-         lambda bundle: has_crawl(bundle)),
+         lambda bundle: can_crawl(bundle)),
     ])
 
     # KF Outside Deku Tree  (upstream RR_KF_OUTSIDE_DEKU_TREE, SCENE_KOKIRI_FOREST)

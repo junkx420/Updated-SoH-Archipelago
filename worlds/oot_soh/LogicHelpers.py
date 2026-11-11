@@ -1635,6 +1635,12 @@ def has_crawl(bundle: tuple[Regions, "SohWorld"]) -> Rule:
     return True_()  # TODO feature 3.11 (Shuffle Crawl)
 
 
+def can_crawl(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    """logic.cpp Logic::CanUse(RG_CRAWL): HasItem(RG_CRAWL) && IsChild (adult Link can't crawl).
+    Upstream HasItem(RG_CRAWL) without the age check is has_crawl."""
+    return has_crawl(bundle) & is_child(bundle)
+
+
 def has_open_chest(bundle: tuple[Regions, "SohWorld"]) -> Rule:
     return True_()  # TODO feature 3.11 (Shuffle Open Chest)
 

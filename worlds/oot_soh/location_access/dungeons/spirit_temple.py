@@ -132,7 +132,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.SPIRIT_TEMPLE_ENTRYWAY,
          lambda bundle: True_()),
         (Regions.SPIRIT_TEMPLE_CHILD_SIDE_HUB,
-         lambda bundle: (is_adult(bundle) | has_speak(bundle, "GERUDO") | has_item(Events.SPIRIT_NABOORU_KIDNAPPED, bundle)) & has_crawl(bundle)),
+         lambda bundle: (is_adult(bundle) | has_speak(bundle, "GERUDO") | has_item(Events.SPIRIT_NABOORU_KIDNAPPED, bundle)) & can_crawl(bundle)),
         (Regions.SPIRIT_TEMPLE_ADULT_SIDE_HUB,
          lambda bundle: can_use(Items.SILVER_GAUNTLETS, bundle)),
     ])
@@ -148,9 +148,9 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.SPIRIT_TEMPLE_CHILD_SIDE_HUB, world, [
         (Regions.SPIRIT_TEMPLE_FOYER,
-         lambda bundle: has_crawl(bundle)),
+         lambda bundle: can_crawl(bundle)),
         (Regions.SPIRIT_TEMPLE_CHILD_BOXES,
-         lambda bundle: has_crawl(bundle)),
+         lambda bundle: can_crawl(bundle)),
         (Regions.SPIRIT_TEMPLE_SWITCH_BRIDGE_SOUTH,
          lambda bundle: any_age_time(bundle, lambda bundle: can_kill_enemy(bundle, Enemies.ARMOS))),
         (Regions.SPIRIT_TEMPLE_RUPEE_BRIDGE_SOUTH,
@@ -268,7 +268,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.SPIRIT_TEMPLE_CHILD_BOXES, world, [
         (Regions.SPIRIT_TEMPLE_CHILD_SIDE_HUB,
-         lambda bundle: has_crawl(bundle)),
+         lambda bundle: can_crawl(bundle)),
         (Regions.SPIRIT_TEMPLE_SUN_ON_FLOOR_1F,
          lambda bundle: small_keys_scene("SCENE_SPIRIT_TEMPLE", 1, bundle)),
     ])
@@ -432,7 +432,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.SPIRIT_TEMPLE_EMPTY_STAIRS,
          lambda bundle: has_grab(bundle)),
         (Regions.DESERT_COLOSSUS,
-         lambda bundle: True_() & has_grab(bundle) & has_crawl(bundle) & small_keys_scene("SCENE_SPIRIT_TEMPLE", 4, bundle) & can_kill_enemy(bundle, Enemies.IRON_KNUCKLE)),
+         lambda bundle: True_() & has_grab(bundle) & can_crawl(bundle) & small_keys_scene("SCENE_SPIRIT_TEMPLE", 4, bundle) & can_kill_enemy(bundle, Enemies.IRON_KNUCKLE)),
     ])
 
     # Spirit Temple Inner West Hand  (upstream RR_SPIRIT_TEMPLE_INNER_WEST_HAND, SCENE_SPIRIT_TEMPLE)

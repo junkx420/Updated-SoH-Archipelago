@@ -171,7 +171,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.HC_ABOVE_CLIMBABLE_ROCKS,
          lambda bundle: has_climb(bundle) | can_use(Items.HOOKSHOT, bundle)),
         (Regions.HC_GREAT_FAIRY_FOUNTAIN,
-         lambda bundle: blast_or_smash(bundle) & has_crawl(bundle)),
+         lambda bundle: blast_or_smash(bundle) & can_crawl(bundle)),
     ])
 
     # Hyrule Castle Above Climbable Rocks  (upstream RR_HC_ABOVE_CLIMBABLE_ROCKS, SCENE_HYRULE_CASTLE)
@@ -266,7 +266,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.HC_MOAT,
          lambda bundle: True_()),
         (Regions.HC_GARDEN,
-         lambda bundle: has_crawl(bundle)),
+         lambda bundle: can_crawl(bundle)),
     ])
 
     # HC Garden  (upstream RR_HC_GARDEN, SCENE_CASTLE_COURTYARD_ZELDA)
