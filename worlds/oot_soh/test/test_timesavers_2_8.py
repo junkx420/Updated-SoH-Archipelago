@@ -31,7 +31,7 @@ class TestDefaults(SohTestBase):
 
     def test_beans_need_child(self):
         # location_access.cpp CanPlantBean: beans && (IsChild || Skip Planting Beans)
-        rule = can_plant_bean((Regions.DESERT_COLOSSUS, self.world)).resolve(self.world)
+        rule = can_plant_bean((Regions.DESERT_COLOSSUS, self.world), Items.DESERT_COLOSSUS_BEAN_SOUL).resolve(self.world)
         self.assertFalse(rule(bean_state(self)))
 
 
@@ -39,7 +39,7 @@ class TestSkipPlantingBeans(SohTestBase):
     options = {"skip_planting_beans": True, "skip_child_stealth": True}
 
     def test_beans_without_child(self):
-        rule = can_plant_bean((Regions.DESERT_COLOSSUS, self.world)).resolve(self.world)
+        rule = can_plant_bean((Regions.DESERT_COLOSSUS, self.world), Items.DESERT_COLOSSUS_BEAN_SOUL).resolve(self.world)
         self.assertTrue(rule(bean_state(self)))
         self.assertFalse(rule(CollectionState(self.multiworld)))
 
