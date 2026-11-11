@@ -46,7 +46,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.DMC_FAR_PLATFORM,
          lambda bundle: (is_adult(bundle) & (fire_timer_at_least(bundle, 72) | hearts_at_least(bundle, 14)) & dmc_upper_to_pots(bundle) & dmc_pots_to_pad(bundle) & reach_distant_scarecrow(bundle)) | (fire_timer_at_least(bundle, 24) | hearts_at_least(bundle, 5)) & take_damage(bundle) & can_do_trick(Tricks.UNINTUITIVE_JUMPS, bundle)),
         (Regions.DMC_TEMPLE_EXIT,
-         lambda bundle: (is_adult(bundle) | (False_())) & (((fire_timer_at_least(bundle, 72) | hearts_at_least(bundle, 14)) & dmc_upper_to_pots(bundle) & dmc_pots_to_pad(bundle)) | ((fire_timer_at_least(bundle, 48) | hearts_at_least(bundle, 9)) & dmc_upper_to_pad(bundle)))),
+         lambda bundle: (is_adult(bundle) | (True_(options=[OptionFilter(ShuffleDungeonEntrances, ShuffleDungeonEntrances.option_off, "ne")]))) & (((fire_timer_at_least(bundle, 72) | hearts_at_least(bundle, 14)) & dmc_upper_to_pots(bundle) & dmc_pots_to_pad(bundle)) | ((fire_timer_at_least(bundle, 48) | hearts_at_least(bundle, 9)) & dmc_upper_to_pad(bundle)))),
     ])
 
     # DMC Rocks Grotto Entry  (upstream RR_DMC_ROCKS_GROTTO_ENTRY, SCENE_DEATH_MOUNTAIN_CRATER)
@@ -78,7 +78,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.DMC_FAR_PLATFORM,
          lambda bundle: (is_adult(bundle) & (fire_timer_at_least(bundle, 72) | hearts_at_least(bundle, 14)) & dmc_upper_to_pots(bundle) & dmc_pots_to_pad(bundle) & reach_distant_scarecrow(bundle)) | (fire_timer_at_least(bundle, 16) | hearts_at_least(bundle, 3)) & take_damage(bundle) & can_do_trick(Tricks.UNINTUITIVE_JUMPS, bundle)),
         (Regions.DMC_TEMPLE_EXIT,
-         lambda bundle: (is_adult(bundle) | (False_())) & (((fire_timer_at_least(bundle, 64) | hearts_at_least(bundle, 12)) & dmc_upper_to_pots(bundle) & dmc_pots_to_pad(bundle)) | ((fire_timer_at_least(bundle, 40) | hearts_at_least(bundle, 8)) & dmc_upper_to_pad(bundle)))),
+         lambda bundle: (is_adult(bundle) | (True_(options=[OptionFilter(ShuffleDungeonEntrances, ShuffleDungeonEntrances.option_off, "ne")]))) & (((fire_timer_at_least(bundle, 64) | hearts_at_least(bundle, 12)) & dmc_upper_to_pots(bundle) & dmc_pots_to_pad(bundle)) | ((fire_timer_at_least(bundle, 40) | hearts_at_least(bundle, 8)) & dmc_upper_to_pad(bundle)))),
     ])
 
     # DMC Blocked Entry  (upstream RR_DMC_BLOCKED_ENTRY, SCENE_DEATH_MOUNTAIN_CRATER)
@@ -110,7 +110,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.DMC_FAR_PLATFORM,
          lambda bundle: (is_adult(bundle) & (fire_timer_at_least(bundle, 48) | hearts_at_least(bundle, 9)) & dmc_pots_to_pad(bundle) & reach_distant_scarecrow(bundle)) | ((fire_timer_at_least(bundle, 32) | hearts_at_least(bundle, 6)) & take_damage(bundle) & can_do_trick(Tricks.UNINTUITIVE_JUMPS, bundle) & can_climb_ladder(bundle)) | (is_adult(bundle) & (fire_timer_at_least(bundle, 48) | hearts_at_least(bundle, 9)) & dmc_pots_to_pad(bundle) & bean_planted(bundle, Events.PLANT_DEATH_MOUNTAIN_CRATER_BEAN)) | ((fire_timer_at_least(bundle, 32) | hearts_at_least(bundle, 6)) & take_damage(bundle) & can_do_trick(Tricks.UNINTUITIVE_JUMPS, bundle) & can_do_trick(Tricks.DMC_HOVER_BEAN_POH, bundle) & can_use(Items.HOVER_BOOTS, bundle))),
         (Regions.DMC_TEMPLE_EXIT,
-         lambda bundle: (is_adult(bundle) | (False_())) & (((fire_timer_at_least(bundle, 48) | hearts_at_least(bundle, 9)) & dmc_pots_to_pad(bundle)) | ((fire_timer_at_least(bundle, 56) | hearts_at_least(bundle, 11)) & dmc_upper_to_pad(bundle) & can_climb_ladder(bundle)))),
+         lambda bundle: (is_adult(bundle) | (True_(options=[OptionFilter(ShuffleDungeonEntrances, ShuffleDungeonEntrances.option_off, "ne")]))) & (((fire_timer_at_least(bundle, 48) | hearts_at_least(bundle, 9)) & dmc_pots_to_pad(bundle)) | ((fire_timer_at_least(bundle, 56) | hearts_at_least(bundle, 11)) & dmc_upper_to_pad(bundle) & can_climb_ladder(bundle)))),
     ])
 
     # DMC Pots Entry  (upstream RR_DMC_POTS_ENTRY, SCENE_DEATH_MOUNTAIN_CRATER)
@@ -142,7 +142,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.DMC_FAR_PLATFORM,
          lambda bundle: (is_adult(bundle) & (fire_timer_at_least(bundle, 40) | hearts_at_least(bundle, 8)) & dmc_pots_to_pad(bundle) & reach_distant_scarecrow(bundle)) | ((fire_timer_at_least(bundle, 32) | hearts_at_least(bundle, 6)) & take_damage(bundle) & can_do_trick(Tricks.UNINTUITIVE_JUMPS, bundle) & can_climb_ladder(bundle)) | (is_adult(bundle) & (fire_timer_at_least(bundle, 40) | hearts_at_least(bundle, 8)) & dmc_pots_to_pad(bundle) & bean_planted(bundle, Events.PLANT_DEATH_MOUNTAIN_CRATER_BEAN)) | ((fire_timer_at_least(bundle, 32) | hearts_at_least(bundle, 6)) & take_damage(bundle) & can_do_trick(Tricks.UNINTUITIVE_JUMPS, bundle) & can_do_trick(Tricks.DMC_HOVER_BEAN_POH, bundle) & can_use(Items.HOVER_BOOTS, bundle))),
         (Regions.DMC_TEMPLE_EXIT,
-         lambda bundle: (is_adult(bundle) | (False_())) & (((fire_timer_at_least(bundle, 40) | hearts_at_least(bundle, 8)) & dmc_pots_to_pad(bundle)) | ((fire_timer_at_least(bundle, 56) | hearts_at_least(bundle, 11)) & dmc_upper_to_pad(bundle) & can_climb_ladder(bundle)))),
+         lambda bundle: (is_adult(bundle) | (True_(options=[OptionFilter(ShuffleDungeonEntrances, ShuffleDungeonEntrances.option_off, "ne")]))) & (((fire_timer_at_least(bundle, 40) | hearts_at_least(bundle, 8)) & dmc_pots_to_pad(bundle)) | ((fire_timer_at_least(bundle, 56) | hearts_at_least(bundle, 11)) & dmc_upper_to_pad(bundle) & can_climb_ladder(bundle)))),
     ])
 
     # DMC Pot Grotto Entry  (upstream RR_DMC_POT_GROTTO_ENTRY, SCENE_DEATH_MOUNTAIN_CRATER)
@@ -174,7 +174,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.DMC_FAR_PLATFORM,
          lambda bundle: (is_adult(bundle) & (fire_timer_at_least(bundle, 40) | hearts_at_least(bundle, 8)) & dmc_pots_to_pad(bundle) & reach_distant_scarecrow(bundle)) | ((fire_timer_at_least(bundle, 40) | hearts_at_least(bundle, 8)) & take_damage(bundle) & can_do_trick(Tricks.UNINTUITIVE_JUMPS, bundle) & can_climb_ladder(bundle)) | (is_adult(bundle) & (fire_timer_at_least(bundle, 40) | hearts_at_least(bundle, 8)) & dmc_pots_to_pad(bundle) & bean_planted(bundle, Events.PLANT_DEATH_MOUNTAIN_CRATER_BEAN)) | ((fire_timer_at_least(bundle, 32) | hearts_at_least(bundle, 6)) & take_damage(bundle) & can_do_trick(Tricks.UNINTUITIVE_JUMPS, bundle) & can_do_trick(Tricks.DMC_HOVER_BEAN_POH, bundle) & can_use(Items.HOVER_BOOTS, bundle))),
         (Regions.DMC_TEMPLE_EXIT,
-         lambda bundle: (is_adult(bundle) | (False_())) & (((fire_timer_at_least(bundle, 40) | hearts_at_least(bundle, 8)) & dmc_pots_to_pad(bundle)) | ((fire_timer_at_least(bundle, 56) | hearts_at_least(bundle, 11)) & dmc_upper_to_pad(bundle) & can_climb_ladder(bundle)))),
+         lambda bundle: (is_adult(bundle) | (True_(options=[OptionFilter(ShuffleDungeonEntrances, ShuffleDungeonEntrances.option_off, "ne")]))) & (((fire_timer_at_least(bundle, 40) | hearts_at_least(bundle, 8)) & dmc_pots_to_pad(bundle)) | ((fire_timer_at_least(bundle, 56) | hearts_at_least(bundle, 11)) & dmc_upper_to_pad(bundle) & can_climb_ladder(bundle)))),
     ])
 
     # DMC Pad Entry  (upstream RR_DMC_PAD_ENTRY, SCENE_DEATH_MOUNTAIN_CRATER)
@@ -206,7 +206,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.DMC_FAR_PLATFORM,
          lambda bundle: ((fire_timer_at_least(bundle, 56) | hearts_at_least(bundle, 11)) & take_damage(bundle) & can_do_trick(Tricks.UNINTUITIVE_JUMPS, bundle) & can_climb_ladder(bundle) & dmc_pad_to_pots(bundle)) | ((fire_timer_at_least(bundle, 40) | hearts_at_least(bundle, 8)) & can_do_trick(Tricks.DMC_HOVER_BEAN_POH, bundle) & can_use(Items.HOVER_BOOTS, bundle) & can_use(Items.LONGSHOT, bundle)) | (is_adult(bundle) & (fire_timer_at_least(bundle, 24) | hearts_at_least(bundle, 5)) & bean_planted(bundle, Events.PLANT_DEATH_MOUNTAIN_CRATER_BEAN)) | (is_adult(bundle) & (fire_timer_at_least(bundle, 16) | hearts_at_least(bundle, 3)) & reach_distant_scarecrow(bundle))),
         (Regions.DMC_TEMPLE_EXIT,
-         lambda bundle: (is_adult(bundle) | (False_())) & (fire_timer_at_least(bundle, 16) | hearts_at_least(bundle, 3))),
+         lambda bundle: (is_adult(bundle) | (True_(options=[OptionFilter(ShuffleDungeonEntrances, ShuffleDungeonEntrances.option_off, "ne")]))) & (fire_timer_at_least(bundle, 16) | hearts_at_least(bundle, 3))),
     ])
 
     # DMC Temple Entry  (upstream RR_DMC_TEMPLE_ENTRY, SCENE_DEATH_MOUNTAIN_CRATER)
@@ -220,23 +220,23 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.DMC_TEMPLE_ENTRY, world, [
         (Regions.DMC_CRATE,
-         lambda bundle: has_climb(bundle) & (is_adult(bundle) | (False_())) & (((fire_timer_at_least(bundle, 72) | hearts_at_least(bundle, 14)) & dmc_pad_to_pots(bundle)) | ((fire_timer_at_least(bundle, 72) | hearts_at_least(bundle, 14)) & can_do_trick(Tricks.DMC_HOVER_BEAN_POH, bundle) & can_use(Items.HOVER_BOOTS, bundle) & can_use(Items.LONGSHOT, bundle)) | (is_adult(bundle) & (fire_timer_at_least(bundle, 56) | hearts_at_least(bundle, 11)) & bean_planted(bundle, Events.PLANT_DEATH_MOUNTAIN_CRATER_BEAN)))),
+         lambda bundle: has_climb(bundle) & (is_adult(bundle) | (True_(options=[OptionFilter(ShuffleDungeonEntrances, ShuffleDungeonEntrances.option_off, "ne")]))) & (((fire_timer_at_least(bundle, 72) | hearts_at_least(bundle, 14)) & dmc_pad_to_pots(bundle)) | ((fire_timer_at_least(bundle, 72) | hearts_at_least(bundle, 14)) & can_do_trick(Tricks.DMC_HOVER_BEAN_POH, bundle) & can_use(Items.HOVER_BOOTS, bundle) & can_use(Items.LONGSHOT, bundle)) | (is_adult(bundle) & (fire_timer_at_least(bundle, 56) | hearts_at_least(bundle, 11)) & bean_planted(bundle, Events.PLANT_DEATH_MOUNTAIN_CRATER_BEAN)))),
         (Regions.DMC_ROCK_GROTTO,
-         lambda bundle: has_climb(bundle) & (is_adult(bundle) | (False_())) & (((fire_timer_at_least(bundle, 72) | hearts_at_least(bundle, 14)) & dmc_pad_to_pots(bundle)) | ((fire_timer_at_least(bundle, 64) | hearts_at_least(bundle, 12)) & can_do_trick(Tricks.DMC_HOVER_BEAN_POH, bundle) & can_use(Items.HOVER_BOOTS, bundle) & can_use(Items.LONGSHOT, bundle)) | (is_adult(bundle) & (fire_timer_at_least(bundle, 48) | hearts_at_least(bundle, 9)) & bean_planted(bundle, Events.PLANT_DEATH_MOUNTAIN_CRATER_BEAN)))),
+         lambda bundle: has_climb(bundle) & (is_adult(bundle) | (True_(options=[OptionFilter(ShuffleDungeonEntrances, ShuffleDungeonEntrances.option_off, "ne")]))) & (((fire_timer_at_least(bundle, 72) | hearts_at_least(bundle, 14)) & dmc_pad_to_pots(bundle)) | ((fire_timer_at_least(bundle, 64) | hearts_at_least(bundle, 12)) & can_do_trick(Tricks.DMC_HOVER_BEAN_POH, bundle) & can_use(Items.HOVER_BOOTS, bundle) & can_use(Items.LONGSHOT, bundle)) | (is_adult(bundle) & (fire_timer_at_least(bundle, 48) | hearts_at_least(bundle, 9)) & bean_planted(bundle, Events.PLANT_DEATH_MOUNTAIN_CRATER_BEAN)))),
         (Regions.DMC_CRACKED_WALL,
-         lambda bundle: has_climb(bundle) & (is_adult(bundle) | (False_())) & (((fire_timer_at_least(bundle, 80) | hearts_at_least(bundle, 15)) & dmc_pad_to_pots(bundle)) | ((fire_timer_at_least(bundle, 72) | hearts_at_least(bundle, 14)) & can_do_trick(Tricks.DMC_HOVER_BEAN_POH, bundle) & can_use(Items.HOVER_BOOTS, bundle) & can_use(Items.LONGSHOT, bundle)) | (is_adult(bundle) & (fire_timer_at_least(bundle, 56) | hearts_at_least(bundle, 11)) & bean_planted(bundle, Events.PLANT_DEATH_MOUNTAIN_CRATER_BEAN)))),
+         lambda bundle: has_climb(bundle) & (is_adult(bundle) | (True_(options=[OptionFilter(ShuffleDungeonEntrances, ShuffleDungeonEntrances.option_off, "ne")]))) & (((fire_timer_at_least(bundle, 80) | hearts_at_least(bundle, 15)) & dmc_pad_to_pots(bundle)) | ((fire_timer_at_least(bundle, 72) | hearts_at_least(bundle, 14)) & can_do_trick(Tricks.DMC_HOVER_BEAN_POH, bundle) & can_use(Items.HOVER_BOOTS, bundle) & can_use(Items.LONGSHOT, bundle)) | (is_adult(bundle) & (fire_timer_at_least(bundle, 56) | hearts_at_least(bundle, 11)) & bean_planted(bundle, Events.PLANT_DEATH_MOUNTAIN_CRATER_BEAN)))),
         (Regions.DMC_SCRUB,
-         lambda bundle: has_climb(bundle) & (is_adult(bundle) | (False_())) & (((fire_timer_at_least(bundle, 56) | hearts_at_least(bundle, 11)) & dmc_pad_to_pots(bundle)) | (is_adult(bundle) & (fire_timer_at_least(bundle, 48) | hearts_at_least(bundle, 9)) & bean_planted(bundle, Events.PLANT_DEATH_MOUNTAIN_CRATER_BEAN)))),
+         lambda bundle: has_climb(bundle) & (is_adult(bundle) | (True_(options=[OptionFilter(ShuffleDungeonEntrances, ShuffleDungeonEntrances.option_off, "ne")]))) & (((fire_timer_at_least(bundle, 56) | hearts_at_least(bundle, 11)) & dmc_pad_to_pots(bundle)) | (is_adult(bundle) & (fire_timer_at_least(bundle, 48) | hearts_at_least(bundle, 9)) & bean_planted(bundle, Events.PLANT_DEATH_MOUNTAIN_CRATER_BEAN)))),
         (Regions.DMC_BLOCKED_EXIT,
-         lambda bundle: has_climb(bundle) & (is_adult(bundle) | (False_())) & (((fire_timer_at_least(bundle, 56) | hearts_at_least(bundle, 11)) & dmc_pad_to_pots(bundle)) | (is_adult(bundle) & (fire_timer_at_least(bundle, 48) | hearts_at_least(bundle, 9)) & bean_planted(bundle, Events.PLANT_DEATH_MOUNTAIN_CRATER_BEAN)))),
+         lambda bundle: has_climb(bundle) & (is_adult(bundle) | (True_(options=[OptionFilter(ShuffleDungeonEntrances, ShuffleDungeonEntrances.option_off, "ne")]))) & (((fire_timer_at_least(bundle, 56) | hearts_at_least(bundle, 11)) & dmc_pad_to_pots(bundle)) | (is_adult(bundle) & (fire_timer_at_least(bundle, 48) | hearts_at_least(bundle, 9)) & bean_planted(bundle, Events.PLANT_DEATH_MOUNTAIN_CRATER_BEAN)))),
         (Regions.DMC_POTS,
-         lambda bundle: has_climb(bundle) & (is_adult(bundle) | (False_())) & (((fire_timer_at_least(bundle, 48) | hearts_at_least(bundle, 9)) & dmc_pad_to_pots(bundle)) | (is_adult(bundle) & (fire_timer_at_least(bundle, 48) | hearts_at_least(bundle, 9)) & bean_planted(bundle, Events.PLANT_DEATH_MOUNTAIN_CRATER_BEAN)))),
+         lambda bundle: has_climb(bundle) & (is_adult(bundle) | (True_(options=[OptionFilter(ShuffleDungeonEntrances, ShuffleDungeonEntrances.option_off, "ne")]))) & (((fire_timer_at_least(bundle, 48) | hearts_at_least(bundle, 9)) & dmc_pad_to_pots(bundle)) | (is_adult(bundle) & (fire_timer_at_least(bundle, 48) | hearts_at_least(bundle, 9)) & bean_planted(bundle, Events.PLANT_DEATH_MOUNTAIN_CRATER_BEAN)))),
         (Regions.DMC_POT_GROTTO_EXIT,
-         lambda bundle: has_climb(bundle) & (is_adult(bundle) | (False_())) & (((fire_timer_at_least(bundle, 48) | hearts_at_least(bundle, 9)) & dmc_pad_to_pots(bundle)) | (is_adult(bundle) & (fire_timer_at_least(bundle, 56) | hearts_at_least(bundle, 11)) & bean_planted(bundle, Events.PLANT_DEATH_MOUNTAIN_CRATER_BEAN)))),
+         lambda bundle: has_climb(bundle) & (is_adult(bundle) | (True_(options=[OptionFilter(ShuffleDungeonEntrances, ShuffleDungeonEntrances.option_off, "ne")]))) & (((fire_timer_at_least(bundle, 48) | hearts_at_least(bundle, 9)) & dmc_pad_to_pots(bundle)) | (is_adult(bundle) & (fire_timer_at_least(bundle, 56) | hearts_at_least(bundle, 11)) & bean_planted(bundle, Events.PLANT_DEATH_MOUNTAIN_CRATER_BEAN)))),
         (Regions.DMC_CENTRAL,
-         lambda bundle: has_climb(bundle) & (is_adult(bundle) | (False_())) & (fire_timer_at_least(bundle, 48) | hearts_at_least(bundle, 9))),
+         lambda bundle: has_climb(bundle) & (is_adult(bundle) | (True_(options=[OptionFilter(ShuffleDungeonEntrances, ShuffleDungeonEntrances.option_off, "ne")]))) & (fire_timer_at_least(bundle, 48) | hearts_at_least(bundle, 9))),
         (Regions.DMC_FAR_PLATFORM,
-         lambda bundle: has_climb(bundle) & (is_adult(bundle) | (False_())) & (((fire_timer_at_least(bundle, 88) | hearts_at_least(bundle, 16)) & take_damage(bundle) & can_do_trick(Tricks.UNINTUITIVE_JUMPS, bundle) & can_climb_ladder(bundle) & dmc_pad_to_pots(bundle)) | ((fire_timer_at_least(bundle, 72) | hearts_at_least(bundle, 14)) & can_do_trick(Tricks.DMC_HOVER_BEAN_POH, bundle) & can_use(Items.HOVER_BOOTS, bundle) & can_use(Items.LONGSHOT, bundle)) | (is_adult(bundle) & (fire_timer_at_least(bundle, 56) | hearts_at_least(bundle, 11)) & bean_planted(bundle, Events.PLANT_DEATH_MOUNTAIN_CRATER_BEAN)) | (is_adult(bundle) & (fire_timer_at_least(bundle, 48) | hearts_at_least(bundle, 9)) & reach_distant_scarecrow(bundle)))),
+         lambda bundle: has_climb(bundle) & (is_adult(bundle) | (True_(options=[OptionFilter(ShuffleDungeonEntrances, ShuffleDungeonEntrances.option_off, "ne")]))) & (((fire_timer_at_least(bundle, 88) | hearts_at_least(bundle, 16)) & take_damage(bundle) & can_do_trick(Tricks.UNINTUITIVE_JUMPS, bundle) & can_climb_ladder(bundle) & dmc_pad_to_pots(bundle)) | ((fire_timer_at_least(bundle, 72) | hearts_at_least(bundle, 14)) & can_do_trick(Tricks.DMC_HOVER_BEAN_POH, bundle) & can_use(Items.HOVER_BOOTS, bundle) & can_use(Items.LONGSHOT, bundle)) | (is_adult(bundle) & (fire_timer_at_least(bundle, 56) | hearts_at_least(bundle, 11)) & bean_planted(bundle, Events.PLANT_DEATH_MOUNTAIN_CRATER_BEAN)) | (is_adult(bundle) & (fire_timer_at_least(bundle, 48) | hearts_at_least(bundle, 9)) & reach_distant_scarecrow(bundle)))),
         (Regions.DMC_TEMPLE_EXIT,
          lambda bundle: True_()),
     ])
@@ -505,7 +505,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
 
 # ---- summary
-# notes: ['TODO feature 4.1']
+# notes: []
 # helpers not in LogicHelpers yet: []
 # TODO count: 0
 # new regions: []

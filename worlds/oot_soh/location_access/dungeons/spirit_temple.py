@@ -432,7 +432,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.SPIRIT_TEMPLE_EMPTY_STAIRS,
          lambda bundle: has_grab(bundle)),
         (Regions.DESERT_COLOSSUS,
-         lambda bundle: True_() & has_grab(bundle) & can_crawl(bundle) & small_keys_scene("SCENE_SPIRIT_TEMPLE", 4, bundle) & can_kill_enemy(bundle, Enemies.IRON_KNUCKLE)),
+         lambda bundle: True_(options=[OptionFilter(ShuffleDungeonEntrances, ShuffleDungeonEntrances.option_off)]) & has_grab(bundle) & can_crawl(bundle) & small_keys_scene("SCENE_SPIRIT_TEMPLE", 4, bundle) & can_kill_enemy(bundle, Enemies.IRON_KNUCKLE)),
     ])
 
     # Spirit Temple Inner West Hand  (upstream RR_SPIRIT_TEMPLE_INNER_WEST_HAND, SCENE_SPIRIT_TEMPLE)
@@ -492,7 +492,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.SPIRIT_TEMPLE_SHORTCUT,
          lambda bundle: has_item(Events.SPIRIT_STATUE_SOUTH_DOOR, bundle)),
         (Regions.SPIRIT_TEMPLE_ADULT_SIDE_HUB,
-         lambda bundle: True_() & can_use(Items.SILVER_GAUNTLETS, bundle) & is_adult(bundle) & ((can_kill_enemy(bundle, Enemies.BEAMOS) & (((has_climb(bundle) | can_use(Items.HOOKSHOT, bundle)) & has_grab(bundle)) & small_keys_scene("SCENE_SPIRIT_TEMPLE", 2, bundle) | small_keys_scene("SCENE_SPIRIT_TEMPLE", 3, bundle))) | ((has_climb(bundle) | can_use(Items.HOOKSHOT, bundle)) & has_grab(bundle) & can_kill_enemy(bundle, Enemies.IRON_KNUCKLE) & small_keys_scene("SCENE_SPIRIT_TEMPLE", 4, bundle)))),
+         lambda bundle: True_(options=[OptionFilter(ShuffleDungeonEntrances, ShuffleDungeonEntrances.option_off)]) & can_use(Items.SILVER_GAUNTLETS, bundle) & is_adult(bundle) & ((can_kill_enemy(bundle, Enemies.BEAMOS) & (((has_climb(bundle) | can_use(Items.HOOKSHOT, bundle)) & has_grab(bundle)) & small_keys_scene("SCENE_SPIRIT_TEMPLE", 2, bundle) | small_keys_scene("SCENE_SPIRIT_TEMPLE", 3, bundle))) | ((has_climb(bundle) | can_use(Items.HOOKSHOT, bundle)) & has_grab(bundle) & can_kill_enemy(bundle, Enemies.IRON_KNUCKLE) & small_keys_scene("SCENE_SPIRIT_TEMPLE", 4, bundle)))),
     ])
 
     # Spirit Temple Empty Stairs  (upstream RR_SPIRIT_TEMPLE_EMPTY_STAIRS, SCENE_SPIRIT_TEMPLE)
@@ -917,7 +917,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
 
 # ---- summary
-# notes: ['TODO feature 4.1']
+# notes: [] (RSK_SHUFFLE_DUNGEON_ENTRANCES conditions of spirit_temple.cpp lines 247 and 298 set by hand, feature 4.1)
 # helpers not in LogicHelpers yet: []
 # TODO count: 0
 # new regions: []

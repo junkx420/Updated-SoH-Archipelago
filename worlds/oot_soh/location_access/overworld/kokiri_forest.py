@@ -348,7 +348,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.KF_OUTSIDE_DEKU_TREE, world, [
         (Regions.DEKU_TREE_ENTRYWAY,
-         lambda bundle: is_child(bundle) | (False_() & (True_(options=[OptionFilter(ClosedForest, ClosedForest.option_off)]) | has_item(Events.SHOWED_MIDO_SWORD_AND_SHIELD, bundle)))),
+         lambda bundle: is_child(bundle) | (True_(options=[OptionFilter(ShuffleDungeonEntrances, ShuffleDungeonEntrances.option_off, "ne")]) & (True_(options=[OptionFilter(ClosedForest, ClosedForest.option_off)]) | has_item(Events.SHOWED_MIDO_SWORD_AND_SHIELD, bundle)))),
         (Regions.KOKIRI_FOREST,
          lambda bundle: (is_adult(bundle) & (can_pass_enemy(bundle, Enemies.BIG_SKULLTULA) | has_item(Events.DEKU_TREE_COMPLETED, bundle))) | True_(options=[OptionFilter(ClosedForest, ClosedForest.option_off)]) | has_item(Events.SHOWED_MIDO_SWORD_AND_SHIELD, bundle)),
     ])
@@ -505,7 +505,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
 
 # ---- summary
-# notes: ['TODO feature 4.1']
+# notes: []
 # helpers not in LogicHelpers yet: []
 # TODO count: 0
 # new regions: []

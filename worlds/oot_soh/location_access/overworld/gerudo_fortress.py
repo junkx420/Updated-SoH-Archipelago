@@ -92,7 +92,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.GF_OUTSIDE_GTG, world, [
         (Regions.GF_TO_GTG,
-         lambda bundle: has_item(Events.GTG_GATE_OPEN, bundle) & (is_adult(bundle) | False_())),
+         lambda bundle: has_item(Events.GTG_GATE_OPEN, bundle) & (is_adult(bundle) | True_(options=[OptionFilter(ShuffleDungeonEntrances, ShuffleDungeonEntrances.option_off, "ne")]))),
         (Regions.GF_JAIL_WINDOW,
          lambda bundle: can_use(Items.HOOKSHOT, bundle)),
         (Regions.GF_OUTSKIRTS,
@@ -452,7 +452,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
 
 # ---- summary
-# notes: ['TODO feature 4.1']
+# notes: []
 # helpers not in LogicHelpers yet: []
 # TODO count: 0
 # new regions: []

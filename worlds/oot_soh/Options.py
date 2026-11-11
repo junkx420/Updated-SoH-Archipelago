@@ -769,6 +769,23 @@ class ShuffleBushes(Toggle):
     display_name = "Shuffle Bushes"
 
 
+class ShuffleDungeonEntrances(Choice):
+    """
+    Shuffles the entrances of the dungeons among each other (Ship of Harkinian 9.3.1: "Shuffle Dungeon Entrances").
+    The 8 dungeons, Bottom of the Well, Ice Cavern and Gerudo Training Ground are part of it. The entrances stay
+    coupled: leaving a dungeon brings you back out where you entered it. Blue warps lead outside the entrance the
+    dungeon is now behind.
+    Off - Dungeon entrances are vanilla.
+    On - Dungeon entrances are shuffled.
+    On + Ganon - Ganon's Castle is shuffled as well.
+    """
+    display_name = "Shuffle Dungeon Entrances"
+    option_off = 0
+    option_on = 1
+    option_on_plus_ganon = 2
+    default = 0
+
+
 class ShuffleBeanSouls(Toggle):
     """
     Adds a Bean Soul for each of the 10 magic bean patches to the pool (Ship of Harkinian 9.3.1: "Shuffle Bean
@@ -2502,6 +2519,7 @@ class MerchantAffordablePrices(Toggle):
 @dataclass
 class SohOptions(PerGameCommonOptions):
     closed_forest: ClosedForest
+    shuffle_dungeon_entrances: ShuffleDungeonEntrances
     kakariko_gate: KakarikoGate
     door_of_time: DoorOfTime
     zoras_fountain: ZorasFountain
@@ -3084,8 +3102,11 @@ soh_option_groups = [
         WinConditionSkullTokensRequired,
         WinConditionGregModifier,
     ]),
+    OptionGroup("Shuffle Entrances", [
+        ShuffleDungeonEntrances,
+    ]),
+    # not supported yet (SoH 9.3.1 has these too):
     # OptionGroup("Shuffle Entrances", [
-    #     # Dungeon Entrances
     #     # Boss Entrances
     #     # Overworld Entrances
     #     # Interior Entrances
