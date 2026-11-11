@@ -1626,13 +1626,14 @@ class TorchRecoil(IntEnum):
 
 
 # --- abilities (upstream RG_CLIMB, RG_CRAWL, RG_OPEN_CHEST, RG_POWER_BRACELET, RG_SPEAK_*) ---------------------------
-# Without the ability shuffles (feature 3.11) the game gives all of them at the start.
+# logic.cpp Logic::HasItem: CheckRandoInf(RAND_INF_CAN_*). Logic::Reset sets these flags at the start when the
+# matching shuffle is off (RSK_SHUFFLE_CLIMB/CRAWL/OPEN_CHEST/SPEAK/GRAB), so the ability is then always there.
 def has_climb(bundle: tuple[Regions, "SohWorld"]) -> Rule:
-    return True_()  # TODO feature 3.11 (Shuffle Climb)
+    return OptionFilter(ShuffleClimb, False) | Has(Items.CLIMB)
 
 
 def has_crawl(bundle: tuple[Regions, "SohWorld"]) -> Rule:
-    return True_()  # TODO feature 3.11 (Shuffle Crawl)
+    return OptionFilter(ShuffleCrawl, False) | Has(Items.CRAWL)
 
 
 def can_crawl(bundle: tuple[Regions, "SohWorld"]) -> Rule:
@@ -1642,20 +1643,36 @@ def can_crawl(bundle: tuple[Regions, "SohWorld"]) -> Rule:
 
 
 def has_open_chest(bundle: tuple[Regions, "SohWorld"]) -> Rule:
-    return True_()  # TODO feature 3.11 (Shuffle Open Chest)
-
-
-def has_grab(bundle: tuple[Regions, "SohWorld"]) -> Rule:
-    return True_()  # TODO feature 3.11 (Shuffle Grab / RG_POWER_BRACELET)
-
-
-def has_speak(bundle: tuple[Regions, "SohWorld"], language: str) -> Rule:
-    return True_()  # TODO feature 3.11 (Shuffle Speak)
+    # RAND_INF_CAN_OPEN_CHEST: the first "Open Chests" item (logic.cpp ApplyItemEffect RG_OPEN_CHEST)
+    return OptionFilter(ShuffleOpenChest, ShuffleOpenChest.option_off) | Has(Items.OPEN_CHESTS)
 
 
 def can_open_large_chest(bundle: tuple[Regions, "SohWorld"]) -> Rule:
-    # Logic::CanOpenLargeChest: RAND_INF_CAN_OPEN_LARGE_CHEST, only withheld by Shuffle Open Chest "Progressive"
-    return True_()  # TODO feature 3.11
+    # Logic::CanOpenLargeChest = RAND_INF_CAN_OPEN_LARGE_CHEST. ApplyItemEffect RG_OPEN_CHEST: with "On" the item sets
+    # both flags, with "Progressive" the first copy opens small chests and the second one large chests.
+    return (OptionFilter(ShuffleOpenChest, ShuffleOpenChest.option_off)
+            | (Has(Items.OPEN_CHESTS) & True_(options=[OptionFilter(ShuffleOpenChest, ShuffleOpenChest.option_on)]))
+            | Has(Items.OPEN_CHESTS, 2))
+
+
+def has_grab(bundle: tuple[Regions, "SohWorld"]) -> Rule:
+    # RG_POWER_BRACELET = first Strength Upgrade (item.cpp RG_PROGRESSIVE_STRENGTH), precollected without Shuffle Grab
+    return has_item(Items.POWER_BRACELET, bundle)
+
+
+JABBER_NUT_BY_LANGUAGE: dict[str, Items] = {
+    "DEKU": Items.DEKU_JABBER_NUT,
+    "GERUDO": Items.GERUDO_JABBER_NUT,
+    "GORON": Items.GORON_JABBER_NUT,
+    "HYLIAN": Items.HYLIAN_JABBER_NUT,
+    "KOKIRI": Items.KOKIRI_JABBER_NUT,
+    "ZORA": Items.ZORA_JABBER_NUT,
+}
+
+
+def has_speak(bundle: tuple[Regions, "SohWorld"], language: str) -> Rule:
+    # HasItem(RG_SPEAK_<language>) = RAND_INF_CAN_SPEAK_<language>
+    return OptionFilter(ShuffleSpeak, False) | Has(JABBER_NUT_BY_LANGUAGE[language])
 
 
 # --- masks (Logic::HasItem RG_*_MASK / RG_BUNNY_HOOD, Logic::CanUse) -------------------------------------------------

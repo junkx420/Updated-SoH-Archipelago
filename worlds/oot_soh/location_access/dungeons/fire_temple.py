@@ -504,7 +504,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Locations
     add_locations(Regions.FIRE_TEMPLE_GS_CLIMB_5F, world, [
         (Locations.FIRE_TEMPLE_GS_SCARECROW_CLIMB,
-         lambda bundle: ((has_climb(bundle)) & can_kill_enemy(bundle, Enemies.GOLD_SKULLTULA, EnemyDistance.SHORT_JUMPSLASH) | (Not(has_climb(bundle))) & can_kill_enemy(bundle, Enemies.GOLD_SKULLTULA, EnemyDistance.BOMB_THROW))),
+         lambda bundle: ((has_climb(bundle)) & can_kill_enemy(bundle, Enemies.GOLD_SKULLTULA, EnemyDistance.SHORT_JUMPSLASH) | can_kill_enemy(bundle, Enemies.GOLD_SKULLTULA, EnemyDistance.BOMB_THROW))),
     ])
     # Connections
     connect_regions(Regions.FIRE_TEMPLE_GS_CLIMB_5F, world, [

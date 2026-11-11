@@ -14,6 +14,8 @@ if TYPE_CHECKING:
     from . import SohWorld
 
 
+JABBER_NUTS = [Items.DEKU_JABBER_NUT, Items.GERUDO_JABBER_NUT, Items.GORON_JABBER_NUT, Items.HYLIAN_JABBER_NUT,
+               Items.KOKIRI_JABBER_NUT, Items.ZORA_JABBER_NUT]
 BEAN_SOULS = [Items.DEATH_MOUNTAIN_CRATER_BEAN_SOUL, Items.DEATH_MOUNTAIN_TRAIL_BEAN_SOUL, Items.DESERT_COLOSSUS_BEAN_SOUL, Items.GERUDO_VALLEY_BEAN_SOUL, Items.GRAVEYARD_BEAN_SOUL, Items.KOKIRI_FOREST_BEAN_SOUL, Items.LAKE_HYLIA_BEAN_SOUL, Items.LOST_WOODS_BRIDGE_BEAN_SOUL, Items.LOST_WOODS_BEAN_SOUL, Items.ZORAS_RIVER_BEAN_SOUL]
 
 
@@ -248,6 +250,21 @@ def create_item_pool(world: "SohWorld") -> None:
         for soul in BEAN_SOULS:
             items_to_create[soul] = 1
 
+    # Ability shuffles (3drando/item_pool.cpp): Climb, Crawl, Open Chests (2 with "Progressive") and the six Jabber
+    # Nuts once each (one more with plentiful, see below). Shuffle Grab adds no item: STRENGTH_UPGRADE always has
+    # the Power Bracelet stage, which is precollected without Shuffle Grab (give_starting_items).
+    if world.options.shuffle_climb:
+        items_to_create[Items.CLIMB] = 1
+    if world.options.shuffle_crawl:
+        items_to_create[Items.CRAWL] = 1
+    if world.options.shuffle_open_chest == ShuffleOpenChest.option_progressive:
+        items_to_create[Items.OPEN_CHESTS] = 2
+    elif world.options.shuffle_open_chest == ShuffleOpenChest.option_on:
+        items_to_create[Items.OPEN_CHESTS] = 1
+    if world.options.shuffle_speak:
+        for nut in JABBER_NUTS:
+            items_to_create[nut] = 1
+
     # Shuffle Treasure Chest Game (3drando/item_pool.cpp): a key ring or 6 small keys (7 / 2 with plentiful, see below)
     if world.options.shuffle_treasure_chest_game:
         if world.options.chest_game_key_ring:
@@ -368,6 +385,17 @@ def create_item_pool(world: "SohWorld") -> None:
             if world.options.shuffle_bean_souls:
                 for soul in BEAN_SOULS:
                     items_to_create[soul] += 1
+
+            # ability shuffles, 3drando/item_pool.cpp AddItemToPool(RG_CLIMB, 2, ...) etc.
+            if world.options.shuffle_climb:
+                items_to_create[Items.CLIMB] += 1
+            if world.options.shuffle_crawl:
+                items_to_create[Items.CRAWL] += 1
+            if world.options.shuffle_open_chest:
+                items_to_create[Items.OPEN_CHESTS] += 1
+            if world.options.shuffle_speak:
+                for nut in JABBER_NUTS:
+                    items_to_create[nut] += 1
 
             if world.options.shuffle_boss_souls:
                 items_to_create[Items.GOHMAS_SOUL] += 1
@@ -633,6 +661,8 @@ def give_starting_items(world: "SohWorld") -> None:
     # these are for making the progressive items collect/remove work properly
     if not world.options.shuffle_swim:
         world.precollect_from_pool(Items.PROGRESSIVE_SCALE)
+    if not world.options.shuffle_grab:  # first Strength Upgrade = Power Bracelet (grab), 9.3.1 Shuffle Grab
+        world.precollect_from_pool(Items.STRENGTH_UPGRADE)
     if not world.options.shuffle_deku_stick_bag:
         world.precollect_from_pool(Items.PROGRESSIVE_STICK_CAPACITY)
     if not world.options.shuffle_deku_nut_bag:

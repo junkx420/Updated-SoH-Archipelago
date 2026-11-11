@@ -397,7 +397,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.JABU_JABUS_BELLY_LIFT_ROOM,
          lambda bundle: True_()),
         (Regions.JABU_JABUS_BELLY_BOSS_ENTRYWAY,
-         lambda bundle: (has_climb(bundle) & can_use(Items.BOOMERANG, bundle)) | (can_do_trick(Tricks.JABU_NEAR_BOSS_RANGED, bundle) & (((has_climb(bundle)) & can_use(Items.HOOKSHOT, bundle) | (Not(has_climb(bundle))) & can_use(Items.LONGSHOT, bundle)) | can_use(Items.FAIRY_BOW, bundle) | can_use(Items.FAIRY_SLINGSHOT, bundle))) | (can_do_trick(Tricks.JABU_NEAR_BOSS_EXPLOSIVES, bundle) & (can_use(Items.BOMBCHUS_5, bundle) | (can_use(Items.HOVER_BOOTS, bundle) & can_use(Items.BOMB_BAG, bundle) & has_climb(bundle))))),
+         lambda bundle: (has_climb(bundle) & can_use(Items.BOOMERANG, bundle)) | (can_do_trick(Tricks.JABU_NEAR_BOSS_RANGED, bundle) & (((has_climb(bundle)) & can_use(Items.HOOKSHOT, bundle) | can_use(Items.LONGSHOT, bundle)) | can_use(Items.FAIRY_BOW, bundle) | can_use(Items.FAIRY_SLINGSHOT, bundle))) | (can_do_trick(Tricks.JABU_NEAR_BOSS_EXPLOSIVES, bundle) & (can_use(Items.BOMBCHUS_5, bundle) | (can_use(Items.HOVER_BOOTS, bundle) & can_use(Items.BOMB_BAG, bundle) & has_climb(bundle))))),
     ])
 
     # Jabu Jabus Belly Boss Entryway  (upstream RR_JABU_JABUS_BELLY_BOSS_ENTRYWAY, SCENE_JABU_JABU)

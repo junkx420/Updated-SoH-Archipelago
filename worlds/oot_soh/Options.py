@@ -349,6 +349,53 @@ class ShuffleSwim(Toggle):
     display_name = "Shuffle Swim"
 
 
+class ShuffleClimb(Toggle):
+    """
+    Shuffles the ability to climb ladders into the item pool as the item "Climb" (Ship of Harkinian 9.3.1: "Shuffle
+    Climb").
+    """
+    display_name = "Shuffle Climb"
+
+
+class ShuffleCrawl(Toggle):
+    """
+    Shuffles the ability to use crawlspaces into the item pool as the item "Crawl" (Ship of Harkinian 9.3.1: "Shuffle
+    Crawl"). Only child Link can crawl either way.
+    """
+    display_name = "Shuffle Crawl"
+
+
+class ShuffleGrab(Toggle):
+    """
+    Shuffles the ability to grab as a progressive upgrade before Goron's Bracelet (Ship of Harkinian 9.3.1: "Shuffle
+    Grab"): the first Strength Upgrade is the Power Bracelet, so the pool gets one more Strength Upgrade.
+    Start with Strength is turned off (as in Ship of Harkinian).
+    """
+    display_name = "Shuffle Grab"
+
+
+class ShuffleSpeak(Toggle):
+    """
+    Shuffles the ability to speak to NPCs (Ship of Harkinian 9.3.1: "Shuffle Jabber Nuts"). 6 Jabber Nuts are
+    shuffled: Deku, Gerudo, Goron, Hylian, Kokiri, Zora. Kaepora Gaebora speaks any language.
+    """
+    display_name = "Shuffle Jabber Nuts"
+
+
+class ShuffleOpenChest(Choice):
+    """
+    Shuffles the ability to open chests into the item pool (Ship of Harkinian 9.3.1: "Shuffle Open Chest").
+    Off - Chests can be opened as usual.
+    On - One "Open Chests" item opens all chests.
+    Progressive - Two "Open Chests" items: the first one only opens small chests, the second one also big chests.
+    """
+    display_name = "Shuffle Open Chest"
+    option_off = 0
+    option_on = 1
+    option_progressive = 2
+    default = 0
+
+
 class ShuffleWeirdEgg(Choice):
     """
     Off - Malon gives you the Weird Egg at Hyrule Castle.
@@ -2266,6 +2313,7 @@ class StartWithBombBag(Choice):
 class StartWithStrength(Choice):
     """
     Start with the Strength at this level. The matching items are taken out of the item pool.
+    Turned off when Shuffle Grab is on (as in Ship of Harkinian).
     """
     display_name = "Start with Strength"
     option_off = 0
@@ -2491,6 +2539,11 @@ class SohOptions(PerGameCommonOptions):
     shuffle_ocarinas: ShuffleOcarinas
     shuffle_ocarina_buttons: ShuffleOcarinaButtons
     shuffle_swim: ShuffleSwim
+    shuffle_climb: ShuffleClimb
+    shuffle_crawl: ShuffleCrawl
+    shuffle_grab: ShuffleGrab
+    shuffle_speak: ShuffleSpeak
+    shuffle_open_chest: ShuffleOpenChest
     shuffle_weird_egg: ShuffleWeirdEgg
     shuffle_gerudo_membership_card: ShuffleGerudoMembershipCard
     shuffle_fishing_pole: ShuffleFishingPole
@@ -2766,6 +2819,10 @@ class SohOptions(PerGameCommonOptions):
         if self.shuffle_swim and self.start_with_scale:
             logging.warning("Shuffle Swim is on: Start with Scale is turned off (as in SoH 9.3.1).")
             self.start_with_scale.value = StartWithScale.option_off
+        # same for Shuffle Grab: settings.cpp sets RSK_STARTING_STRENGTH to 0 (grab is the first strength stage)
+        if self.shuffle_grab and self.start_with_strength:
+            logging.warning("Shuffle Grab is on: Start with Strength is turned off (as in SoH 9.3.1).")
+            self.start_with_strength.value = StartWithStrength.option_off
 
         if self.shuffle_deku_stick_bag == ShuffleDekuStickBag.option_true:
             self.start_with_stick_ammo.value = StartWithStickAmmo.option_false
@@ -3044,6 +3101,11 @@ soh_option_groups = [
         ShuffleOcarinas,
         ShuffleOcarinaButtons,
         ShuffleSwim,
+        ShuffleClimb,
+        ShuffleCrawl,
+        ShuffleGrab,
+        ShuffleSpeak,
+        ShuffleOpenChest,
         ShuffleWeirdEgg,
         ShuffleGerudoMembershipCard,
         ShuffleFishingPole,

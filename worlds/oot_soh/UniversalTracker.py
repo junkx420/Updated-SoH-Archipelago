@@ -50,6 +50,11 @@ def setup_options_from_slot_data(world: "SohWorld") -> None:
             world.options.shuffle_ocarina_buttons.value = world.passthrough[
                 "shuffle_ocarina_buttons"]
             world.options.shuffle_swim.value = world.passthrough["shuffle_swim"]
+            world.options.shuffle_climb.value = world.passthrough.get("shuffle_climb", 0)  # apworld 1.5+
+            world.options.shuffle_crawl.value = world.passthrough.get("shuffle_crawl", 0)  # apworld 1.5+
+            world.options.shuffle_grab.value = world.passthrough.get("shuffle_grab", 0)  # apworld 1.5+
+            world.options.shuffle_speak.value = world.passthrough.get("shuffle_speak", 0)  # apworld 1.5+
+            world.options.shuffle_open_chest.value = world.passthrough.get("shuffle_open_chest", 0)  # apworld 1.5+
             world.options.shuffle_weird_egg.value = world.passthrough["shuffle_weird_egg"]
             world.options.shuffle_gerudo_membership_card.value = world.passthrough[
                 "shuffle_gerudo_membership_card"]

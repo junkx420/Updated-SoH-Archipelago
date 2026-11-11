@@ -75,6 +75,8 @@ class GroupTag(IntFlag):
     Gerudo_Fortress_Item = auto()
     Ganons_Castle_Item = auto()
     Graveyard_Item = auto()
+    Ability = auto()
+    Jabber_Nut = auto()
 
 class SohItemData(NamedTuple):
     # None means it's just here for the data, and won't be added to the datapackage
@@ -130,7 +132,9 @@ item_data_table: dict[Items, SohItemData] = {
     Items.CLAIM_CHECK: SohItemData(37, IC.progression, 1, adult_only=True, tags=GroupTag.Trade_Item),
     Items.GOLD_SKULLTULA_TOKEN: SohItemData(38, IC.progression_deprioritized_skip_balancing, 100, tags=GroupTag.Token | GroupTag.Golden_Item),
     Items.PROGRESSIVE_HOOKSHOT: SohItemData(39, IC.progression | IC.useful, 2, tags=GroupTag.Item_Retriever | GroupTag.Movement_Upgrade | GroupTag.Graveyard_Item),
-    Items.STRENGTH_UPGRADE: SohItemData(40, IC.progression | IC.useful, 3, tags=GroupTag.Ability_Upgrade),
+    # 4 = Power Bracelet (grab ability, 9.3.1 Shuffle Grab) + Goron's Bracelet + 2 gauntlets; the first one is
+    # precollected without Shuffle Grab (like the Bronze Scale for Shuffle Swim), 3drando/item_pool.cpp
+    Items.STRENGTH_UPGRADE: SohItemData(40, IC.progression | IC.useful, 4, tags=GroupTag.Ability_Upgrade),
     Items.PROGRESSIVE_BOMB_BAG: SohItemData(41, IC.progression | IC.useful, 3, tags=GroupTag.Explosives_Upgrade | GroupTag.Bag_Upgrade),
     Items.PROGRESSIVE_BOW: SohItemData(42, IC.progression | IC.useful, 3, tags=GroupTag.Ranged_Weapon),
     Items.PROGRESSIVE_SLINGSHOT: SohItemData(43, IC.progression | IC.useful, 3, tags=GroupTag.Ranged_Weapon ),
@@ -391,6 +395,18 @@ item_data_table: dict[Items, SohItemData] = {
     Items.LOST_WOODS_BRIDGE_BEAN_SOUL: SohItemData(293, IC.progression, 0, tags=GroupTag.Bean_Soul),
     Items.LOST_WOODS_BEAN_SOUL: SohItemData(294, IC.progression, 0, tags=GroupTag.Bean_Soul),
     Items.ZORAS_RIVER_BEAN_SOUL: SohItemData(295, IC.progression, 0, tags=GroupTag.Bean_Soul),
+    # SoH 9.3.1 ability shuffles (Shuffle Climb/Crawl/Open Chest/Speak): new IDs 296-304 in RandomizerGet order
+    # (RG_CLIMB, RG_CRAWL, RG_OPEN_CHEST, RG_SPEAK_DEKU ... RG_SPEAK_ZORA). Grab has no item of its own (Strength Upgrade).
+    Items.CLIMB: SohItemData(296, IC.progression, 0, tags=GroupTag.Ability),
+    Items.CRAWL: SohItemData(297, IC.progression, 0, tags=GroupTag.Ability),
+    Items.OPEN_CHESTS: SohItemData(298, IC.progression, 0, tags=GroupTag.Ability),
+    Items.DEKU_JABBER_NUT: SohItemData(299, IC.progression, 0, tags=GroupTag.Ability | GroupTag.Jabber_Nut),
+    Items.GERUDO_JABBER_NUT: SohItemData(300, IC.progression, 0, tags=GroupTag.Ability | GroupTag.Jabber_Nut),
+    Items.GORON_JABBER_NUT: SohItemData(301, IC.progression, 0, tags=GroupTag.Ability | GroupTag.Jabber_Nut),
+    Items.HYLIAN_JABBER_NUT: SohItemData(302, IC.progression, 0, tags=GroupTag.Ability | GroupTag.Jabber_Nut),
+    Items.KOKIRI_JABBER_NUT: SohItemData(303, IC.progression, 0, tags=GroupTag.Ability | GroupTag.Jabber_Nut),
+    Items.ZORA_JABBER_NUT: SohItemData(304, IC.progression, 0, tags=GroupTag.Ability | GroupTag.Jabber_Nut),
+    Items.POWER_BRACELET: SohItemData(None),
     Items.STICKS: SohItemData(None, child_only=True),
     Items.NUTS: SohItemData(None),
     Items.EPONA: SohItemData(None),
@@ -435,7 +451,8 @@ no_rules_bottles = [
 progressive_items: dict[str, tuple[str, ...]] = {
     Items.PROGRESSIVE_SCALE: (Items.BRONZE_SCALE, Items.SILVER_SCALE, Items.GOLDEN_SCALE),
     Items.PROGRESSIVE_OCARINA: (Items.FAIRY_OCARINA, Items.OCARINA_OF_TIME),
-    Items.STRENGTH_UPGRADE: (Items.GORONS_BRACELET, Items.SILVER_GAUNTLETS, Items.GOLDEN_GAUNTLETS),
+    # item.cpp RG_PROGRESSIVE_STRENGTH: Power Bracelet (grab) first, precollected without Shuffle Grab
+    Items.STRENGTH_UPGRADE: (Items.POWER_BRACELET, Items.GORONS_BRACELET, Items.SILVER_GAUNTLETS, Items.GOLDEN_GAUNTLETS),
     Items.PROGRESSIVE_HOOKSHOT: (Items.HOOKSHOT, Items.LONGSHOT),
     Items.PROGRESSIVE_WALLET: (Items.CHILD_WALLET, Items.ADULT_WALLET, Items.GIANT_WALLET, Items.TYCOON_WALLET),
     Items.PROGRESSIVE_SLINGSHOT: (Items.FAIRY_SLINGSHOT,),

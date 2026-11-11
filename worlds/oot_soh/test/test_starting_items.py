@@ -32,7 +32,7 @@ class TestStartingItems(SohTestBase):
         self.assertEqual(pool_count(self, Items.PROGRESSIVE_HOOKSHOT), 0)
         self.assertEqual(precollected(self, Items.PROGRESSIVE_HOOKSHOT), 2)
         self.assertEqual(precollected(self, Items.PROGRESSIVE_BOW), 2)
-        self.assertEqual(precollected(self, Items.STRENGTH_UPGRADE), 2)
+        self.assertEqual(precollected(self, Items.STRENGTH_UPGRADE), 3)  # Power Bracelet (grab) + 2 stages
 
     def test_starting_items_have_no_id(self):
         # the client gives them at the start; with an ID the server would send them a second time

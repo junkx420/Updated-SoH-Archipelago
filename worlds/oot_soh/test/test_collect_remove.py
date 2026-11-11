@@ -112,10 +112,10 @@ class ProgressiveTestsMixin:
 
 class TestCollectRemoveProgressiveAllOff(ProgressiveTestsMixin, SohTestBase):
     options = {"shuffle_childs_wallet": False, "shuffle_swim": False, "shuffle_deku_stick_bag": False,
-               "shuffle_deku_nut_bag": False, "bombchu_bag": "none", "shuffle_ocarinas": True}
+               "shuffle_deku_nut_bag": False, "bombchu_bag": "none", "shuffle_ocarinas": True, "shuffle_grab": False}
     optional_prog_item_set = {Items.PROGRESSIVE_SCALE, Items.PROGRESSIVE_WALLET, Items.PROGRESSIVE_STICK_CAPACITY,
-                              Items.PROGRESSIVE_NUT_CAPACITY, Items.BOMBCHU_BAG}
+                              Items.PROGRESSIVE_NUT_CAPACITY, Items.BOMBCHU_BAG, Items.STRENGTH_UPGRADE}
 
 class TestCollectRemoveProgressiveAllOn(ProgressiveTestsMixin, SohTestBase):
     options = {"shuffle_childs_wallet": True, "shuffle_swim": True, "shuffle_deku_stick_bag": True,
-               "shuffle_deku_nut_bag": True, "bombchu_bag": "single_bag", "shuffle_ocarinas": True}
+               "shuffle_deku_nut_bag": True, "bombchu_bag": "single_bag", "shuffle_ocarinas": True, "shuffle_grab": True}
