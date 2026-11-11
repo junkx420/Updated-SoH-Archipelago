@@ -97,6 +97,17 @@ def add_location_source(location_name: str, parent_region: Regions, rule: Rule, 
     from .Regions import SohRegion
     sources = world.soh_location_sources[location_name]
     hub_name = f"{location_name} (shared access)"
+    # Upstream sometimes lists a location twice in the same region (dodongos_cavern.cpp RR_DODONGOS_CAVERN_UPPER_LIZALFOS:
+    # RC_DODONGOS_CAVERN_LOWER_LIZALFOS_HEART). Either entry grants access, so the rules are combined with "or".
+    for index, (source_region, source_rule) in enumerate(sources):
+        if source_region == parent_region:
+            combined = source_rule | rule
+            sources[index] = (source_region, combined)
+            if len(sources) == 1:
+                world.set_rule(world.get_location(location_name), combined)
+            else:
+                world.set_rule(world.get_entrance(f"{source_region} -> {hub_name}"), combined)
+            return
     if len(sources) == 1:
         location: Location = world.get_location(location_name)
         first_region, first_rule = sources[0]
