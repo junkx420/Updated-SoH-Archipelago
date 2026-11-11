@@ -842,7 +842,8 @@ void Context::ParseArchipelagoOptions() {
     mOptions[RSK_STARTING_NUTS].Set(slotData["start_with_nut_ammo"]);
     mOptions[RSK_STARTING_BEANS].Set(slotData["start_with_magic_beans"]);
     mOptions[RSK_FULL_WALLETS].Set(slotData["full_wallets"]);
-    mOptions[RSK_SHUFFLE_CHEST_MINIGAME].Set(RO_GENERIC_NO);
+    // Treasure Chest Game (apworld 1.5+): chests, shopkeeper and the game's keys / key ring are items and checks
+    mOptions[RSK_SHUFFLE_CHEST_MINIGAME].Set(slotData.value("shuffle_treasure_chest_game", static_cast<int>(RO_GENERIC_NO)));
     mOptions[RSK_BIG_POE_COUNT].Set(slotData["big_poe_target_count"]);
     mOptions[RSK_SKIP_EPONA_RACE].Set(slotData["skip_epona_race"]);
     // 9.3.1 removed "Complete Mask Quest" (upstream #7104): "Completed" is now starting with every mask.
@@ -986,6 +987,7 @@ void Context::ParseArchipelagoOptions() {
     }
     mOptions[RSK_KEYRINGS_RANDOM_COUNT].Set(slotData["key_rings_count"]);
     mOptions[RSK_KEYRINGS_GERUDO_FORTRESS].Set(slotData["gerudo_fortress_key_ring"]);
+    mOptions[RSK_KEYRINGS_CHEST_GAME].Set(slotData.value("chest_game_key_ring", static_cast<int>(RO_KEYRING_FOR_DUNGEON_OFF)));
     mOptions[RSK_KEYRINGS_FOREST_TEMPLE].Set(slotData["forest_temple_key_ring"]);
     mOptions[RSK_KEYRINGS_FIRE_TEMPLE].Set(slotData["fire_temple_key_ring"]);
     mOptions[RSK_KEYRINGS_WATER_TEMPLE].Set(slotData["water_temple_key_ring"]);
